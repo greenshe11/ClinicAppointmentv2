@@ -51,7 +51,10 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="active">Home</a></li>
-                          <li><a href="/schedule" class="" id="schedule-title">View Schedules</a></li>
+                          <li><a href="/schedule" class="" id="schedule-title">View Schedules</a>
+                            <div id="pending-count-container" style="display: none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                              <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                          </div></li>
                           <li><a href="/profile" class="">Account</a></li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                           
@@ -386,7 +389,18 @@
      <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
      <script type="module">
       import {resetSymptomsSelected} from '/static/pageScripts/session.js';
-      
+      import {
+        CalendarSelection,
+        onClickShowCal,
+        selected,
+        getAppointmentsFilter,
+        getTimeName,
+        deleteAppointment,
+        setCalendarButtonOpeners,
+        btn
+      } from "/static/components/calendarSelection/script.js";
+      import {getUserData} from '/static/pageScripts/session.js'
+      import {getSession} from '/static/pageScripts/session.js'
       resetSymptomsSelected()
       
       setInterval(()=>{
@@ -404,12 +418,30 @@
         }
         
       }, 50)
-      import {getUserData} from '/static/pageScripts/session.js'
-      import {getSession} from '/static/pageScripts/session.js'
+      
       async function applyProfile(){
         let data = await getUserData()
         data = data[0]
         const session = await getSession()
+        const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
+        
+        let count = 0;
+        for (let index in appointments){
+            const a = appointments[index]
+            const targetDateTime =  new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+            const currentDateTime = new Date();
+        
+            if ((appointments[index].Appointment_Confirmed == 0)&&
+            (currentDateTime - targetDateTime)<0){
+                console.log("PENDING",appointments[index])
+                count+=1
+            }
+        }
+        if (count>0){
+          
+          document.getElementById("pending-count").innerHTML = count
+          document.getElementById("pending-count").style.display = "block"
+        }
         if (session["isStaff"]){
           // remove appointment button if staff
           document.getElementById("appointment-btn").remove()

@@ -130,7 +130,7 @@ class App:
                 return render_template('patient/chatbot.html')
             except Exception as e:
                 return f"Error: {e}", 500
-
+        '''
         @self.app.route('/chatbotpage/response')
         def chatbotpageResponse():
             if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
@@ -156,7 +156,7 @@ class App:
             try:
                 return render_template('patient/chatbotpageSummary.html')
             except Exception as e:
-                return f"Error: {e}", 500
+                return f"Error: {e}", 500'''
             
         @self.app.route('/about')
         def about_home():

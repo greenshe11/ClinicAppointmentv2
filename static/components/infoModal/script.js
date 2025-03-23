@@ -71,7 +71,7 @@ export async function showModal(event){
     document.getElementById('im-status').innerHTML = getStatusDisplay(status)
     document.getElementById('im-sched-response').innerHTML = symptomResponse
     document.getElementById('im-category').innerHTML = userInfo[0].PatientCategory
-    document.getElementById('im-sched-complaints').innerHTML = appointmentData.Appointment_Complaints
+    document.getElementById('im-sched-complaints').innerHTML = appointmentData.Appointment_Complaints||"N/A"
    
 
     
@@ -195,7 +195,7 @@ window.filterUser = (event) => {
     
     document.getElementById("last-name-filter").value = lastName
     document.getElementById("month-filter").value = "0"
-    document.getElementById("year-filter").value = ""
+    //document.getElementById("year-filter").value = ""
     document.getElementById("status-filter").value = "-1"
     onClickCloseCal()
     window.useFilter()

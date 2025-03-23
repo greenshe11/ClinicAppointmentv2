@@ -46,8 +46,13 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="">Home</a></li>
-                          <li><a href="/schedule" class="">View Requests</a></li>
-                          <li><a href="/profile" class="active">Account</a></li>
+                          <li><a href="/schedule" class="">View Requests</a>
+                              
+                              <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                                  <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                              </div></li>
+                          <li><a href="/profile" class="active">Account</a>
+                         </li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                           
                         </ul>
@@ -58,7 +63,7 @@
                     <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
                          <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
                        
-                         <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                         <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
                        
                        </div>  
 
@@ -166,11 +171,44 @@
 
                applyProfile()
           </script>
-          <script type="module">
+          <script type="module">import {resetSymptomsSelected} from '/static/pageScripts/session.js';
+               import {
+                 CalendarSelection,
+                 onClickShowCal,
+                 selected,
+                 getAppointmentsFilter,
+                 getTimeName,
+                 deleteAppointment,
+                 setCalendarButtonOpeners,
+                 btn
+               } from "/static/components/calendarSelection/script.js";
+               import {getSession} from '/static/pageScripts/session.js'
                import {getUserData} from '/static/pageScripts/session.js'
                let data = await getUserData()
                data = data[0]
 
+               async function getPendingCount(){
+                    const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
+                    console.log(appointments)
+                    let count = 0;
+                    for (let index in appointments){
+                         const a = appointments[index]
+                         const targetDateTime =  new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+                         const currentDateTime = new Date();
+                    
+                         if ((appointments[index].Appointment_Confirmed == 0)&&
+                         (currentDateTime - targetDateTime)<0){
+                              console.log("PENDING",appointments[index])
+                              count+=1
+                         }
+                    }
+                    if (count>0){
+                         document.getElementById("pending-count").innerHTML = count
+                          document.getElementById("pending-count").style.display = "block"
+                    }
+                  
+               }
+               getPendingCount()
                window.validateApply = () => {
                     let result = false
                     const email = document.getElementById('email')
@@ -259,7 +297,6 @@
                     
 
                }
-               renderData()
                // Attach the function to the global scope
                window.contactOnChange = (event) => {
                     const contactField = document.getElementById('contact');

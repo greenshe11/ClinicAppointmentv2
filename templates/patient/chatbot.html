@@ -523,7 +523,7 @@
             if (selected.month && selected.time){
                 disableFinishedChats()
                 createChatFromBot(`You will have an appointment on ${selected.monthName} ${selected.day} ${selected.year} @ ${selected.timeName}. Is this correct?`);
-                createChatFromUser(`<div style="display: flex; flex-direction: column" ><button onclick="chatSummaryStage()">Yes</button><button onclick="setAppointmentDateStage()">No</button></div>`)
+                createChatFromUser(`<div style="display: flex; flex-direction: row" ><button style="width: 100px; height: 30px" onclick="chatSummaryStage()">Yes</button><button style="width: 100px; height: 30px" onclick="setAppointmentDateStage()">No</button></div>`)
                
     
             }
@@ -845,7 +845,7 @@
             document.getElementById('sum-contact').innerHTML = `${userData.PatientContactNo}`
             document.getElementById('sum-symptoms').innerHTML = `${symptomsString}`
             document.getElementById('sum-response').innerHTML = `${response}`
-            document.getElementById('sum-complaints').innerHTML = complaints
+            document.getElementById('sum-complaints').innerHTML = complaints?complaints:"N/A"
             
             // Function to navigate to home after checking appointment availability and creating a new appointment
             const toHome = async () => {
