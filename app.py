@@ -32,11 +32,10 @@ class App:
         self.create_api_routes()
         self.create_page_routes()
         self.initiate_notif_service()
-        
     
     def initiate_notif_service(self):
         # get data every 8 hours
-        notif.start_notif_service(self, 'tblpatient', 'tblappointment', 8 * 60 * 60) # attempt notif every 8 hours 8 * 60 * 60
+        notif.start_notif_service(self, 'tblpatient', 'tblappointment', 8 * 60 * 60) # attempt notif every 8 hours
         pass
 
     def configure_app(self):
@@ -132,6 +131,33 @@ class App:
             except Exception as e:
                 return f"Error: {e}", 500
 
+        @self.app.route('/chatbotpage/response')
+        def chatbotpageResponse():
+            if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('patient/chatbotpageResponse.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
+        @self.app.route('/chatbotpage/response/appointment')
+        def chatbotpageAppointment():
+            if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('patient/chatbotpageAppointment.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
+        @self.app.route('/chatbotpage/response/appointment/summary')
+        def chatbotpageSummary():
+            if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('patient/chatbotpageSummary.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
         @self.app.route('/about')
         def about_home():
             if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
@@ -151,7 +177,15 @@ class App:
                 return f"Error: {e}", 500
             
         
-    
+        @self.app.route('/staff/schedules')
+        def staff_schedules():
+            if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('dummy_all_appointments.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+        
         @self.app.route('/chat')
         def chatbot():
             if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
@@ -161,7 +195,15 @@ class App:
             except Exception as e:
                 return f"Error: {e}", 500
             
-      
+        @self.app.route('/chatbotpage/success')
+        def chatbotpageSuccess():
+            if util.no_user_logged_in() or util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('patient/appointmentSent.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
     def create_api_routes(self):
         patient_routes(self, 'tblpatient')
         appointment_routes(self, 'tblappointment')
@@ -172,7 +214,7 @@ class App:
 
     def run(self):
         """Run the Flask application."""
-        self.app.run(debug=False)
+        self.app.run(debug=True)
 
 if __name__ == '__main__':
     app_instance = App()

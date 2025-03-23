@@ -54,7 +54,7 @@
                    <nav id="navmenu" class="navmenu">
                     <ul>
                      <li><a href="/" class="">Home</a></li>
-                     <li><a href="/schedule" class="active">Requests</a></li>
+                     <li><a href="/schedule" class="active" id="schedule-title">View Schedules</a></li>
                      <li><a href="/profile" class="">Account</a></li>
                      <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                      
@@ -66,7 +66,7 @@
                <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
                 <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
               
-                <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px;color:white; padding: 5px; border-radius: 10px;"></span>
               
               </div>  
 
@@ -87,7 +87,7 @@
       
     <div id="home-container" style="margin-top: 50px;">
         <div id="home" class="container-fluid" >
-            <h1 class="title-opening" style="font-size: 30px;">Requests</h1>
+            <h1 class="title-opening" style="font-size: 30px;">My Schedules</h1>
         </div>
          
     </div>

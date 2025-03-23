@@ -291,7 +291,7 @@
                      <nav id="navmenu" class="navmenu">
                       <ul>
                        <li><a href="/" class="">Home</a></li>
-                       <li><a href="/schedule" class="">Requests</a></li>
+                       <li><a href="/schedule" class="" id="schedule-title">View Schedules</a></li>
                        <li><a href="/profile" class="">Account</a></li>
                        <li id="appointment-btn" style="display: none"><a class="active" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                        
@@ -303,7 +303,7 @@
                       <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
                         <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
                       
-                        <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                        <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px;color:white; padding: 5px; border-radius: 10px;"></span>
                       
                       </div>  
 
@@ -367,7 +367,6 @@
             message.classList.add('chatbot-message', 'chatbot', 'left-fade');
             message.innerHTML = `<div class="chatbot-text" sentTime="${currentTime}" >${input}</div>`;
             conversation.appendChild(message);
-            console.log("MESSAGE")
         }
 
         async function createChatFromUser(input){
@@ -600,11 +599,6 @@
                     function symptom1(){
                         const index = 0
                         const question = Object.keys(levelQuestions)[index]
-                        if (!levelQuestions[Object.keys(levelQuestions)[index]]){
-                            console.log('fisnished first')
-                            symptom2()
-                            return
-                        }
                         createChatFromBot(question)
                         createChatFromUser(`<div id="q-${index}" style="display:flex; flex-direction: column">${levelQuestions[question]}</div>`)
                         document.querySelectorAll(`#q-${index} button`).forEach(btn => {
@@ -767,7 +761,7 @@
             // If there are serious symptoms, enable the "Next" button and show a message about setting an appointment.
             if (seriousSymptoms.length > 0) {
                 //nextBtn.disabled = false
-                bottomLine.innerHTML = `The symptoms <b>${seriousSymptoms.join(', ')}</b> makes you in need of professional help. `
+                bottomLine.innerHTML = `The symptoms (${seriousSymptoms.join(',')}) make you in need of professional help. `
                 
             } else {
                 // If no serious symptoms are found, disable the "Next" button and display a mild symptoms message.
@@ -919,7 +913,7 @@
             // remove appointment button if staff
             document.getElementById("appointment-btn").remove()
             document.getElementById("appointment-btn-2").remove()
-  
+            document.getElementById("schedule-title").innerHTML = "View Requests"
           }
   
           document.getElementById("user-category-display").innerHTML = data["PatientCategory"]

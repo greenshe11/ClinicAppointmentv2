@@ -1,0 +1,293 @@
+
+[
+"Temperature (39.4 C or higher)",
+"Severe headache",
+"Rash",
+["Unusual sensitivity to bright light", "Stiff neck and pain when you bend your head forward"],
+"Mental confusion, strange behavior or altered speech",
+"Persistent vomiting",
+"Difficulty breathing or chest pain",
+"Abdominal pain",
+"Pain when urinating",
+"Convulsions or seizures"
+
+"Severe stomach pain",
+"Persistent vomiting",
+"Bleeding from your gums or nose",
+["Blood in your urine", "Blood in your stools", "Blood in your vomit"],
+"Bleeding under the skin, which might look like bruising",
+"Difficult or rapid breathing",
+"Fatigue",
+"Irritability or restlessness"
+
+[
+"Sore throat that comes on suddenly",
+"Pain when swallowing",
+"Fever",
+["Headache", "Stomach pain", "Nausea and vomiting"]
+
+[
+"You can't find relief from your hay fever symptoms",
+"Allergy medicines don't provide relief, or they cause side effects",
+["You have another condition", "such as nasal polyps", "asthma", "frequent sinus infections"]
+
+[
+"A sudden, new and severe headache",
+["Headache with a fever", "shortness of breath", "stiff neck", "rash"],
+"Headaches that occur after a head injury or accident",
+"Getting a new type of headache after age 55",
+"Weakness",
+"Dizziness",
+["Sudden loss of balance", "falling"],
+"Numbness or tingling",
+"Paralysis",
+"Speech difficulties",
+"Mental confusion",
+"Seizures",
+"Personality changes/inappropriate behavior",
+["Vision changes", "blurry vision", "double vision", "blind spots"]
+[
+"Your headache symptoms occur more than 15 days a month or require frequent pain medicine",
+["You have a severe headache", "pain medicine available without a prescription doesn't help"],
+"You miss school or work because of frequent headaches or they interfere with your daily life"
+
+[
+"A stiff neck",
+"Pain or tenderness in your jaw when you chew or at your temple",
+["Fever above 103°F", "doesn’t go away"],
+"Headaches that feel different or happen more frequently than usual after age 50",
+["A headache that happens only when lying flat", "when standing up"],
+["Cancer or autoimmune disease", "noticing more severe headaches"],
+["Numbness", "weakness", "slurred speech", "confused thoughts", "vision or speech changes"],
+"Shortness of breath"
+[
+"An abrupt, severe headache like a thunderclap",
+["Headache with fever", "stiff neck", "confusion", "seizures", "double vision", "numbness or weakness"],
+"Headache after a head injury",
+["Chronic headache", "worse after coughing", "exertion", "straining", "sudden movement"],
+"New headache pain after age 50"
+"Your child develops a stiff neck",
+"Child acts sluggish, looks or acts very sick",
+["Severe ear pain", "Fever over 104°F (40°C)"],
+"Signs of weakness in the face (crooked smile)",
+["Bloody or pus-filled fluid draining from the ear", "Fever remains or comes back after 48 hours of antibiotics"],
+"Ear pain persists after three days of antibiotics"
+["Antibiotics", "Used if the infection is severe or doesn't improve after a few days."],
+["Pain Relief", "Use over-the-counter medications like acetaminophen or ibuprofen to reduce pain and fever."],
+["Ear Drops", "Recommended by a healthcare provider to relieve pain."],
+["Ear Tubes", "Considered for children with frequent infections or hearing loss; helps drain fluid and improve airflow."]
+"Severe light sensitivity",
+"Blurred or decreased vision",
+"Eye pain",
+"Sensation of a foreign object in the eye",
+"Large amounts of discharge",
+"Worsening symptoms despite home treatment"
+"Swollen eyelid shuts the eye",
+"Pus or blood leaking from the stye",
+"Increased pain and swelling after 2-3 days",
+"Blisters forming on the eyelid",
+"Eyelids feel hot",
+"Vision changes",
+"Recurrent styes despite treatment"
+"Cough that lingers for weeks",
+"Cough that brings up sputum or blood",
+"Cough that disturbs sleep or affects daily activities"
+"Cough lasting more than three weeks",
+"Fever greater than 102°F",
+"Fever lasting more than five days",
+"Cough producing blood",
+"Shortness of breath or wheezing"
+"Cough lasting more than three weeks or recurring",
+"Frequent shortness of breath or wheezing",
+"High fever (103°F or 39.4°C) lasting more than five days",
+"Coughing up blood"
+
+[
+"High fever",
+"Chest pain",
+"Ear pain",
+"Asthma flare-up or difficulty breathing",
+"Symptoms lasting more than 10 days or worsening"
+[
+"Difficulty breathing",
+"Chest tightness",
+"Widespread hives",
+"Tingling hands, feet, or lips",
+"Throat swelling that constricts airway"
+[
+"Severe throat pain",
+"Trouble breathing or swallowing",
+"Fever over 100.4°F (38°C)",
+"Visible bulge in the throat",
+"Blood in saliva or phlegm",
+"Rash anywhere on the body"
+"Sore throat lasting more than four days",
+"Fever over 101°F (38.33°C)",
+"Difficulty breathing"
+"Symptoms lasting for a week or longer",
+"Severe stomach pain",
+"Vomiting preventing food intake",
+"Feeling lightheaded or dizzy",
+"Stomach discomfort after medications (especially aspirin)",
+"Vomiting blood",
+"Blood in stools",
+"Stools that appear black"
+"Pallor (paleness)",
+"Dizziness, weakness, or faintness",
+"Black blood in poop",
+"Vomit that looks like coffee grounds",
+"Sudden, severe abdominal pain"
+"Symptoms not improving after four days",
+"High fever (above 102°F or 39°C) lasting four days",
+"Inability to pee or poop for two days",
+"Suspected dehydration",
+"Blood in poop",
+"Severe abdominal pain"
+"Persistent, high fever (over 102°F or 38.9°C)",
+"Bloody diarrhea or vomit, unable to tolerate anything orally",
+"Dark pee or lack of pee",
+"Blurred vision",
+"Delirium or confusion",
+"Dizziness or lightheadedness"
+"Chest pain",
+"Shortness of breath",
+"Jaw pain",
+"Arm pain"
+"Fever one or two days after feeling better",
+"Nausea or vomiting",
+"Earache",
+"Headache",
+"Skin rash",
+"Cough",
+"Swollen glands",
+"Painful joints",
+"Muscle pain",
+"Shortness of breath",
+"Dark urine, rash or chest pain (may occur 3-4 weeks later)"
+"Fever one or two days after feeling better",
+"Nausea or vomiting",
+"Earache",
+"Headache",
+"Skin rash",
+"Cough",
+"Swollen glands",
+"Painful joints",
+"Muscle pain",
+"Shortness of breath",
+"Dark urine, rash or chest pain (may occur 3-4 weeks later)"
+"Fever",
+"Severe headache that doesn't go away",
+"Confusion",
+"Vomiting",
+"Stiff neck"
+"If you have symptoms of a UTI"
+"Sudden, severe headache",
+"Chest pain",
+"Difficulty breathing",
+"Numbness or paralysis of arms or legs",
+"Fainting",
+"Double vision",
+"Rapid or irregular heartbeat",
+"Confusion or slurred speech",
+"Stumbling or difficulty walking",
+"Ongoing vomiting",
+"Seizures",
+"Sudden change in hearing",
+"Facial numbness or weakness"
+"Extreme low blood pressure",
+"Symptoms of shock"
+
+"Shortness of breath",
+"Headache",
+"Chest pain",
+"Blurry vision",
+"Heart palpitations",
+"Anxiety",
+"Dizziness",
+"Nosebleed",
+"Vomiting"
+"Headache pain doesn’t get better",
+"Pain returns or is severe",
+"Presence of other symptoms",
+"Signs of severe dehydration"
+"Chest pain",
+"Shortness of breath or trouble breathing",
+"Fatigue",
+"Trouble sleeping",
+"Nausea or stomach discomfort",
+"Heart palpitations",
+"Anxiety or a feeling of impending doom",
+"Sweating",
+"Feeling lightheaded or passing out"
+"Chronic, persistent nausea or vomiting",
+"Motion sickness symptoms when not moving",
+"Signs of dehydration"
+"Experiencing hyperventilation for the first time",
+"Pain, head injury, fever, or bleeding",
+"Worsening or more frequent hyperventilation"
+"Experiencing symptoms of Diabetes for the first time",
+"Increased thirst",
+"Frequent urination"
+"Fever",
+"Severe pain",
+"Vomiting",
+"Blood or mucus in stool",
+"Weight loss"
+"Symptoms lasting longer than three weeks",
+"Symptoms affecting daily activities",
+"Rectal bleeding",
+"Blood in stools",
+"Unusual stool color or shape",
+"Stomach pain that doesn't stop",
+"Unexplained weight loss"
+"Fever of 103°F (39.4°C) or higher",
+"Muscle twitching",
+"Red, hot, and dry skin",
+"Nausea",
+"Rapid pulse",
+"Seizures",
+"Lack of sweating",
+"Confusion or altered mental state",
+"Dizziness",
+"Fainting or loss of consciousness",
+"Hallucinations"
+"Toothache lasting longer than two days",
+"Swelling in face or jaw",
+"Pain when opening mouth wide",
+"Swelling below the eye or knot on the jaw",
+"Unbearable tooth pain not relieved by medication",
+"Bleeding that won't stop with pressure",
+"Fever over 101°F (38.33°C)"
+"Repeated infections",
+"High fever (over 103°F/40°C)",
+"Confusion or mental changes",
+"Vision changes, especially with pain or swelling around eyes",
+"Seizures",
+"Stiff neck"
+"Repeated sinusitis that doesn't improve with treatment",
+"Sinusitis symptoms lasting over 10 days",
+"Fever",
+"Swelling or redness around eyes",
+"Severe headache",
+"Forehead swelling",
+"Confusion",
+"Double vision or other vision changes",
+"Stiff neck"
+"Cough lasting over three weeks",
+"Frequent shortness of breath or wheezing",
+"High fever (over 103°F or 39.4°C) lasting over five days",
+"Coughing up blood"
+"Coughing or wheezing",
+"Shortness of breath or breathing difficulties",
+"Allergy symptoms like stuffy nose, itchy/watery eyes, or skin rash"
+"Itchiness",
+"Discharge from the ear",
+"Severe pain even during treatment",
+"Dizziness",
+"Fever"
+"Symptoms not improving within three days",
+"Fever of 100.4°F (38°C) or higher"
+"Shortness of breath",
+"Fever or cough with mucus",
+"Tiredness",
+"Change in appetite"

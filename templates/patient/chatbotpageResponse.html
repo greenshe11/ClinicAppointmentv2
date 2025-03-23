@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+     <title>ChatClinic</title>
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+     <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/chatbotpage.css')}}">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     
+     <!-- Favicons-->
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com" rel="preconnect">
+     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+     <!--Veondor CSS Files-->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+
+
+
+
+     <!-- Main CSS File -->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+</head>
+<body>
+     <header id="header" class="header sticky-top">
+
+
+          <!-- Navigations -->
+          <div class="branding d-flex align-items-center">
+               <div class="container position-relative d-flex align-items-center justify-content-between">
+                    <a href="/" class="logo d-flex align-items-center me-auto">
+                         <h1 class="sitename">ISAT-U ClinicHub</h1>
+                    </a>
+
+                    <!--Navigation Menu-->
+                    <nav id="navmenu" class="navmenu">
+                         <ul>
+                              <li><a href="/" class="">Home</a></li>
+                              <li><a href="/schedule" class="">Schedules</a></li>
+                              <li><a href="/profile" class="">Account</a></li>
+                              <li><a href="#" class="active">Make an Appointment</a></li>
+                         </ul>
+                         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                    </nav>
+
+                  
+               </div>
+
+          </div>
+     </header>
+     <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
+    
+
+
+     <div id="main-body">
+          <div id="header">
+               <ul class="nav nav-pills">
+                    <li class="nav-item mx-2">
+                         <a class="nav-link tab" aria-current="page" href="/"><</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                         <a class="nav-link tab" href="/chatbotpage">Symptoms</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                         <a class="nav-link active tab" style="background-color: white; color: #257ECC; border-radius: 0px;"  href="/chatbotpage/response">Response</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                         <a class="nav-link disabled tab" href="#">Appointment</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                         <a class="nav-link disabled tab" href="#">Summary</a>
+                    </li>
+               </ul>
+          </div>
+          
+          
+          <div class="cbp-dialog-container" >
+               <img class="cbp-dialog-img" src="/static/assets/nurse.png" style="margin: 20px;"/>
+               <div class="cbp-dialog" style="flex-direction: column; height: auto;">
+                    <div id="cbp-recommendation">Evaluating..
+                    </div>
+                   
+               </div>
+               
+               </p>
+               <div class="cbp-dialog-footer">
+                    <p id="cbp-bottom-line"></p>
+                    Additional Complaints:
+                    <textarea style="width: 100%;" id="complaints"></textarea>
+               </div>
+          </div>
+     </div>
+     <div id="text-area" >
+          <div style="width:100%; height: 40px; background-color: white;  border-radius: 10px"></div>
+          <button id='next-button' onclick="toAppointment()" disabled>Next</button>
+     </div>
+     <!-- Vendor JS Files -->
+     <script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+
+
+     <!-- Main JS File -->
+     <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
+     <!--DONT DELETE-->
+     <script type="module">
+          /**
+          * Import necessary scripts and components.
+          * 
+          * - Sidebar: Loads and renders the sidebar in the HTML element.
+          * - createRecommendationSent: Generates a recommendation sentence based on selected symptoms.
+          * - getSeriousSymptoms: Retrieves serious symptoms from a list of selected symptoms.
+          * - getSymptomsSession: Fetches the session data for selected symptoms.
+          */
+          import "/static/components/sidebar/script.js";
+          import {createRecommendationSent, getSeriousSymptoms } from '/static/pageScripts/utils.js'
+          import {getSymptomsSession} from "/static/components/symptomsSelection/script.js"
+
+          /**
+          * Loads the sidebar component into the specified HTML element.
+          * 
+          * @function Sidebar
+          * @param {HTMLElement} document.getElementById('home-sidebar-insert-area') - The HTML element where the sidebar is inserted.
+          */
+          Sidebar(document.getElementById('home-sidebar-insert-area'))
+
+          /**
+          * Fetches selected symptoms from the session, creates recommendations, and determines if serious symptoms are present.
+          * 
+          * - Updates the HTML content of the page based on the symptoms and their severity.
+          * 
+          * @async
+          * @function createResponse
+          * @returns {Promise<void>} - This function does not return any value. It performs DOM manipulations.
+          */
+          const createResponse = async () => {
+          // Fetch selected symptoms from the session.
+          const symptoms = await getSymptomsSession(false)
+          console.log(symptoms)
+          
+          // Display the recommendation based on the selected symptoms.
+          console.log('seleted',symptoms['symptoms_selected'])
+          document.getElementById('cbp-recommendation').innerHTML = createRecommendationSent(symptoms['symptoms_selected'])
+          
+          // Get serious symptoms from the selected symptoms.
+          const seriousSymptoms = getSeriousSymptoms(symptoms['symptoms_selected'])
+          
+          // Get the "Next" button and the bottom-line text element.
+          const nextBtn = document.getElementById('next-button')
+          const bottomLine = document.getElementById('cbp-bottom-line')
+          
+          // If there are serious symptoms, enable the "Next" button and show a message about setting an appointment.
+          if (seriousSymptoms.length > 0) {
+               nextBtn.disabled = false
+               bottomLine.innerHTML = `The symptoms (${seriousSymptoms.join(',')}) make you in need of professional help. Click <b>Next</b> to set an appointment date.`
+          } else {
+               // If no serious symptoms are found, disable the "Next" button and display a mild symptoms message.
+               nextBtn.disabled = true
+               bottomLine.innerHTML = `The symptoms above are considered mild and treatable with home remedies or over-the-counter medicines through your local pharmacies. For these symptoms, you will not need to make an appointment.`
+          }
+          }
+
+          // Call createResponse to initialize the symptom evaluation and response generation.
+          createResponse()
+
+     </script>
+
+     <script type="module">
+          import {complaintsToSession} from '/static/pageScripts/session.js';
+               
+          window.toAppointment = () => {
+               complaintsToSession(document.getElementById('complaints').value)
+               
+               window.location.href = '/chatbotpage/response/appointment'
+          }
+
+         
+     </script>
+</body>
+
+</html>
