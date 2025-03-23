@@ -1,0 +1,40 @@
+
+
+<div id="ss-dimmer"></div>
+
+<div id="ss-modal" class="ss-modal" style="display: none">
+    <div class="dr-body" id="ss-body">
+            <div class="ss-close-btn" id="ss-close-btn" onclick="onClickCloseCal()">x</div>
+            <div class="ss-scrollview">
+               
+                <div class="container symptoms-selector-container">
+                    <div id="symptom-tags-container">
+                        <i class="symptom-tags-tip">Select up to 3 symptoms; click on tag to remove</i>
+                        <div id="symptom-tags-list"></div>
+                    </div>
+                    <div class="dropdown ">
+                        <div style="display: flex; flex-direction: row">
+                            <input type="text" id="textbox" class="form-control" placeholder="Find and select symptoms..." oninput="suggestSymptoms()" onfocus="suggestSymptoms()" autocomplete="off" aria-haspopup="true" aria-expanded="false" 
+                        style="width: 75%;"/>
+                            <button id='show-btn' onclick="showHideList()" style="width: 25%; background-color: #257ECC; border-color: #257ECC;" class="btn btn-success" >ok</button>
+                        </div>
+                        <ul id="symptoms-suggestion-list" class="dropdown-menu w-100 show">
+                        </ul>
+                    </div>
+                    <div id="selection-0">
+                    </div>
+                    <div id="selection-1">
+                    </div>
+                    <div id="selection-2">
+                    </div>
+                </div>
+            </div>
+            <div class="ss-action" style="margin-top: 0px;border-width: 0px; border-top-width: 1px; padding-top: 20px; border-style:solid; border-color:gray">
+                <button id="ss-confirm">Confirm</button>
+                <button id="ss-cancel">Cancel</button>
+            </div>
+           
+    </div>
+        <!-- Include the JavaScript file for the calendar functionality -->
+    
+</div>

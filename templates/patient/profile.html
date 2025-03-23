@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Profile</title>
+     <meta name="description" content="">
+     <meta name="keywords" content="">
+
+     <!-- Favicons-->
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/sample-icon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/account-icon.png')}}">
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com" rel="preconnect">
+     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+     <!--Veondor CSS Files-->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+
+
+
+
+     <!-- Main CSS File -->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+</head>
+<body>
+     <header id="header" class="header sticky-top">
+
+
+          <!-- Navigations -->
+          <div class="branding d-flex align-items-center">
+               <div class="container position-relative d-flex align-items-center justify-content-between">
+                    <a href="/" class="logo d-flex align-items-center me-auto">
+                         <h1 class="sitename">ISAT-U ClinicHub</h1>
+                    </a>
+
+                     <!--Navigation Menu-->
+                     <nav id="navmenu" class="navmenu">
+                         <ul>
+                          <li><a href="/" class="">Home</a></li>
+                          <li><a href="/schedule" class="">Requests</a></li>
+                          <li><a href="/profile" class="active">Account</a></li>
+                          <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                          
+                        </ul>
+                         <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
+                    </nav>
+
+                    <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
+                    <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                      <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                    
+                      <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                    
+                    </div>  
+                    
+                  
+               </div>
+
+          </div>
+     </header>
+     <main>
+          
+          <!--Hero Section-->
+          <section id="hero" class="hero section light-background">
+               <!-- <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in"> -->
+
+              <div class="container">
+               <div class="row">
+                    <div class="col-12">
+                         <!-- Page title -->
+                         
+                         <!-- Form START -->
+                         <form class="file-upload">
+                              <div class="row mb-5 gx-5">
+                                   <!-- Contact detail -->
+                                   <div class="col-xxl-12 mb-5 mb-xxl-0">
+                                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                                             <div class="row g-3" style="display:flex; align-items:center; justify-content:center;">
+                                                  <h3>My Profile</h3>
+                                                  <hr>
+                                                  <h4 class="mb-4 mt-0">Information</h4>
+                                                  <!-- First Name -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Email *</label>
+                                                       <input type="text" id="email" class="form-control" placeholder="" aria-label="First name" value="">
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">First Name *</label>
+                                                       <input type="text" id="first-name" class="form-control" placeholder="" oninput="validateApply()" aria-label="First name" value="">
+                                                  </div>
+                                                  <!-- Last name -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Last Name *</label>
+                                                       <input type="text" id="last-name" class="form-control" placeholder="" oninput="validateApply()" aria-label="Last name" value="">
+                                                  </div>
+                                                  <!-- Phone number -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Phone number *</label>
+                                                       <input type="text" id="contact" class="form-control" placeholder="" oninput="contactOnChange(event)" aria-label="Phone number" value="63">
+                                                  </div>
+                                                  <!-- Label number -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Member type</label>
+                                                       <select class="form-select" id="member-type" aria-label="Default select example" onchange="validateApply()">
+                                                            <option value="student">student</option>
+                                                            <option value="community">community</option>
+                                                            <option value="faculty">faculty</option>
+                                                            <!---<option value="staff">staff</option>-->
+                                                          </select>
+                                                  </div>
+                                                 
+                                             </div> <!-- Row END -->
+                                        </div>
+                                        <div style="display: flex; width: 100%; justify-content:space-between; border-width:0px; padding-top: 10px; border-color: gray; border-top-width: 1px; border-style: solid;">
+                                             <button class="btn btn-danger" style="margin-left: 30px;"  onclick="logout()">Log Out</button>
+                        
+                                             <div style="display: flex;">
+                                                  <button class="btn btn-primary" id="apply" onclick="updateInfo()">Apply</button>
+                                                  <button class="btn " id="cancel" style="margin-left: 20px;" onclick="renderData(event)">Cancel</button>
+                                             </div>
+                                             
+                                             
+                                        </div>
+                                   </div>
+                                  
+                                   <!-- Upload profile -->
+                                    <!--
+                                   <div class="col-xxl-4">
+                                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                                             <div class="row g-3">
+                                                  <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                                                  <div class="text-center">
+                                                       <div class="square position-relative display-2 mb-3">
+                                                            <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+                                                       </div>
+                                                       <input type="file" id="customFile" name="file" hidden="">
+                                                       <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
+                                                       <button type="button" class="btn btn-danger-soft">Remove</button>
+                                                  
+                                                       <p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>-->
+                              </div> <!-- Row END -->
+                         </form> <!-- Form END -->
+                       
+               </div>
+          </section>
+
+
+     </main>
+
+
+         <!-- Scroll Top -->
+         <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+          class="bi bi-arrow-up-short"></i></a>
+
+          <!-- Preloader -->
+          <div id="preloader"></div>
+
+          <!-- Vendor JS Files -->
+          <script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+          <script src="{{ url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+          <script src="{{ url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+          <script src="{{ url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+          <script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+          <script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>  
+
+
+          <!-- Main JS File -->
+          <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
+          <script type="module">
+               import {getUserData} from '/static/pageScripts/session.js'
+               let data = await getUserData()
+               data = data[0]
+               window.validateApply = () => {
+                    console.log('validated')
+                    let result = false
+                    const email = document.getElementById('email')
+                    const firstName = document.getElementById('first-name')
+                    const lastName = document.getElementById('last-name')
+                    const contact = document.getElementById('contact')
+                    const applyBtn = document.getElementById('apply')
+                    const cancelBtn = document.getElementById('cancel')
+                    
+                    const memberType = document.getElementById('member-type')
+                   
+
+                    if (email.value != data.PatientEmail){
+                         result = true
+                         console.log('email changed')
+                    }
+                    if (firstName.value != data.PatientName){
+                         result = true
+                         console.log('name changed')
+                    }
+                    if (lastName.value != data.PatientLastName){
+                         result = true
+                         console.log('last name changed')
+                    }
+                    if (contact.value != data.PatientContactNo){
+                         result = true
+                         console.log('contact changed')
+                    }
+                    console.log(getTypeSelected(), data.PatientCategory)
+                    if (data.PatientCategory != getTypeSelected()){
+                         result = true
+                         console.log('category changed')
+                    }
+                    console.log(result)
+                    
+                    if (result){
+                         applyBtn.removeAttribute('disabled')
+                         applyBtn.style.display = "block"
+                         cancelBtn.style.display = "block"
+                    }else{
+                         applyBtn.setAttribute('disabled', "true")
+                         applyBtn.style.display = "none"
+                         cancelBtn.style.display = "none"
+                    }
+                    result = false
+
+
+
+               }
+               document.getElementById('apply').setAttribute('disabled',true)
+               document.getElementById('apply').style.display = "none"
+               document.getElementById('cancel').style.display = "none"
+               const getTypeSelected = () => {
+                    const memberType = document.getElementById('member-type')
+                   
+                    return memberType.value
+               }
+
+               const setDefaultType = (name) => {
+                    const memberType = document.getElementById('member-type')
+                    
+                    memberType.childNodes.forEach((element)=>{
+                         if (element.nodeName == '#text'){return}
+                         if (name==element.value){
+                              element.setAttribute('selected', 'true')
+                         }else{
+                              console.log(element)
+                              element.removeAttribute('selected')
+                         }
+                    })
+                   
+               }
+
+               const renderData = async (event) => {
+                    event?event.preventDefault():null
+                    
+                    const email = document.getElementById('email')
+                    const firstName = document.getElementById('first-name')
+                    const lastName = document.getElementById('last-name')
+                    const contact = document.getElementById('contact')
+                    
+                    
+                    const disableEmail = () => {email.setAttribute('disabled', "true")} 
+                    const enableEmail = () => {email.removeAttribute('disabled')}
+                    enableEmail()
+                    email.value = data.PatientEmail
+                    disableEmail()
+                    console.log(data)
+                    firstName.value = data.PatientName 
+                    lastName.value = data.PatientLastName 
+                    contact.value = data.PatientContactNo 
+                    setDefaultType(data.PatientCategory)
+                    validateApply()
+                    console.log(getTypeSelected())
+
+
+                    
+
+               }
+               renderData()
+               // Attach the function to the global scope
+               window.contactOnChange = (event) => {
+                    const contactField = document.getElementById('contact');
+                    const prefix = "63";
+                 console.log(event.target.value); // Logs the new value
+                 if (event.target.value == '6'){
+                    event.target.value = '63'
+                    return
+                 }
+                 if (!event.target.value.startsWith(prefix)) {
+                    event.target.value = prefix + event.target.value.replace(new RegExp(`^${prefix}`), '');
+                  }
+                  const input = document.getElementById('contact');
+                  input.value = input.value.replace(/\D/g, '');  // Removes non-digit characters
+                  if (input.value.length > 12) {
+                      input.value = input.value.slice(0, 12);    // Ensures max length is 10 digits
+                  }
+                  validateApply()
+               };
+
+               window.logout = async () => {
+                    try {
+                        const response = await fetch('/api/patient?for=logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({}),
+                        });
+                
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                
+                        const result = await response.json();
+                        if (result.hasOwnProperty('customError')) {
+                            alert(result.customError);
+                            return;
+                        }
+                
+                        window.location.href = '/login';
+                    } catch (error) {
+                        console.error('Error:', error);
+                        window.location.href = '/home';
+                    }
+                }
+               
+                async function applyProfile(){
+                  let data = await getUserData()
+                  data = data[0]
+                  console.log(data)
+                  
+                  if (data["PatientCategory"]=="staff"){
+                    // remove appointment button if staff
+                    document.getElementById("appointment-btn").remove()
+                    document.getElementById("appointment-btn-2").remove()
+          
+                  }
+          
+                  document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
+                }
+          
+                applyProfile()
+               async function updateInfo() {
+                    const newData = {
+                         Patient_ID: data.Patient_ID,
+                         PatientName: document.getElementById('first-name').value,
+                         PatientLastName: document.getElementById('last-name').value,
+                         PatientContactNo: document.getElementById('contact').value,
+                         PatientCategory: getTypeSelected()
+                    }
+                    const response = await fetch('/api/patient', {
+                         method: 'PUT',
+                         headers: {
+                              'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify(newData),
+                    });
+               
+                    if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                         return
+                    }
+                    alert('Update Successful')
+                    window.location.href = '/profile';
+                    
+               }
+
+               window.updateInfo = updateInfo
+          </script>
+
+
+     
+</body>
+</html>

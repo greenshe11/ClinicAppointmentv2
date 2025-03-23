@@ -1,0 +1,619 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>sandbox</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/sidebar.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/chatbotpage.css">
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+         rel="stylesheet">
+
+    <!--Veondor CSS Files-->
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+
+
+
+
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+</head>
+
+<body >
+    <!--Start-->
+      <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
+      <header id="header" class="header sticky-top">
+
+
+        <!-- Navigations -->
+        <div class="branding d-flex align-items-center">
+             <div class="container position-relative d-flex align-items-center justify-content-between">
+                  <a href="/" class="logo d-flex align-items-center me-auto">
+                       <h1 class="sitename">ISAT-U ClinicHub</h1>
+                  </a>
+
+                  <!--Navigation Menu-->
+                  <!-- Navigations -->
+
+                 <!--Navigation Menu-->
+                 <nav id="navmenu" class="navmenu">
+                      <ul>
+                       <li><a href="/" class="">Home</a></li>
+                       <li><a href="/schedule" class="active">Requests</a></li>
+                       <li><a href="/profile" class="">Account</a></li>
+                       <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                       
+                     </ul>
+                      <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
+                 </nav>
+
+                 <!--<a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>-->
+                 <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                    <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                  
+                    <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                  
+                  </div>  
+
+               
+            </div>
+
+   </header>
+
+    <div id="sched-calendar-insert-area" style="display: flex; justify-content: center; align-items:center; height: 100%; width: 100%; "></div>
+   
+    
+    <div id="info-modal-insert-area" style="display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%"></div>
+      
+    <div id="home-container" style="margin-top: 50px;">
+        <div id="home" class="container-fluid" >
+            <h1 class="title-opening" style="font-size: 30px;">All Requests</h1>
+        </div>
+         
+    </div>
+    <div style="margin-left: 30px; margin-right: 30px;padding: 10px; margin-bottom: -30px; margin-top: 20px; background-color: white; justify-self: center; border-radius: 5px;">
+        <h5>Filter</h5>
+        <div style="display: flex; flex-wrap: wrap; justify-content:center; "> 
+          <div style="margin: 5px;">
+            <label for="month" >Month:</label>
+            <select id="month-filter" onchange="useFilter()" name="month">
+                <option value="0">All</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+          </div>
+          <div style="margin: 5px;">
+            Last Name:
+            <input id="last-name-filter" oninput="useFilter()"/>
+          </div>
+          <div style="margin: 5px;">
+            First Name:
+            <input id="first-name-filter" oninput="useFilter()"/>
+          </div>
+          <div style="margin: 5px;">
+            Year:
+            <input id="year-filter" oninput="useFilter()"/>
+          </div>
+          <div style="margin: 5px;">
+            <label for="status" >Status:</label>
+            <select id="status-filter" onchange="useFilter()" name="status">
+                <option value="-1">All</option>
+                <option value="0">Pending</option>
+                <option value="1">Confirmed</option>
+            </select>
+          </div>
+        </div>
+        
+      </div>
+    <div id="table-staff" class="container-fluid" style="padding:20px;">
+        <br>
+        
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Schedule Info</p>
+            </div>
+            <div class="card-body">
+                
+                <div class="row">
+                    <div class="col-md-12 text-nowrap">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><!--<label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                                    <option value="10" selected="">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>&nbsp;</label></div>
+                    </div>-->
+                    <div class="col-md-6">
+                        <!---<div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>-->
+                    </div>
+                </div>
+
+                <div class="table-responsive table mt-2"   id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable" >
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Schedule</th>
+                                
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                
+                                <th>Info</th>
+                                <th>Status</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="sched-table-body">
+                            
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 align-self-center">
+                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination" id="pagination">
+                               
+                            </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<!--DONT DELETE-->
+<script type="module">
+    import {SidebarStaff} from "/static/components/sidebarStaff/script.js";
+    SidebarStaff(document.getElementById('home-sidebar-insert-area'))
+</script>
+
+     <!-- Vendor JS Files -->
+     <script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+
+
+     <!-- Main JS File -->
+     <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
+     <script type="module">
+        import {getUserData} from '/static/pageScripts/session.js'
+        import {getSession} from '/static/pageScripts/session.js'
+        async function applyProfile(){
+        let data = await getUserData()
+        data = data[0]
+        const session = await getSession()
+        if (session["isStaff"]){
+             // remove appointment button if staff
+             document.getElementById("user-category-display").innerHTML = "staff"
+        }else{
+             document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
+        }
+
+        
+        }
+
+        applyProfile()
+   </script>
+<script type="module">
+    // Imports necessary modules and functions for handling calendar and appointment data
+    import {
+        CalendarSelection,
+        onClickShowCal,
+        selected,
+        getAppointmentsFilter,
+        getSession,
+        getTimeName,
+        deleteAppointment,
+        setCalendarButtonOpeners,
+        btn
+    } from "/static/components/calendarSelection/script.js";
+
+    import { deleteSymptomsFromDb } from "/static/components/symptomsSelection/script.js";
+    import { InfoModal, showModal } from "/static/components/infoModal/script.js";
+    import { getDaysUntilAppointment } from "/static/pageScripts/calendar.js"
+
+    /**
+    * Global Constants and Variables
+    */
+    const monthNamesAll = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // Array of month names for display
+    const tableBody = document.getElementById('sched-table-body'); // Reference to the table body where appointments will be rendered
+    const itemsPerPage = 5; // Number of appointments displayed per page
+    let currentPage = 1; // Tracks the current page number for pagination
+    let sessionData = null; // Holds session data (initially null)
+    let appointments = null; // Holds appointment data (initially null)
+  
+    /**
+    * Show the calendar when a date is clicked.
+    * @param {Event} event - The click event that triggered the calendar display.
+    * @param {string} contact - The contact information of the patient.
+    */
+    window.onClickShowCalendar = (event, contact) => {
+        console.log(event.srcElement); // Log the element that triggered the event
+        const month = event.srcElement.getAttribute('data-month'); // Get month from data attribute
+        const year = event.srcElement.getAttribute('data-year'); // Get year from data attribute
+        selected.appointmentId = event.srcElement.getAttribute('data-appointmentId'); // Store the selected appointment ID
+        selected.contact = contact; // Store the contact information
+        onClickShowCal(month - 1, year); // Show calendar starting on selected month and year (month - 1 because months are 0-indexed)
+    };
+
+    /**
+    * Fetch patient information based on user ID.
+    * @param {string} userId - The ID of the patient.
+    * @returns {Promise<Object>} - The patient information.
+    */
+    const getPatientInfo = async (userId) => {
+        const res = await fetch(`/api/patient?Patient_ID=${userId}`); // Fetch patient info from the API
+        const returnVal = await res.json(); // Parse the JSON response
+        console.log("result", returnVal); // Log the result
+        return returnVal; // Return the patient info
+    };
+
+    /**
+    * Set the current page for pagination and render the corresponding appointments.
+    * @param {number} num - The page number to set.
+    */
+    window.setToPage = async (num) => {
+        currentPage = num; // Update current page
+        setPaginationNumber(); // Update pagination display
+        await renderPage(); // Render the appointments for the new page
+    };
+
+    /**
+    * Delete an appointment and its associated symptoms from the database.
+    * @param {Event} event - The click event triggering the deletion.
+    */
+    window.deleteAppointment = async (event) => {
+        if (!(confirm("Are you sure you want to delete this appointment?\nThis will not alert the user and this action is irreversible."))) {
+            return
+        }
+        const id = event.srcElement.getAttribute('data-appointmentId'); // Get appointment ID from data attribute
+        await deleteAppointment(id); // Delete the appointment
+        await deleteSymptomsFromDb(id); // Delete associated symptoms
+        
+        const tr = event.srcElement.closest('tr'); // Find the closest <tr> (the entire row)
+        tr.parentElement.removeChild(tr); // Remove the entire row from the table
+        
+        setPaginationNumber(); // Update pagination after deletion
+    };
+
+    /**
+    * Send an SMS notification about the appointment status.
+    * @param {string} date - The appointment date.
+    * @param {string} time - The appointment time.
+    * @param {string} contact - The contact number.
+    * @param {number} statusCode - The status code of the appointment.
+    */
+    const sendMessage = async (date, time, contact, statusCode) => {
+        const url = '/api/sms'; // API endpoint for sending SMS
+        const data = { date, time, contact, statusCode }; // Prepare data for the request
+        try {
+            const response = await fetch(url, {
+                method: 'POST', // Specify POST method
+                headers: { 'Content-Type': 'application/json' }, // Set content type to JSON
+                body: JSON.stringify(data) // Convert data object to JSON string
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); // Check for errors
+
+            const result = await response.json(); // Parse the JSON response
+            console.log(result); // Log the result
+        } catch (error) {
+            console.error('Error:', error); // Log any errors encountered
+        }
+    };
+
+    /**
+    * Update the appointment status and notify the patient.
+    * @param {Event} event - The click event triggering the status update.
+    * @param {number} statusCode - The new status code for the appointment.
+    */
+    window.setAppointmentStatus = async (event, statusCode) => {
+        // Function to return HTML for displaying status
+        const getStatusDisplay = (statusCode) => { 
+            const color = ['black', 'green', 'red']; // Colors for status display
+            const name = ['Pending', 'Confirmed', 'Rejected']; // Status names
+            return `<p style="color: ${color[statusCode]}">${name[statusCode]}</p>`; // Return formatted HTML
+        };
+
+        // Get attributes from the clicked element
+        const appointmentId = event.srcElement.getAttribute('data-appId'); // Get appointment ID
+        const monthName = event.srcElement.getAttribute('data-monthName'); // Get month name
+        const day = event.srcElement.getAttribute('data-day'); // Get day
+        const year = event.srcElement.getAttribute('data-year'); // Get year
+        const timeName = event.srcElement.getAttribute('data-timeName'); // Get time name
+        const contact = event.srcElement.getAttribute('data-contact'); // Get contact information
+
+        const url = '/api/appointments'; // API endpoint for updating appointments
+        const data = {
+            Appointment_ID: appointmentId,
+            Appointment_Confirmed: statusCode // Prepare data for the update
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'PUT', // Specify PUT method for updates
+                headers: { 'Content-Type': 'application/json' }, // Set content type to JSON
+                body: JSON.stringify(data) // Convert data object to JSON string
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); // Check for errors
+
+            const result = await response.json(); // Parse the JSON response
+            console.log('Success:', result); // Log success message
+            const td = event.srcElement.closest('td'); // Get the closest <td> element
+            td.innerHTML = getStatusDisplay(statusCode); // Update the status display
+
+            // Send an SMS notification
+            sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode);
+        } catch (error) {
+            console.error('Error:', error); // Log any errors encountered
+        }
+    };
+
+    /**
+    * Update pagination display based on the current page and total appointments.
+    */
+    const setPaginationNumber = async (count) => {
+        const statement = document.getElementById('dataTable_info'); // Reference to the pagination info element
+        statement.innerHTML = ""; // Clear previous info
+        let finalLength = itemsPerPage * currentPage; // Calculate the final item index to display
+        finalLength = finalLength >= count ? count: finalLength; // Ensure it does not exceed total appointments
+        statement.innerHTML = `Showing ${currentPage} to ${finalLength} of ${count}`; // Display current pagination info
+
+        const paginationContainer = document.getElementById('pagination'); // Reference to pagination container
+        paginationContainer.innerHTML = ""; // Clear previous pagination buttons
+        const pageCountDisplayedMax = 3; // Maximum number of page buttons to display
+        const leftCountAllowance = 3; // Allowance for pages to the left of the current page
+
+        // Calculate the number of left pages to display
+        const leftAllowance = (() => {
+            let tempRes = leftCountAllowance; // Start with the left count allowance
+            if (currentPage - tempRes <= 0) {
+                tempRes = Math.abs(1 - currentPage); // Adjust if current page is near the start
+            }
+            return tempRes; // Return the calculated allowance
+        })();
+
+        const rightAllowance = Math.floor((pageCountDisplayedMax / 2)); // Allowance for pages to the right
+        let codeTop = ''; // HTML for the previous button
+        let codeBottom = ''; // HTML for the next button
+
+        // Set HTML for the previous button based on current page
+        if (currentPage === 1) {
+            codeTop = `<li class="page-item disabled"><a class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a></li>`;
+        } else {
+            codeTop = `<li class="page-item" onclick="setToPage(${currentPage - 1})"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">«</span></a></li>`;
+        }
+
+        // Set HTML for the next button based on current page
+        if (currentPage >= (count / itemsPerPage)) {
+            codeBottom = `<li class="page-item disabled"><a class="page-link" aria-label="Previous"><span aria-hidden="true">»</span></a></li>`;
+        } else {
+            codeBottom = `<li class="page-item" onclick="setToPage(${currentPage + 1})"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>`;
+        }
+
+        let codeAll = ''; // HTML for all page buttons
+        // Loop to create page buttons based on current page and allowances
+        for (let i = currentPage - leftAllowance; i < currentPage + pageCountDisplayedMax; i++) {
+            if (i >= (count / itemsPerPage) + 1) { // Skip if beyond total pages
+                continue;
+            }
+            // Create HTML for the current page button
+            if (i === currentPage) {
+                codeAll += `<li class="page-item active" onclick="setToPage(${i})"><a class="page-link" href="#">${i}</a></li>`;
+            } else {
+                codeAll += `<li class="page-item" onclick="setToPage(${i})"><a class="page-link" href="#">${i}</a></li>`;
+            }
+        }
+        
+        // Update the pagination container with all constructed HTML
+        paginationContainer.innerHTML = codeTop + codeAll + codeBottom;
+    };
+
+    /**
+    * Render the current page of appointments in the table.
+    */
+    const renderPage = async () => {
+        tableBody.innerHTML = ""; // Clear existing table content
+        const startNum = itemsPerPage * (currentPage - 1); // Calculate starting index for current page
+        let finalNum = itemsPerPage * currentPage; // Calculate ending index for current page
+        let count = 0
+        let codeAll = ''; // HTML for all appointment rows
+        for (let i = startNum; i < finalNum; i++) {
+            if (appointments.length <= i) { // Break if exceeding total appointments
+                break;
+            }
+            const appointmentSpec = appointments[i]; // Get appointment data for current index
+            const month = appointmentSpec.Appointment_Month; // Extract month
+            const year = appointmentSpec.Appointment_Year; // Extract year
+            const day = appointmentSpec.Appointment_Day; // Extract day
+            const status = appointmentSpec.Appointment_Confirmed; // Extract status
+            const time = appointmentSpec.Appointment_Time; // Extract time
+            const appId = appointmentSpec.Appointment_ID; // Extract appointment ID
+            const patientId = appointmentSpec.Patient_ID; // Extract patient ID
+            const monthName = monthNamesAll[appointmentSpec.Appointment_Month - 1]; // Get month name from array
+            const combinedDate = `${monthName} ${day}, ${year}`; // Format date for display
+            const timeName = getTimeName(time); // Get formatted time name
+            
+            // Fetch patient info and ensure only single result is used
+            let patientInfo = await getPatientInfo(patientId);
+            patientInfo = patientInfo[0]; // Look only for single result
+            const contact = patientInfo ? patientInfo.PatientContactNo : undefined; // Get contact info
+            const firstName = patientInfo ? patientInfo.PatientName : undefined; // Get first name
+            const lastName = patientInfo ? patientInfo.PatientLastName : undefined; // Get last name
+            const category = patientInfo ? patientInfo.PatientCategory : undefined
+            // Function to return HTML for displaying appointment status and action buttons
+            const useFilter = (monthNum, lastName, firstName, year, status) => {
+                let monthFilter = document.getElementById("month-filter").value
+                monthFilter = monthFilter=="0"?monthNum:monthFilter
+                if (!(monthNum==monthFilter)){
+                    return false
+                }
+                let lastNameFilter = document.getElementById("last-name-filter").value.toLowerCase()
+                lastNameFilter = lastNameFilter?lastNameFilter:lastName.toLowerCase()
+                if (!(lastName.toLowerCase().startsWith(lastNameFilter) )){
+                    return false
+                }
+                let firstNameFilter = document.getElementById("first-name-filter").value.toLowerCase()
+                firstNameFilter = firstNameFilter?firstNameFilter:firstName.toLowerCase()
+                if (!(firstName.toLowerCase().startsWith(document.getElementById("first-name-filter").value.toLowerCase()) )){
+                    return false
+                }
+                let yearFilter = document.getElementById("year-filter").value
+                yearFilter = yearFilter?yearFilter:year.toLowerCase()
+             
+                if (!(year.toLowerCase().startsWith(document.getElementById("year-filter").value.toLowerCase()) )){
+                    return false
+                }
+                let statusFilter = document.getElementById("status-filter").value
+                statusFilter = statusFilter=="-1"?status:statusFilter
+                if (!(status==statusFilter)){
+                    return false
+                }
+                return true
+
+            }
+            if (!useFilter(month, lastName, firstName, year.toString(), status)){
+                continue
+            }else{
+                count+=1
+            }
+            const getStatusDisplay = (statusCode) => {
+                if (statusCode == 0) { // If status is pending
+                    return `<button class="btn btn-success viewer" data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: green" onclick="setAppointmentStatus(event, 1)">Confirm</button>`
+                    //<button class="btn btn-danger" data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" onclick="setAppointmentStatus(event, 2)">Reject</button>`;
+                }
+                const color = ['black', 'green', 'red']; // Colors for status display
+                const name = ['Pending', 'Confirmed', 'Rejected']; // Status names
+                return `<p style="color: ${color[statusCode]}">${name[statusCode]}</p>`; // Return formatted HTML
+            };
+
+            // Construct the HTML for a single appointment row
+            let code = `<tr><td>${category}</td>
+                 <td>${combinedDate} ${timeName}</td>
+                 <td>${lastName}</td>
+                <td>${firstName}</td>
+                
+                <td><button class="btn btn-primary viewer" data-appointmentId="${appId}"  data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: blue" onclick="showModal(event)">Info</button></td>
+                <!---<td><button class="btn btn-danger" data-appointmentId="${appId}" onclick="deleteAppointment(event)">Delete</button></td>-->
+               ` 
+           if ((getDaysUntilAppointment(month, year, day) > 0)||status==1){
+            code = code + `<td>${getStatusDisplay(status)}</td>`
+           }else{
+            code = code + '<td><i><button class="btn btn-success viewer" data-appointmentId="${appId}" style="background-color:gray" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" disabled onclick="showModal(event)">Confirm</button></td></i></td>'
+           }
+            code = code + `
+                
+               
+                
+            `;
+           // const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event, ${contact})" class="btn btn-primary resched" style="background-color: blue">Reschedule</button></td>` : `<td><i>date lapsed</i></td>`
+            //code = code + reschedSnippet
+            code = code + '</tr>'
+            codeAll += code; // Accumulate appointment rows
+            console.log(code)
+            console.log('<tr>' +  (getDaysUntilAppointment(month, year, day) > 0)
+                )
+        }
+        tableBody.innerHTML = codeAll; // Set the table body with all constructed rows
+
+
+        const btnUpdated = document.getElementsByClassName('resched'); // Re-update button elements for calendar selection
+        setCalendarButtonOpeners(btnUpdated); // Initialize calendar button functionality
+        setPaginationNumber(count); // Update pagination display
+    };
+
+    /**
+    * Fetch and set the appointments data for rendering.
+    */
+    const setAppointmentsData = async () => {
+        sessionData = await getSession(); // Get session data
+        appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
+        console.log("DATA", appointments); // Log fetched data
+        appointments.sort((a, b) => {
+            // Create date objects for comparison, using only the hour
+            const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+            const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time);
+            let diff = dateB - dateA; // Sort by date and hour (latest first)
+            return diff;
+        });
+    };
+
+    /**
+    * Render the initial appointments and setup components.
+    */
+    const renderAppointmentsInitial = async () => {
+        await setAppointmentsData(); // Fetch and set appointments data
+        console.log("COMING", appointments); // Log the fetched appointments
+        await renderPage(); // Render the appointments on the initial page
+        
+        // Initiate Calendar Selection after table generation is done
+        CalendarSelection(
+            document.getElementById('sched-calendar-insert-area'), // Element where calendar is inserted
+            document.getElementsByClassName('resched'), // Elements that can show the calendar
+            '* This will reset the appointment status to <b>pending</b> and remove the previous appointment date.', // Warning message
+            'Reschedule', // Button label
+            'sched-patient' // Purpose of the calendar
+        );
+        
+        
+    };
+
+    // Initial call to render appointments when the script loads
+    renderAppointmentsInitial();
+    // Initialize the info modal for appointment details
+    InfoModal(
+        document.getElementById('info-modal-insert-area'), // Element for modal insertion
+        document.getElementsByClassName('viewer') // Elements that can show appointment info
+    );
+
+    window.useFilter = () =>{
+        renderAppointmentsInitial()
+        
+
+    }
+    // Expose showModal function globally for use in HTML
+    window.showModal = showModal;
+
+    
+</script>
+
+
+</html>

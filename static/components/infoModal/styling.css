@@ -1,0 +1,109 @@
+
+
+.dr-date-picker {
+    font-size: 10px;
+    max-width: 10px;
+}
+
+.im-details {
+    width: 100%;
+    height: auto;
+}
+
+.im-close-btn {
+    margin-bottom: 10px;
+    text-align:end;
+    align-self: flex-end;
+    font-weight: bold;
+
+}
+
+.im-scrollview{
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.im-close-btn:hover {
+    cursor: pointer;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.dr-day-header{
+    font-size: 10px;
+}
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-150%);
+    }
+}
+
+.modal-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#im-dimmer {
+    display: none; 
+    background-color: rgba(0,0,0,0.5); 
+    width: 100vw; 
+    height: 100vh; 
+    position: fixed; 
+    top: 0px;
+    left: 0px;
+    z-index: 1200;
+}
+.im-modal {
+    /* Add initial state for animation */
+    transition: transform 0.5s ease-in;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0px;
+    z-index: 1201;
+}
+
+#im-body{
+    display: flex;
+    background-color: rgba(255,255,255,1);
+    flex-direction: column;
+    padding: 20px;
+    width: 50%;
+    border-radius: 8px;
+}
+
+.im-modal.active {
+    /* Apply the animation when active */
+    animation: slideInFromLeft 0.5s forwards;
+}
+
+.im-modal.inactive {
+    /* Apply the animation when active */
+    animation: slideInFromRight 0.5s forwards;
+}
+
+
+.im-info-title {
+    color: white;
+    text-align: center;
+    background-color: #257ECC;
+}
+

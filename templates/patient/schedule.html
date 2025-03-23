@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>sandbox</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/sidebar.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/chatbotpage.css">
+     <!-- Favicons-->
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com" rel="preconnect">
+     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+     <!--Veondor CSS Files-->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+
+
+
+
+     <!-- Main CSS File -->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+</head>
+
+<body>
+    <!--Start-->
+      <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
+    <!--<div id="home-sidebar-insert-area"></div>-->
+    <header id="header" class="header sticky-top">
+
+
+        <!-- Navigations -->
+        <div class="branding d-flex align-items-center">
+             <div class="container position-relative d-flex align-items-center justify-content-between">
+                  <a href="/" class="logo d-flex align-items-center me-auto">
+                       <h1 class="sitename">ISAT-U ClinicHub</h1>
+                  </a>
+
+                   <!--Navigation Menu-->
+                   <nav id="navmenu" class="navmenu">
+                    <ul>
+                     <li><a href="/" class="">Home</a></li>
+                     <li><a href="/schedule" class="active">Requests</a></li>
+                     <li><a href="/profile" class="">Account</a></li>
+                     <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                     
+                   </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
+               </nav>
+
+               <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
+               <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+              
+                <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+              
+              </div>  
+
+                
+             </div>
+
+        </div>
+   </header>
+
+    <div id="sched-calendar-insert-area" style="display: flex; justify-content: center; align-items:center; height: 100%; width: 100%; "></div>
+   
+    
+    <div id="info-modal-insert-area" style="display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%"></div>
+      
+    <div id="home-container" style="margin-top: 50px;">
+        <div id="home" class="container-fluid" >
+            <h1 class="title-opening" style="font-size: 30px;">Requests</h1>
+        </div>
+         
+    </div>
+      
+    <div id="table" class="container-fluid">
+        <br>
+        
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Schedule Info</p>
+            </div>
+            <div class="card-body">
+                
+                <div class="row">
+                    <div class="col-md-12 text-nowrap">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><!--<label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                                    <option value="10" selected="">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>&nbsp;</label></div>
+                    </div>-->
+                    <div class="col-md-6">
+                        <!---<div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>-->
+                    </div>
+                </div>
+
+                <div class="table-responsive table mt-2"   id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable" >
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Datetime</th>
+                                <th>Info</th>
+                                <th>Reschedule</th>
+                                
+                                <th>Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sched-table-body">
+                            
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <!--<div class="row">
+                    <div class="col-md-6 align-self-center">
+                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                    </div>
+                    <div class="col-md-6">
+                        <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div>end of list</div>
+    </div>
+</body>
+<!--DONT DELETE-->
+<script type="module">
+    import "/static/components/sidebar/script.js";
+    Sidebar(document.getElementById('home-sidebar-insert-area'))
+</script>
+
+
+<!-- Vendor JS Files -->
+<script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+<script src="{{ url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+<script src="{{ url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+<script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+<script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+
+
+<!-- Main JS File -->
+<script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
+<script type="module">
+    /**
+    * Import necessary modules for handling calendar selection, appointment filtering, session management, and modal handling.
+    * 
+    * - CalendarSelection: Component to display and handle calendar selection for appointments.
+    * - onClickShowCal: Function to show the calendar based on selected date and month.
+    * - selected: Object containing selected appointment details.
+    * - getAppointmentsFilter: Fetches appointments filtered by a specific condition (e.g., Patient_ID).
+    * - getSession: Retrieves session information.
+    * - getTimeName: Converts appointment time to a human-readable format.
+    * - deleteAppointment: Deletes an appointment from the database.
+    * - InfoModal: Component to display a modal dialog.
+    * - showModal: Function to display the modal dialog.
+    * - deleteSymptomsFromDb: Deletes symptoms associated with a given appointment.
+    */
+    import { CalendarSelection, onClickShowCal, selected, getAppointmentsFilter, getSession, getTimeName, deleteAppointment } from "/static/components/calendarSelection/script.js";
+    import { InfoModal, showModal } from "/static/components/infoModal/script.js";
+    import { deleteSymptomsFromDb } from "/static/components/symptomsSelection/script.js";
+    import { getDaysUntilAppointment } from "/static/pageScripts/calendar.js"
+
+    /**
+    * Event handler for showing the calendar for rescheduling an appointment.
+    * 
+    * - Fetches the month, year, and appointment ID from the clicked element, 
+    *   then displays the calendar with the given month and year preselected.
+    * 
+    * @function onClickShowCalendar
+    * @param {Event} event - The event object representing the click action.
+    */
+    window.onClickShowCalendar = (event) => {
+        const month = event.srcElement.getAttribute('data-month'); // Get the month attribute
+        const year = event.srcElement.getAttribute('data-year'); // Get the year attribute
+        selected.appointmentId = event.srcElement.getAttribute('data-appointmentId'); // Store the appointment ID
+        onClickShowCal(month - 1, year); // Show the calendar, with the month adjusted to 0-based index
+    }
+
+    /**
+    * Event handler for deleting an appointment.
+    * 
+    * - Deletes both the appointment and its associated symptoms from the database,
+    *   then removes the appointment row from the table.
+    * 
+    * @async
+    * @function deleteAppointment
+    * @param {Event} event - The event object representing the click action.
+    * @returns {Promise<void>}
+    */
+    window.deleteAppointment = async (event) => {
+        if (!(confirm("Are you sure you want to cancel this appointment?\nThis action is irreversible."))) {
+            return
+        }
+        const id = event.srcElement.getAttribute('data-appointmentId'); // Get the appointment ID
+        await deleteAppointment(id); // Delete the appointment from the database
+        await deleteSymptomsFromDb(id); // Delete related symptoms from the database
+        const tr = event.srcElement.closest('tr'); // Find the closest <tr> element (table row)
+        tr.parentElement.removeChild(tr); // Remove the entire row from the table
+    }
+
+    /**
+    * Renders the list of user appointments in a table and allows interactions 
+    * such as rescheduling, viewing, and deleting appointments.
+    * 
+    * - Retrieves session data, filters appointments by user, sorts them, 
+    *   and dynamically generates a table of appointments.
+    * - Initializes components such as the calendar selection and modal after rendering.
+    * 
+    * @async
+    * @function renderAppointments
+    * @returns {Promise<void>}
+    */
+    const renderAppointments = async () => {
+        const monthNamesAll = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // Month names for display
+        const tableBody = document.getElementById('sched-table-body'); // Get table body element
+        const sessionData = await getSession(); // Get session data
+        let appointments = await getAppointmentsFilter({ Patient_ID: sessionData.userId }); // Get filtered appointments for user
+        let node = ''; // Empty string to build table rows
+
+        // Sort appointments by year, month, day, and time
+        appointments.sort((a, b) => {
+            const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time); // Date A
+            const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time); // Date B
+            return dateB - dateA; // Sort by descending order
+        });
+
+        // Iterate over each appointment and generate the table rows
+        for (let i = 0; i < appointments.length; i++) {
+            const appointmentSpec = appointments[i];
+            const month = appointmentSpec.Appointment_Month;
+            const year = appointmentSpec.Appointment_Year;
+            const day = appointmentSpec.Appointment_Day;
+            const status = appointmentSpec.Appointment_Confirmed;
+            const time = appointmentSpec.Appointment_Time;
+            const appId = appointmentSpec.Appointment_ID;
+            const monthName = monthNamesAll[month - 1];
+            const combinedDate = `${monthName} ${day},${year}`;
+            const timeName = getTimeName(time); // Get human-readable time
+
+            // Function to display the status of the appointment
+            const getStatusDisplay = (statusCode) => {
+                const color = ['black', 'green', 'red']; // Status colors: Pending, Confirmed, Rejected
+                const name = ['Pending', 'Confirmed', 'Rejected']; // Status names
+                return `<p style="color: ${color[statusCode]}">${name[statusCode]}</p>`; // Status display
+            }
+
+            // Create table row for each appointment
+            let code = `<tr>
+                <td>${getStatusDisplay(status)}</td>
+                <td>${combinedDate} ${timeName}</td>
+            `;
+            const infoSnippet = `<td><button class="btn btn-primary viewer" data-appointmentId="${appId}" data-userId="${sessionData.userId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: #257ECC" onclick="showModal(event)">Info</button></td>`
+            code = code + infoSnippet
+            const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event)" class="btn btn-primary resched" style="background-color: #257ECC">Reschedule</button></td>` : '<td><i>date lapsed</i></td>'
+            code = code + reschedSnippet
+            
+            const cancelSnippet = getDaysUntilAppointment(month, year, day) > 0 ? ` <td><button class="btn btn-danger" data-appointmentId="${appId}" onclick="deleteAppointment(event)">Cancel</button></td>` : `<td><i>date lapsed</i></td>`
+            code = code + cancelSnippet
+            code = code + '</tr>'
+            console.log(code,'code')
+            node += code; // Append the code for each row
+        }
+
+        tableBody.innerHTML = node; // Insert the generated rows into the table body
+
+        // Initialize the calendar selection component after table generation
+        CalendarSelection(
+            document.getElementById('sched-calendar-insert-area'), // Element where the calendar is inserted
+            document.getElementsByClassName('resched'), // Buttons for showing the calendar (reschedule buttons)
+            '* This will reset the appointment status to <b>pending</b> and remove the previous appointment date.', // Warning message
+            'Reschedule', // Button label
+            'sched-patient', // Purpose
+        );
+    }
+
+    // Render the appointments when the page loads
+    renderAppointments();
+
+    // Initialize the InfoModal component for displaying appointment details
+    InfoModal(
+        document.getElementById('info-modal-insert-area'), // Element where the modal is inserted
+        document.getElementsByClassName('viewer') // Buttons that trigger the modal (info buttons)
+    );
+
+    // Assign the showModal function to the global window object
+    window.showModal = showModal;
+
+    import {getUserData} from '/static/pageScripts/session.js'
+    async function applyProfile(){
+      let data = await getUserData()
+      data = data[0]
+      console.log(data)
+      
+      if (data["PatientCategory"]=="staff"){
+        // remove appointment button if staff
+        document.getElementById("appointment-btn").remove()
+        document.getElementById("appointment-btn-2").remove()
+
+      }
+
+      document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
+    }
+
+    applyProfile()
+</script>
+
+
+</html>

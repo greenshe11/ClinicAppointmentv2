@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+     <title>ChatClinic</title>
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+     <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/chatbotpage.css')}}">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     
+     <!-- Favicons-->
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+     
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com" rel="preconnect">
+     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+     
+     <!--Veondor CSS Files-->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+     
+     
+     
+     <!-- Favicons-->
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
+     
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com" rel="preconnect">
+     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+     
+     <!--Veondor CSS Files-->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/aos/aos.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/fontawesome-free/css/all.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+     
+     
+     
+     
+     <!-- Main CSS File -->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+     
+     <!-- Main CSS File -->
+     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+     
+</head>
+<style>
+  
+ 
+ .chatbot-container {
+     width: 80vw;
+     background-color: #f8e0e0;
+     border: 1px solid white;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px rgba(39, 8, 214, 0.1);
+   }
+ 
+ #chatbot {
+     background-color: #fff;
+     border: 1px solid white;
+     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+     border-radius: 4px;
+   }
+   
+   
+   message-container {
+     background: #fff;  
+     width: 100%;
+     display: flex;
+     align-items: center;
+   }
+   
+   
+   
+   #conversation {
+     height: 80vh;
+     overflow-y: auto;
+     padding: 20px;
+     display: flex;
+     flex-direction: column;
+   }
+ 
+ 
+   
+   .chatbot-message {
+     display: flex;
+     align-items: flex-start;
+     position: relative;
+     font-size: 16px;
+     line-height: 20px;
+     border-radius: 20px;
+     word-wrap: break-word;
+     max-width: 100%;
+     padding: 0 15px;
+     margin-bottom: 50px;
+     
+   }
+
+   .left-fade{
+    animation: message-fade-from-left 0.5s forwards linear;
+   }
+
+   .right-fade{
+    animation: message-fade-from-right 0.5s forwards linear;
+   }
+
+   @keyframes message-fade-from-left {
+     from {
+       opacity: 0;
+       
+       transform: translateX(-20px) scale(90%);
+     }
+     to {
+       opacity: 1;
+       transform: translateX(0) scale(100%);
+     }
+   }
+
+   @keyframes message-fade-from-right {
+     from {
+       opacity: 0;
+       transform: translateX(20px);
+     }
+     to {
+       opacity: 1;
+       transform: translateX(0px);
+     }
+   }
+   
+   .user-message {
+     justify-content: flex-end;
+   }
+ 
+   .chatbot-text-self {
+     background-color:#257ECC;;
+     color: #fff;
+     font-size: 1.1em;
+     padding: 15px;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   }
+   
+ .chatbot-text {
+     background-color:gray;
+     color: #fff;
+     font-size: 1.1em;
+     max-width: 70%;
+     padding: 15px;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   }
+   
+   #input-form {
+     display: flex;
+     align-items: center;
+     border-top: 1px solid #196bd6;
+   }
+   
+   #input-field {
+     flex: 1;
+     height: 60px;
+     border: 1px solid #7f9bbe;
+     border-radius: 4px;
+     padding: 0 10px;
+     font-size: 14px;
+     transition: border-color 0.3s;
+     background: #e9dce6;
+     color: #000000;
+     border: none;
+   }
+ 
+   .send-icon {
+     margin-right: 10px;
+     cursor: pointer;
+     max-width: 30px;
+   }
+   
+   #input-field:focus {
+     border-color: #000000;
+     outline: none;
+   }
+   
+   #submit-button {
+     background-color: transparent;
+     border: none;
+   }
+ 
+   p[sentTime]:hover::after {    
+     content: attr(sentTime);
+     position: absolute;
+     top: -3px;
+     font-size: 14px;
+     color: white;
+   }
+ 
+   .chatbot p[sentTime]:hover::after {  
+     left: 15px;
+   }
+ 
+   .user-message p[sentTime]:hover::after {  
+     right: 15px;
+   }
+   
+ 
+   /* width */
+ ::-webkit-scrollbar {
+     width: 10px;
+   }
+   
+   /* Track */
+   ::-webkit-scrollbar-track {
+     background: #f1f1f1; 
+   }
+    
+   /* Handle */
+   ::-webkit-scrollbar-thumb {
+     background: #888; 
+   }
+   
+   /* Handle on hover */
+   ::-webkit-scrollbar-thumb:hover {
+     background: #555; 
+   }
+
+   #header{
+    padding-left: 0px;
+   }
+
+   button {
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border-width: 2px;
+        border-color: #257ECC;
+        border-style: solid;
+        outline: none;
+
+   }
+   button:hover{
+        border-style:dotted;
+   }
+
+   textarea{
+    border-radius: 10px;
+    border-color:#257ECC;
+    outline: none;
+    border-style: solid;
+    margin:5px;
+    border-width: 3px;
+    padding: 10px;
+   }
+
+   textarea:hover{
+    border-style: double;
+   }
+
+   textarea:focus{
+    border-style: double;
+   }
+</style>
+<body>
+    <div id="home-symptoms-insert-area"  style="display: flex; justify-content: center; align-items:center; height: 100%; width: 100%; "></div>
+    <div id="home-calendar-insert-area" style="display: flex; justify-content: center; align-items:center; height: 100%; width: 100%; "></div>
+
+    
+     <header id="header" class="header sticky-top">
+
+
+          <!-- Navigations -->
+          <div class="branding d-flex align-items-center">
+               <div class="container position-relative d-flex align-items-center justify-content-between">
+                    <a href="/" class="logo d-flex align-items-center me-auto">
+                         <h1 class="sitename">ISAT-U ClinicHub</h1>
+                    </a>
+
+                     <!--Navigation Menu-->
+                     <nav id="navmenu" class="navmenu">
+                      <ul>
+                       <li><a href="/" class="">Home</a></li>
+                       <li><a href="/schedule" class="">Requests</a></li>
+                       <li><a href="/profile" class="">Account</a></li>
+                       <li id="appointment-btn" style="display: none"><a class="active" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                       
+                     </ul>
+                      <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
+                      </nav>
+
+                      <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
+                      <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                        <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                      
+                        <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:gray; padding: 5px; border-radius: 10px;"></span>
+                      
+                      </div>  
+
+                  
+               </div>
+
+          </div>
+     </header>
+     <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
+     <div class="cbp-dialog-container" style="display:none">
+        <img class="cbp-dialog-img" src="/static/assets/nurse.png" style="margin: 20px;"/>
+        <div class="cbp-dialog" style="flex-direction: column">
+             <p id="cbp-dialog-chat"> Please choose a date and time for your appointment.
+             </p>
+        </div>
+   </div>
+
+     <div id="main-body">
+          <div id="head">
+            <div class="chatbot-container">
+                <div id="chatbot">
+                    <div id="conversation">
+                      
+                      
+                    </div>
+                </div>  
+        
+            </div>
+     </div>
+    
+     <!--DONT DELETE-->
+     <script>
+
+            // Get chatbot elements
+        const chatbot = document.getElementById('chatbot');
+        const conversation = document.getElementById('conversation');
+        const inputForm = document.getElementById('input-form');
+        const inputField = document.getElementById('input-field');
+
+
+        //// 
+        function disableFinishedChats() {
+            const prevChats = document.querySelectorAll('.chatbot-text-self')
+            prevChats.forEach(parent => {
+                parent.style.pointerEvents = 'none';
+            
+                // Optionally disable form elements
+                const children = parent.querySelectorAll('button, input, textarea, select');
+                children.forEach(child => child.disabled = true);
+            })
+            
+          }
+
+        
+        ////
+        function createChatFromBot(input){
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" });
+            const conversation = document.getElementById('conversation')
+            // Add user input to conversation
+            let message = document.createElement('div');
+            message.classList.add('chatbot-message', 'chatbot', 'left-fade');
+            message.innerHTML = `<div class="chatbot-text" sentTime="${currentTime}" >${input}</div>`;
+            conversation.appendChild(message);
+            console.log("MESSAGE")
+        }
+
+        async function createChatFromUser(input){
+            
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" });
+            const conversation = document.getElementById('conversation')
+            // Add user input to conversation
+            let message = document.createElement('div');
+            message.classList.add('chatbot-message', 'user-message','right-fade');
+            const txt = `<div class="chatbot-text-self" sentTime="${currentTime}">${input}</div>`
+            console.log(txt);
+            message.innerHTML = txt
+            conversation.appendChild(message);
+            const div = conversation;
+            const lastChild = div.lastElementChild;
+            if (lastChild) {
+              lastChild.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the bottom
+            }
+           
+        
+        }
+        ///
+        function chatAskSymptoms () {
+           createChatFromBot('Hello. How do you feel today?')
+           createChatFromUser(`<button class='symptoms-button' onclick="showSymptomsModal()">Identify Symptoms</button>`)
+           window.symptomsSelectionStart()
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            chatAskSymptoms()
+        })
+        ///
+
+
+        // Add event listener to input form
+        inputForm.addEventListener('submit', function(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            // Get user input
+            const input = inputField.value;
+
+            // Clear input field
+            inputField.value = '';
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" });
+
+            // Add user input to conversation
+            let message = document.createElement('div');
+            message.classList.add('chatbot-message', 'user-message');
+            message.innerHTML = `<p class="chatbot-text-self" sentTime="${currentTime}">${input}</p>`;
+            conversation.appendChild(message);
+
+            // Generate chatbot response
+            const response = generateResponse(input);
+
+            // Add chatbot response to conversation
+            message = document.createElement('div');
+            message.classList.add('chatbot-message','chatbot');
+            message.innerHTML = `<p class="chatbot-text"  sentTime="${currentTime}">${response}</p>`;
+            conversation.appendChild(message);
+            message.scrollIntoView({behavior: "smooth"});
+        });
+
+        // Generate chatbot response function
+        function generateResponse(input) {
+            // Add chatbot logic here
+            const responses = [
+            "Hello, how can I help you today? 😊",
+            "I'm sorry, I didn't understand your question. Could you please rephrase it? 😕",
+            "I'm here to assist you with any questions or concerns you may have. 📩",
+            "I'm sorry, I'm not able to browse the internet or access external information. Is there anything else I can help with? 💻",
+            "What would you like to know? 🤔",
+            "I'm sorry, I'm not programmed to handle offensive or inappropriate language. Please refrain from using such language in our conversation. 🚫",
+            "I'm here to assist you with any questions or problems you may have. How can I help you today? 🚀",
+            "Is there anything specific you'd like to talk about? 💬",
+            "I'm happy to help with any questions or concerns you may have. Just let me know how I can assist you. 😊",
+            "I'm here to assist you with any questions or problems you may have. What can I help you with today? 🤗",
+            "Is there anything specific you'd like to ask or talk about? I'm here to help with any questions or concerns you may have. 💬",
+            "I'm here to assist you with any questions or problems you may have. How can I help you today? 💡",
+            ];
+            
+            // Return a random response
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        
+        
+     </script>
+     
+     <!-- Vendor JS Files -->
+     <script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+     <script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+
+
+     <!-- Main JS File -->
+     <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
+     <script type="module">
+          // taken from components folder, formatted to be reusable
+          import "/static/components/sidebar/script.js";
+          Sidebar(document.getElementById('home-sidebar-insert-area'))
+          
+     </script>
+
+     <script type="module">
+        /**
+        * Import the necessary components and objects for calendar selection.
+        * 
+        * - CalendarSelection: A component that renders the calendar and handles appointment selections.
+        * - selected: An object that contains information about the selected date.
+        */
+        import {
+             CalendarSelection, // component for calendar functionality
+             selected // object containing the selected date info
+        } 
+        from "/static/components/calendarSelection/script.js";
+        
+        /**
+        * Initializes the calendar selection component and attaches it to the DOM element.
+        * 
+        * @function CalendarSelection
+        * @param {HTMLElement} document.getElementById('home-calendar-insert-area') - The HTML element where the calendar will be rendered.
+        * @param {Array} [document.getElementById('cbp-set-date-btn')] - An array of buttons used for opening the calendar.
+        * @param {string} '' - A warning footer (currently unused, hence an empty string).
+        * @param {string} 'Set Appointment' - The label for the "Set Appointment" button.
+        * @param {string} 'cbp-appointment' - Purpose of the calendar, such as 'cbp-appointment'.
+        * @param {HTMLElement} document.getElementById('cbp-dialog-chat') - The element where dialog messages or interactions will be displayed.
+        */
+        window.setupCalendar = async () => {
+            await CalendarSelection(
+             document.getElementById('home-calendar-insert-area'), // where the calendar is inserted
+             [document.getElementById('cbp-set-date-btn')], // buttons to trigger the calendar
+             '', // warning footer, currently not used
+             'Set Appointment', // label for the button
+             'cbp-appointment', // purpose of the calendar
+             document.getElementById('cbp-dialog-chat') // dialog container for calendar-related interactions
+        );}
+        
+        /**
+        * Redirects the user to the appointment summary page if an appointment is selected.
+        * 
+        * - Checks whether the user has selected a valid appointment (date and time) before allowing them to proceed.
+        * - If no appointment is selected, an alert message is displayed.
+        * - If an appointment is selected, the user is redirected to the summary page.
+        * 
+        * @function toSummary
+        */
+
+        window.chatConfirmDate = () => {
+             
+            if (selected.month && selected.time){
+                disableFinishedChats()
+                createChatFromBot(`You will have an appointment on ${selected.monthName} ${selected.day} ${selected.year} @ ${selected.timeName}. Is this correct?`);
+                createChatFromUser(`<div style="display: flex; flex-direction: column" ><button onclick="chatSummaryStage()">Yes</button><button onclick="setAppointmentDateStage()">No</button></div>`)
+               
+    
+            }
+            
+        }
+    
+        window.toSummary = () => {
+             // Ensure an appointment (month, day, year, and time) is selected before proceeding.
+             if (!(selected.month || selected.day || selected.year || selected.time)) {
+             alert("You first need to set an appointment to proceed."); // Alert if no appointment is set
+             } else {
+             // Redirect to the summary page if appointment is valid.
+             window.location.href = '/chatbotpage/response/appointment/summary';
+             }
+        }
+        
+        window.setAppointmentDateStage = async () => {
+            
+            document.querySelectorAll('#cbp-set-date-btn').forEach(element => {
+                element.id = ""
+            })
+            disableFinishedChats()
+            createChatFromBot('Please choose a date and time for your appointment.')
+            createChatFromUser(' <button id="cbp-set-date-btn"onclick="onClickShowCal()">Select Date and Time</button>')
+            await window.setupCalendar()
+            console.log(document.getElementById('dr-confirm-button'))
+        
+            document.getElementById('dr-confirm-button').addEventListener('click', ()=>{
+                console.log('hello')
+                window.chatConfirmDate()
+            })
+            console.log("DONE SETTING UP DATE")
+        }
+   </script>
+
+    
+    <script type="module">
+        /**
+        * Import necessary modules for symptoms selection and session management.
+        * 
+        * - storeSymptomsSession: Stores the selected symptoms in a session.
+        * - symptomsSelection: A component responsible for rendering and handling symptom selection.
+        * - createRecommendationSent: A utility function that generates recommendations based on selected symptoms.
+        * - storeResponseSession: Stores the generated response in a session.
+        */
+        import {storeSymptomsSession, symptomsSelection, showSymptomsModal, levelQuestions} from "/static/components/symptomsSelection/script.js";
+        import {createRecommendationSent} from "/static/pageScripts/utils.js";
+        import {storeResponseSession} from "/static/components/symptomsSelection/script.js";
+       
+        window.showSymptomsModal = showSymptomsModal
+        /**
+        * Initializes the symptoms selection process by rendering the symptoms selection component 
+        * into the specified DOM element and preparing the transition to the next page after selection.
+        * 
+        * @async
+        * @function symptomsSelectionStart
+        * @returns {Promise<void>}
+        */
+        const symptomsSelectionStart = async () => {
+                console.log(document.getElementsByClassName('symptoms-button'))
+            const ss = await SymptomsSelection(document.getElementById('home-symptoms-insert-area'), document.getElementsByClassName('symptoms-button'));
+
+            window.toResponse = async () => {
+                    // Check if the user has selected at least one symptom.
+                    if (ss.symptoms.length < 1) {
+                        alert("Tip: You need to select at least 1 symptom."); // Alert if no symptoms are selected
+                        
+                        return; // Exit if no symptoms are selected
+                        
+                    }
+                    disableFinishedChats()
+
+                    function symptom1(){
+                        const index = 0
+                        const question = Object.keys(levelQuestions)[index]
+                        if (!levelQuestions[Object.keys(levelQuestions)[index]]){
+                            console.log('fisnished first')
+                            symptom2()
+                            return
+                        }
+                        createChatFromBot(question)
+                        createChatFromUser(`<div id="q-${index}" style="display:flex; flex-direction: column">${levelQuestions[question]}</div>`)
+                        document.querySelectorAll(`#q-${index} button`).forEach(btn => {
+                            btn.addEventListener('click', ()=> {
+                                btn.style.borderColor = 'green'
+                                disableFinishedChats()
+                                symptom2()
+                            })
+                        })
+                    }
+
+                    function symptom2(){
+                
+                        
+                        const index = 1
+                        const question = Object.keys(levelQuestions)[index]
+                        if (!levelQuestions[Object.keys(levelQuestions)[index]]){
+                            console.log('fisnished')
+                            symptom3()
+                            return
+                        }
+                        createChatFromBot(question)
+                        createChatFromUser(`<div id="q-${index}" style="display:flex; flex-direction: column">${levelQuestions[question]}</div>`)
+                        document.querySelectorAll(`#q-${index} button`).forEach(btn => {
+                            btn.addEventListener('click', ()=> {
+                                btn.style.borderColor = 'green'
+                                disableFinishedChats()
+                                symptom3()
+                            })
+                        })
+                    }
+
+                    async function finisher(){
+                        // Store the selected symptoms in the session
+                        await storeSymptomsSession();
+
+                        // Store the generated recommendation in the session
+                        storeResponseSession(createRecommendationSent(ss.symptoms));
+                        console.log("DONE")
+                        
+                        // Redirect to the response page
+                        //window.location.href = '/chatbotpage/response';
+                        //window.setAppointmentDateStage()
+                        window.chatResponse()
+                    }
+                    async function symptom3(){
+                        const index = 2
+                        if (!levelQuestions[Object.keys(levelQuestions)[index]]){
+                            console.log('fisnished')
+                            finisher()
+                            return
+                        }
+
+                        const question = Object.keys(levelQuestions)[index]
+                        createChatFromBot(question)
+                        createChatFromUser(`<div id="q-${index}" style="display:flex; flex-direction: column">${levelQuestions[question]}</div>`)
+                        document.querySelectorAll(`#q-${index} button`).forEach(btn => {
+                            btn.addEventListener('click', ()=> {
+                                btn.style.borderColor = 'green'
+                                disableFinishedChats()
+                                finisher()
+                                
+                            })
+                        })
+                    }
+
+                    symptom1()
+                
+            }
+        }
+
+        // Start the symptoms selection process
+        window.symptomsSelectionStart = symptomsSelectionStart;
+
+        document.getElementById('menu-btn').addEventListener('click', ()=>{
+            
+            const btn = document.getElementById('show-btn')
+            btn.innerHTML != 'search' ? btn.click() : null
+        })
+     </script>
+
+     <script type="module">
+        let noNeedForAppointment = false
+        window.chatResponse = async () => {
+            disableFinishedChats()
+            createChatFromBot(`
+               <div class="cbp-dialog">
+                    <div id="cbp-recommendation">Evaluating..
+                    </div>
+                   
+               </div>
+               
+               <div class="cbp-dialog-footer">
+                 <p id="cbp-bottom-line"></p>
+                    </div>
+               
+          `)
+          await window.createResponse()
+            console.log(noNeedForAppointment, 'noneed?')
+            if (noNeedForAppointment){
+                createChatFromUser(`<button onclick="location.reload(true)">Okay</button>
+                `)
+            }
+            else{
+                createChatFromUser(`Additional Complaints:<textarea style="width: 100%;" id="complaints"></textarea><br><button onclick="toAppointment()">Proceed</button>
+                `)
+
+                // Call createResponse to initialize the symptom evaluation and response generation.
+                console.log("FINISHING RESPONSE")
+            }
+           
+        }
+          
+        /**
+        * Import necessary scripts and components.
+        * 
+        * - Sidebar: Loads and renders the sidebar in the HTML element.
+        * - createRecommendationSent: Generates a recommendation sentence based on selected symptoms.
+        * - getSeriousSymptoms: Retrieves serious symptoms from a list of selected symptoms.
+        * - getSymptomsSession: Fetches the session data for selected symptoms.
+        */
+        import "/static/components/sidebar/script.js";
+        import {createRecommendationSent, getSeriousSymptoms } from '/static/pageScripts/utils.js'
+        import {getSymptomsSession} from "/static/components/symptomsSelection/script.js"
+        import {complaintsToSession} from '/static/pageScripts/session.js';
+               
+        /**
+        * Loads the sidebar component into the specified HTML element.
+        * 
+        * @function Sidebar
+        * @param {HTMLElement} document.getElementById('home-sidebar-insert-area') - The HTML element where the sidebar is inserted.
+        */
+        Sidebar(document.getElementById('home-sidebar-insert-area'))
+
+        /**
+        * Fetches selected symptoms from the session, creates recommendations, and determines if serious symptoms are present.
+        * 
+        * - Updates the HTML content of the page based on the symptoms and their severity.
+        * 
+        * @async
+        * @function createResponse
+        * @returns {Promise<void>} - This function does not return any value. It performs DOM manipulations.
+        */
+        window.createResponse = async () => {
+            // Fetch selected symptoms from the session.
+            const symptoms = await getSymptomsSession(false)
+            console.log(symptoms)
+            
+            // Display the recommendation based on the selected symptoms.
+            console.log('seleted',symptoms['symptoms_selected'])
+            document.getElementById('cbp-recommendation').innerHTML = createRecommendationSent(symptoms['symptoms_selected'])
+            
+            // Get serious symptoms from the selected symptoms.
+            const seriousSymptoms = getSeriousSymptoms(symptoms['symptoms_selected'])
+            
+            // Get the "Next" button and the bottom-line text element.
+            const nextBtn = document.getElementById('next-button')
+            const bottomLine = document.getElementById('cbp-bottom-line')
+            
+            // If there are serious symptoms, enable the "Next" button and show a message about setting an appointment.
+            if (seriousSymptoms.length > 0) {
+                //nextBtn.disabled = false
+                bottomLine.innerHTML = `The symptoms <b>${seriousSymptoms.join(', ')}</b> makes you in need of professional help. `
+                
+            } else {
+                // If no serious symptoms are found, disable the "Next" button and display a mild symptoms message.
+                //nextBtn.disabled = true
+                noNeedForAppointment = true
+                console.log("NON NEED")
+                bottomLine.innerHTML = `The symptoms above are considered mild and treatable with home remedies or over-the-counter medicines through your local pharmacies. For these symptoms, you will not need to make an appointment.<br>If you have further doubt in your condition, select <b>... others</b> for your symptoms.`
+            }
+        
+            window.toAppointment = () => {
+                 complaintsToSession(document.getElementById('complaints').value)
+                 setAppointmentDateStage()
+            }
+        }
+
+        
+
+   </script>
+
+   <script type="module">
+        import {sidebar, getUserData} from "/static/components/sidebar/script.js";
+        import {getSession, getTimeName, createAppointment, getAppointments} from "/static/components/calendarSelection/script.js";
+        import { createRecommendationSent , getCodesFromSymptomsArray} from "/static/pageScripts/utils.js"    
+        sidebar(document.getElementById('home-sidebar-insert-area'))
+
+            /**
+        * Creates a new symptom entry in the database associated with a given appointment.
+        * 
+        * @async
+        * @function createSymptoms   
+        * @param {number} Appointment_ID - The ID of the appointment.
+        * @param {string} Symptoms_Code - The code of the symptom to be created in the database.
+        * @returns {Promise<Object>} - A promise that resolves to the response of the symptom creation operation.
+        */
+        const createSymptoms = async (Appointment_ID, Symptoms_Code) => {
+            console.log(Symptoms_Code)
+            const response = await fetch('/api/symptoms', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Appointment_ID: Appointment_ID, Symptoms_Code: Symptoms_Code }),
+            });
+            const resJson = await response.json()
+            console.log("createSymptoms()", resJson)
+            return resJson
+        }
+
+
+        /**
+        * Renders appointment data, user data, and symptoms data into the HTML elements on the page.
+        * 
+        * @async
+        * @function renderData
+        * @returns {void}
+        */
+        const renderData = async () => {
+            // Fetch session and user data
+            const sessionData = await getSession()
+            const userData = await getUserData().then((data)=>{return data[0]}) // Get only the first result
+            
+            // Extract session data
+            const day = sessionData.appointment_day
+            const monthName = sessionData.appointment_monthName
+            const month = sessionData.appointment_month
+            const year = sessionData.appointment_year
+            const timeName = sessionData.appointment_timeName
+            const time = sessionData.appointment_time
+            const symptoms = sessionData.symptoms_selected
+            const symptomsString = symptoms.join(', ') // Join symptoms into a comma-separated string
+            const response = createRecommendationSent(sessionData.symptoms_selected) // Generate response for symptoms
+            const userId = sessionData.userId
+            const codes = getCodesFromSymptomsArray(symptoms) // Get symptom codes
+            const complaints = sessionData.complaints
+            console.log('complaints', complaints)
+
+            // Render data to HTML elements
+            document.getElementById('sum-datetime').innerHTML = `${monthName} ${day}, ${year} @ ${sessionData.appointment_timeName}`
+            document.getElementById('sum-name').innerHTML = `${userData.PatientLastName}, ${userData.PatientName}`
+            document.getElementById('sum-email').innerHTML = `${userData.PatientEmail}`
+            document.getElementById('sum-contact').innerHTML = `${userData.PatientContactNo}`
+            document.getElementById('sum-symptoms').innerHTML = `${symptomsString}`
+            document.getElementById('sum-response').innerHTML = `${response}`
+            document.getElementById('sum-complaints').innerHTML = complaints
+            
+            // Function to navigate to home after checking appointment availability and creating a new appointment
+            const toHome = async () => {
+            const value = await getAppointments(month, year, day) // Check for existing appointments
+            for (let i = 0; i < value.length; i++) {
+                if (value[i].Appointment_Time == time) { // If there's an appointment at the same time
+                    alert("Selected date is not available / is taken.")
+                    window.location.href = '/chatbotpage/response/appointment' // Redirect to appointment page
+                    return null
+                }
+            }
+
+            const newAppointment = await createAppointment(userId, day, month, time, year, 0, complaints) // Create a new appointment
+            for (let i = 0; i < codes.length; i++) {
+                let newSymptoms = await createSymptoms(newAppointment.id, codes[i]) // Create symptoms for the appointment
+                console.log(i, newAppointment.id, newSymptoms)
+            }
+
+            window.location.href = '/schedule' // Redirect to success page
+            }
+
+            // Add click event to send button
+            const sendButton = document.getElementById('cbp-send-request')
+            sendButton.onclick = ()=>{
+                disableFinishedChats();
+                toHome();
+            }
+        }
+
+        // Call renderData function to render the data on page load
+        window.chatSummaryStage = () => {
+            disableFinishedChats()
+            console.log("CHAT SUMMARY STAGE")
+            createChatFromBot(` <div class="cbp-dialog" style=" height: 100%; flex-direction: column;">
+                    <p><b>Appointment Datetime: </b><span id="sum-datetime"></span>
+                    </p>
+                    <p><b>Name: </b><span id="sum-name"></span>
+                    </p>
+                    <p><b>Email: </b><span id="sum-email"></span>
+                    </p>
+                    <p><b>Contact No: </b><span id="sum-contact"></span>
+                    </p>
+                    <p><b>Symptoms: </b><span id="sum-symptoms"></span>
+                    </p>
+                    <p><b>Initial Diagnosis: </b><span id="sum-response"></span>
+                    </p>
+                    <p><b>Additional Complaints: </b><span id="sum-complaints"></span>
+                    <hr>
+                    <p><i><u>Check your info and input above</u> and press <b>Confirm</b> below. <br>If any of your account information is incorrect, navigate to <b>Menu  → Account</b> to edit your information. Once request is received by the staff, a confirmation SMS will be sent to your number. <br> You can navigate to <b>Menu  → Requests</b> to see the status of all your appointments. <br><br>We wil notify the nurse of your appointment.
+                    </i>
+                    </p>
+                    
+               </div>`)
+            createChatFromUser(`<div style="display: flex; flex-direction: column"><button id="cbp-send-request">Confirm</button>`);
+            renderData() 
+            //<button onclick="location.reload(true)">Retry</button></div>
+        };
+        
+        async function applyProfile(){
+          let data = await getUserData()
+          data = data[0]
+          console.log(data)
+          
+          if (data["PatientCategory"]=="staff"){
+            // remove appointment button if staff
+            document.getElementById("appointment-btn").remove()
+            document.getElementById("appointment-btn-2").remove()
+  
+          }
+  
+          document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
+        }
+  
+        applyProfile()
+    </script>
+</body>
+
+</html>

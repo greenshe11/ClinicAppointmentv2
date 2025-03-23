@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+     <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+          <style>
+            .divider:after,
+            .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+            }
+            .h-custom {
+            height: calc(100% - 73px);
+            }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+            }
+            #buttons {
+              background-color: #00008b;
+              color: white;
+            }
+
+            body {
+              background: linear-gradient(to right, #00008b,  #87CEEB);
+              font-family: 'Roboto', sans-serif;
+              padding: 20px;
+            }
+
+            label {
+              color: white;
+            }
+
+            p {
+              color: white;
+            }
+
+            #fg-pass {
+              color: #00008b;
+            }
+
+            #logo {
+              opacity: 0;
+              padding: 20px;
+              animation: logo-animation 1s ease-in-out forwards;
+            }
+
+            @keyframes logo-animation {
+              from {
+                opacity: 0;
+                transform: translateX(-100px);
+              }
+              to{
+                opacity: 1;
+                transform: translateX(0px)
+              }
+            }
+
+
+            /* Invalid Input Effect */
+          .invalid-input {
+               border: 2px solid red;
+               animation: shake 0.3s ease-in-out;
+          }
+
+          /* Shake Animation */
+          @keyframes shake {
+               0% {
+                    transform: translateX(0);
+               }
+
+               25% {
+                    transform: translateX(-5px);
+               }
+
+               50% {
+                    transform: translateX(5px);
+               }
+
+               75% {
+                    transform: translateX(-5px);
+               }
+
+               100% {
+                    transform: translateX(0);
+               }
+          }
+
+          /* Flash Animation */
+          @keyframes flash {
+
+               0%,
+               100% {
+                    background-color: white;
+               }
+
+               50% {
+                    background-color: #ffcccc;
+               }
+          }
+
+          /* Red Flash Effect */
+          .flash {
+               animation: flash 0.8s ease-in-out;
+          }
+
+          </style>
+     </head>
+
+     <body>
+          
+          <section class="vh-100">
+               <div class="container-fluid h-custom">
+                 <div class="row d-flex justify-content-center align-items-center h-100">
+                   <div class="col-md-9 col-lg-6 col-xl-5">
+                     <img id="logo" src="{{ url_for('static',filename='assets/logo.png')}}"
+                       class="img-fluid" alt="Sample image">
+                   </div>
+                   <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                     <form onsubmit="return false">
+                       <!--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                         <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                         <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-facebook-f"></i>
+                         </button>
+             
+                         <button  id="buttons" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-twitter"></i>
+                         </button>
+             
+                         <button  id="buttons" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-linkedin-in"></i>
+                         </button>
+                       </div>
+             
+                       <div class="divider d-flex align-items-center my-4">
+                         <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                       </div>-->
+             
+                       <!-- Email input -->
+                       <div data-mdb-input-init class="form-outline mb-4">
+                         <input type="email" id="email" class="form-control form-control-lg"
+                           placeholder="Enter a valid email address" />
+                         <label class="form-label" for="email">Email address</label>
+                       </div>
+             
+                       <!-- Password input -->
+                       <div data-mdb-input-init class="form-outline mb-3">
+                         <input type="password" id="password" class="form-control form-control-lg"
+                           placeholder="Enter password" />
+                         <label class="form-label" for="password">Password</label>
+                       </div>
+                       
+                       <!--<div class="d-flex justify-content-between align-items-center">
+                         <!-
+                         <div class="form-check mb-0">
+                           <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                           <label class="form-check-label" for="form2Example3">
+                             Remember me
+                           </label>
+                         </div>
+                         <a id="fg-pass" href="#!">Forgot password?</a>
+                       </div>-->
+             
+                       <div class="text-center text-lg-start mt-4 pt-2">
+                         <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
+                           style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="login0()">Login</button>
+                         <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/register"
+                             class="link-danger">Register</a></p>
+                       </div>
+             
+                     </form>
+                   </div>
+                 </div>
+               </div>
+               
+             </section>
+          <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
+          <script>
+            function toRegister(){
+                    window.location.href = '/register';
+               }
+
+               async function login0(){
+                    const PatientEmail = document.getElementById("email").value
+                    const PatientPassword = document.getElementById("password").value
+                    const passwordInput = document.getElementById('password');
+                    const data = {PatientEmail, PatientPassword}
+                                     
+                    try {
+                         const response = await fetch('/api/patient?for=login', {
+                         method: 'POST',
+                         headers: {
+                         'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify(data),
+                         });
+               
+                         if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                         }
+
+                         const result = await response.json();
+                         console.log(result.hasOwnProperty('customError'))
+                         if (result.hasOwnProperty('customError')) {
+                              //alert(result.customError)
+                              passwordInput.classList.add('invalid-input', 'flash');
+                              passwordInput.classList.add('is-invalid');
+
+                              setTimeout(() => {
+                                    passwordInput.classList.remove('invalid-input', 'flash');
+                              }, 800);
+                              return 
+                         }
+                         
+                         alert("LOGIN IS A SUCCESS!")
+                         window.location.replace('/')
+                         // Handle the result (e.g., show a success message to the user)
+                    } catch (error) {
+                         
+                         console.error('Error:', error);
+                         // Handle errors (e.g., show an error message to the user)
+                    }
+               };
+          </script>
+     </body>
+</html>

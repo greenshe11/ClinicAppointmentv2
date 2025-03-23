@@ -1,0 +1,180 @@
+#symptoms-suggestion-list {
+    max-height: 200px; /* Lssit height */
+    overflow-y: auto;  /* Scroll if needed */
+
+}
+
+@media all and (max-width: 600px){
+    #symptoms-suggestion-list{
+        max-height: 300px;
+    }
+}
+
+.symptom-tag {
+    display: inline-block;
+    background-color: #257ECC;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+    cursor: pointer;/* Smooth transition for border color */
+    transition: color 0.4s ease;
+    text-align: center;
+    margin-right: 5px;
+    color: white;
+    
+}
+
+
+.symptom-tag:hover{
+    border-color: red;
+ 
+}
+
+.symptom-tags-tip{
+    color: black;
+}
+
+#symptom-tags-container{
+    margin-top: 5px;
+}
+
+.dropdown-item.symptom:hover{
+    background-color: rgb(230,230,230);
+}
+
+
+
+.dr-date-picker {
+    font-size: 10px;
+    max-width: 10px;
+}
+
+.ss-details {
+    width: 100%;
+    height: auto;
+}
+
+.ss-close-btn {
+    margin-bottom: 10px;
+    text-align:end;
+    align-self: flex-end;
+    font-weight: bold;
+
+}
+
+#selection-0, #selection-1, #selection-2{
+    display:none
+}
+
+.ss-scrollview{
+    overflow-y: scroll;
+    width: 100%;
+    min-height: 40vh;
+}
+
+.ss-close-btn:hover {
+    cursor: pointer;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.dr-day-header{
+    font-size: 10px;
+}
+@keyframes slideInFromRight {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}
+
+.modal-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#ss-dimmer {
+    display: none; 
+    background-color: rgba(0,0,0,0.5); 
+    width: 100vw; 
+    height: 100vh; 
+    position: fixed; 
+    top: 0px;
+    left: 0px;
+    z-index: 1200;
+}
+.ss-modal {
+    /* Add initial state for anssation */
+    transition: transform 0.5s ease-in;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0px;
+    z-index: 1201;
+}
+
+#ss-body{
+    display: flex;
+    background-color: rgba(255,255,255,1);
+    flex-direction: column;
+    padding: 20px;
+    min-height: 40vh;
+    width: 50%;
+    border-radius: 8px;
+}
+
+.ss-modal.active {
+    /* Apply the anssation when active */
+    animation: slideInFromLeft 0.5s forwards;
+}
+
+.ss-modal.inactive {
+    /* Apply the anssation when active */
+    animation: slideInFromRight 0.5s forwards;
+}
+
+
+.ss-info-title {
+    color: white;
+    text-align: center;
+    background-color: #257ECC;
+}
+
+.ss-action {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 20px;
+    
+}
+
+.ss-action button {
+    margin-right: 10px;
+}

@@ -1,0 +1,21 @@
+
+<div id="mySidebar" class="sidebar">
+    <a class="closebtn" href="javascript:void(0)" onclick="closeExpansion()" style="font-size: 25px;">x</a>
+    <div class="profile-container">
+        <div class="profile-avatar-container">
+            <img src="/static/p-default-inverted.png" class="user-icon" id="icon" alt="User Icon" />
+        </div>
+        <div>
+            <div class="profile-name-container" id="userName"></div>
+            <hr>
+            <span id='sidebar-logout' onclick="logout()">Log out</span>
+        </div>
+    </div>
+    <div id="container-button">
+        <button class="btn "><a href="/home">Home</a></button>
+        <button class="btn "><a href="/schedule">Schedule</a></button>
+        <button class="btn "><a href="/about">About</a></button>
+
+    </div>
+</div>
+<div id="main"><button class="btn btn-primary openbtn" id="openbtn" style="position: fixed; top: 20px;" type="button" onclick="expand()">☰</button></div>

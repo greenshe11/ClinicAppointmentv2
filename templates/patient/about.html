@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>about</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        #main-text {
+            color: white;
+            justify-content: center;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        #main-text p {
+            font-size: 24px;
+            margin-top: 50px;
+        }
+
+        body {
+            background: linear-gradient(to right, #00008b,  #87CEEB);
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+        }
+
+    </style>
+<body>
+    <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
+    <div id="home-sidebar-insert-area"></div>
+
+    <!--Start-->
+    <div id="main-text" class="container-fluid">
+        <h1>About Us</h1>
+        <p>We are a group of passionate college students dedicated to improving 
+            the healthcare experience through technology. As part of our capstone project,
+             we are developing a Medical Appointment Chatbot designed to simplify 
+             the process of scheduling appointments and accessing healthcare information.
+              Our goal is to create a user-friendly and efficient tool that can assist
+               patients and healthcare providers alike,
+             making healthcare more accessible to everyone.</p>
+        
+        
+    </div>
+</body>
+ <!--DONT DELETE-->
+<script type="module">
+    import "/static/components/sidebar/script.js";
+    Sidebar(document.getElementById('home-sidebar-insert-area'))
+</script>
+
+
+</html>

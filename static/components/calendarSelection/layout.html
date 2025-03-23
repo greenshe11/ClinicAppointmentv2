@@ -1,0 +1,54 @@
+<div id="dr-dimmer"></div>
+    
+    <div id="calendar" class="dr-modal" style="display: none">
+        <div class="dr-body">
+            <div class="modal-top">
+                <div id="modal-top-name"></div>
+                <div class="dr-close-btn" onclick="onClickCloseCal()">X</div>
+            </div>
+            
+            
+                <div class="dr-container-calendar">
+                        <div id="dr-date">
+                            <div id="cal-nextbtn" class="dr-button-container-calendar">
+                                <button style="background-color: #257ECC;" id="dr-previous"
+                                        onclick="previous()">
+                                    ‹   
+                                </button>
+                                <h3 id="dr-monthAndYear"></h3>
+                                <button style="background-color: #257ECC;" id="dr-next"
+                                        onclick="next()">
+                                    ›
+                                </button>
+                            </div>
+                        
+                            <table class="dr-table-calendar"
+                                id="dr-calendar"
+                                data-lang="en">
+                                <thead id="dr-thead-month"></thead>
+                                <!-- Table body for displaying the calendar -->
+                                <tbody id="dr-calendar-body"></tbody>
+                            </table>
+                        </div>
+                        <div id="dr-actions">
+                            <div id="dr-event-section">
+                                <div class="dr-footer-container-calendar dr-set-time">
+                                    <label for="dr-month1">Time: </label>
+                                    <!-- Dropdowns to select a specific time -->
+                                    <select id="dr-month1" class="dr-hoursChoices" onchange="onChangeTime(event)">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="dr-footer-msg" id="dr-footer-msg">
+                            
+                            </div>
+                            <div style="display: flex; justify-content: center">
+                                <button style="background-color: #257ECC;" class="dr-confirm-button" id="dr-confirm-button" onclick="onSetFunction()"></button>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+        </div>
+            <!-- Include the JavaScript file for the calendar functionality -->
+    </div>
