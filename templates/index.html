@@ -64,7 +64,7 @@
 
                     <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
                     <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
-                      <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                      <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" id="account-icon" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
                       <div style="flex-direction:column; margin-right: 10px;">
                         <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span><br id="user-name-br">
                         <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
@@ -415,6 +415,7 @@
             
           }else{
             document.getElementById('appointment-btn').style.display = 'none'
+         
             
           }
         }catch{
