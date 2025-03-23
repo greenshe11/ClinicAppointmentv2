@@ -51,7 +51,7 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="active">Home</a></li>
-                          <li><a href="/schedule" class="" id="schedule-title">View Schedules</a>
+                          <li><a href="/schedule" class="" id="schedule-title">View Appointments</a>
                             <div id="pending-count-container" style="display: none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                               <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                           </div></li>
@@ -65,8 +65,11 @@
                     <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
                     <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
                       <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
-                    
-                      <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
+                      <div style="flex-direction:column; margin-right: 10px;">
+                        <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span><br id="user-name-br">
+                        <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
+                      </div>
+                      
                     
                     </div>   
                </div>
@@ -429,7 +432,9 @@
           document.getElementById("appointment-btn").remove()
           document.getElementById("appointment-btn-2").remove()
           document.getElementById("user-category-display").innerHTML = "staff"
-          document.getElementById("schedule-title").innerHTML = "View Requests"
+          document.getElementById("user-name").remove()
+          document.getElementById("user-name-br").remove()
+          document.getElementById("schedule-title").innerHTML = "View Records"
           const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
           
           let count = 0;
@@ -450,7 +455,8 @@
              document.getElementById("pending-count-container").style.display = "block"
           }
         }else{
-          document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
+          document.getElementById("user-category-display").innerHTML = data["PatientCategory"].toUpperCase()
+          document.getElementById("user-name").innerHTML = data["PatientLastName"] +", "+ data["PatientName"]      
         }
 
         
