@@ -387,6 +387,7 @@
 
             // Send an SMS notification
             sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode);
+            getPendingCount()
         } catch (error) {
             console.error('Error:', error); // Log any errors encountered
         }
@@ -588,7 +589,7 @@
         }
         if (count>0){
             document.getElementById("pending-count").innerHTML = count
-            document.getElementById("pending-count").style.display = "block"
+            document.getElementById("pending-count-container").style.display = "block"
        }
     }
     getPendingCount()

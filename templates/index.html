@@ -431,24 +431,23 @@
           document.getElementById("user-category-display").innerHTML = "staff"
           document.getElementById("schedule-title").innerHTML = "View Requests"
           const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
-        
-        
-          for (let index in appointments){
-              const a = appointments[index]
-              const targetDateTime =  new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
-              const currentDateTime = new Date();
           
-              if ((appointments[index].Appointment_Confirmed == 0)&&
-              (currentDateTime - targetDateTime)<0){
-                  console.log("PENDING",appointments[index])
-                  count+=1
-              }
-          }
           let count = 0;
+          for (let index in appointments){
+            const a = appointments[index]
+            const targetDateTime =  new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+            const currentDateTime = new Date();
+        
+            if ((appointments[index].Appointment_Confirmed == 0)&&
+            (currentDateTime - targetDateTime)<0){
+                console.log("PENDING",appointments[index])
+                count+=1
+            }
+        }
           if (count>0){
             
             document.getElementById("pending-count").innerHTML = count
-            document.getElementById("pending-count").style.display = "block"
+             document.getElementById("pending-count-container").style.display = "block"
           }
         }else{
           document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
