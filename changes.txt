@@ -1,0 +1,21 @@
+todo:
+
+member type, dropdown on registration.
+yes, no, horizontal.
+n/a if empty complaint.
+tag number on View Requests Tab. 
+Full name instead of last name, first name...
+remove year filter sa filter names (View Requests)
+
+
+
+kag ang sa landing nila kas, islan kuno picture sng clinic ang background instead sng daw stethoscope. info nlng dayun
+
+Needs to integrate: document.getElementById('account-icon').style.display = 'none';
+
+
+Needs ReWork
+The Icon Account take advantage of it to create a dropdown menu (future suggestions)
+Bugs
+filter (all) is currently not working properly
+if not log in the user icon should be hidden
