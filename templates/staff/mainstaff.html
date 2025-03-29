@@ -388,6 +388,7 @@
             // Send an SMS notification
             sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode);
             getPendingCount()
+            location.reload()
         } catch (error) {
             console.error('Error:', error); // Log any errors encountered
         }

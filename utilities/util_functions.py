@@ -296,7 +296,7 @@ def user_is_staff():
 
 def sms_confirmed(date, time, contact, *args, **kwargs):
     print("CONFIRMATION SMS SENT", date, time, contact)
-    conn = http.client.HTTPSConnection("1gg4gx.api.infobip.com")
+    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
@@ -307,7 +307,7 @@ def sms_confirmed(date, time, contact, *args, **kwargs):
         ]
     })
     headers = {
-        'Authorization': 'App 36a933f0d09bfbc8cca4c805fe1fce42-83bbb717-3d0e-4512-9108-2610088ff4f5',
+        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
@@ -320,7 +320,7 @@ def sms_confirmed(date, time, contact, *args, **kwargs):
 
 def sms_reject(contact, *args, **kwargs):
     print("REJECT SMS SENT", contact)
-    conn = http.client.HTTPSConnection("1gg4gx.api.infobip.com")
+    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
@@ -331,7 +331,7 @@ def sms_reject(contact, *args, **kwargs):
         ]
     })
     headers = {
-        'Authorization': 'App 36a933f0d09bfbc8cca4c805fe1fce42-83bbb717-3d0e-4512-9108-2610088ff4f5',
+        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
@@ -344,7 +344,7 @@ def sms_reject(contact, *args, **kwargs):
     
 def sms_resched(date, time, contact, *args, **kwargs):
     print("Rescheduling SMS SENT", date, time, contact)
-    conn = http.client.HTTPSConnection("1gg4gx.api.infobip.com")
+    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
@@ -355,7 +355,7 @@ def sms_resched(date, time, contact, *args, **kwargs):
         ]
     })
     headers = {
-        'Authorization': 'App 36a933f0d09bfbc8cca4c805fe1fce42-83bbb717-3d0e-4512-9108-2610088ff4f5',
+        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
@@ -373,7 +373,7 @@ def sms_reminder(contact,time):
     message = f"Good Day! This is an automated message from ISATU Chatbot Clinic and we would like to remind you that your appointment is in tommorow at {time} {timeName(time)}. Thank you."
     print(message)
     
-    conn = http.client.HTTPSConnection("1gg4gx.api.infobip.com")
+    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
@@ -384,10 +384,11 @@ def sms_reminder(contact,time):
         ]
     })
     headers = {
-        'Authorization': 'App 36a933f0d09bfbc8cca4c805fe1fce42-83bbb717-3d0e-4512-9108-2610088ff4f5',
+        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
+    
     conn.request("POST", "/sms/2/text/advanced", payload, headers)
     res = conn.getresponse()
     data = res.read()
