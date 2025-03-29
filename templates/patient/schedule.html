@@ -124,7 +124,6 @@
                                 <th>Status</th>
                                 <th>Datetime</th>
                                 <th>Info</th>
-                                <th>Reschedule</th>
                                 
                                 <th>Cancel</th>
                             </tr>
@@ -285,8 +284,8 @@
             `;
             const infoSnippet = `<td><button class="btn btn-primary viewer" data-appointmentId="${appId}" data-userId="${sessionData.userId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: #257ECC" onclick="showModal(event)">Info</button></td>`
             code = code + infoSnippet
-            const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event)" class="btn btn-primary resched" style="background-color: #257ECC">Reschedule</button></td>` : '<td><i>date lapsed</i></td>'
-            code = code + reschedSnippet
+            //const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event)" class="btn btn-primary resched" style="background-color: #257ECC">Reschedule</button></td>` : '<td><i>date lapsed</i></td>'
+            //code = code + reschedSnippet
             
             const cancelSnippet = getDaysUntilAppointment(month, year, day) > 0 ? ` <td><button class="btn btn-danger" data-appointmentId="${appId}" onclick="deleteAppointment(event)">Cancel</button></td>` : `<td><i>date lapsed</i></td>`
             code = code + cancelSnippet
