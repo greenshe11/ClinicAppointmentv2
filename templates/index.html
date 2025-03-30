@@ -428,15 +428,18 @@
 
         let data = await getUserData()
 
-        if (data.length === 0) {
-          document.getElementById('account-icon').style.display = 'none';
-
-        }
+       
 
         data = data[0]
         const session = await getSession()
+
+        //fixed
+        if (typeof session['isStaff'] === 'undefined' && typeof data === 'undefined') {
+          document.getElementById('account-icon').style.display = 'none';
        
-      
+        }
+        
+       
         if (session["isStaff"]){
           // remove appointment button if staff
           document.getElementById("appointment-btn").remove()
