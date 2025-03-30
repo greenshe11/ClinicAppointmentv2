@@ -9,12 +9,13 @@ remove year filter sa filter names (View Requests)
 
 
 
-kag ang sa landing nila kas, islan kuno picture sng clinic ang background instead sng daw stethoscope. info nlng dayun
+
 
 Needs to integrate: document.getElementById('account-icon').style.display = 'none';
 
 
 Needs ReWork
+Change images of the landing page
 The Icon Account take advantage of it to create a dropdown menu (future suggestions)
 Bugs
 filter (all) is currently not working properly
