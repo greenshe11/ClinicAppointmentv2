@@ -9,7 +9,7 @@
      <meta name="keywords" content="">
 
      <!-- Favicons-->
-     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.png')}}">
+     <link rel="icon" href="{{ url_for('static',filename='assets/img/sample-icon.png')}}">
      <link rel="icon" href="{{ url_for('static',filename='assets/img/apple-touch-icon.png')}}">
 
      <!-- Fonts -->
@@ -81,13 +81,14 @@
 
           <!--Hero Section-->
           <section id="hero" class="hero section light-background">
-               <img src="{{ url_for('static', filename='assets/img/bg2.jpg')}}" alt="" data-aos="fade-in">
+
+               <img id="background" src="{{ url_for('static', filename='assets/img/bg2.jpg')}}" alt="" data-aos="fade-in">
 
                <div class="container position-relative">
 
                     <div class="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
-                         <h2>ISAT-U ClinicHub</h2>
-                         <p>We are IT students from Iloilo Science and Technology University </p>
+                         <h2 id="staff-heading">ISAT-U ClinicHub</h2>
+                         <p id="staff-description">We are IT students from Iloilo Science and Technology University </p>
                     </div><!-- End Welcome -->
 
                     <div class="content row gy-4">
@@ -168,6 +169,100 @@
 
           </section><!-- /About Section -->
 
+              <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2 class="text-white">Services</h2>
+        <p class="text-white">Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item  position-relative">
+              <div class="icon">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Nesciunt Mete</h3>
+              </a>
+              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-pills"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Eosle Commodi</h3>
+              </a>
+              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-hospital-user"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Ledo Markt</h3>
+              </a>
+              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-dna"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Asperiores Commodit</h3>
+              </a>
+              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-wheelchair"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Velit Doloremque</h3>
+              </a>
+              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fas fa-notes-medical"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>Dolori Architecto</h3>
+              </a>
+              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
 
           <!-- Doctors Section -->
           <section id="" class="section light-background">
@@ -182,13 +277,13 @@
                     <div class="container">
 
                     <div class="row gy-4">
-
+                      <!-- Start of Team Member -->
                     <div class="col" data-aos="fade-up" data-aos-delay="100">
                          <div class="team-member d-flex align-items-start">
                          <div class="pic"><img src="{{url_for('static', filename='assets/img/doctors/doctors-1.jpg')}}" class="img-fluid" alt=""></div>
                          <div class="member-info">
-                              <h4>Walter White</h4>
-                              <span>Chief Medical Officer</span>
+                              <h4>Patrick Allen S. Aranda</h4>
+                              <span>Nurse I</span>
                               <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
                               <div class="social">
                               <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -199,6 +294,78 @@
                          </div>
                          </div>
                     </div><!-- End Team Member -->
+
+                        <!-- Start of Team Member -->
+                        <div class="col" data-aos="fade-up" data-aos-delay="100">
+                          <div class="team-member d-flex align-items-start">
+                          <div class="pic"><img src="{{url_for('static', filename='assets/img/doctors/doctors-1.jpg')}}" class="img-fluid" alt=""></div>
+                          <div class="member-info">
+                               <h4>Remy P. Palomo</h4>
+                               <span>Nurse II</span>
+                               <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                               <div class="social">
+                               <a href=""><i class="bi bi-twitter-x"></i></a>
+                               <a href=""><i class="bi bi-facebook"></i></a>
+                               <a href=""><i class="bi bi-instagram"></i></a>
+                               <a href=""> <i class="bi bi-linkedin"></i> </a>
+                               </div>
+                          </div>
+                          </div>
+                     </div><!-- End Team Member -->
+
+                         <!-- Start of Team Member -->
+                    <div class="col" data-aos="fade-up" data-aos-delay="100">
+                      <div class="team-member d-flex align-items-start">
+                      <div class="pic"><img src="{{url_for('static', filename='assets/img/doctors/doctors-1.jpg')}}" class="img-fluid" alt=""></div>
+                      <div class="member-info">
+                           <h4>Sherlyn S. Paciente</h4>
+                           <span>Nurse I</span>
+                           <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                           <div class="social">
+                           <a href=""><i class="bi bi-twitter-x"></i></a>
+                           <a href=""><i class="bi bi-facebook"></i></a>
+                           <a href=""><i class="bi bi-instagram"></i></a>
+                           <a href=""> <i class="bi bi-linkedin"></i> </a>
+                           </div>
+                      </div>
+                      </div>
+                 </div><!-- End Team Member -->
+
+                     <!-- Start of Team Member -->
+                     <div class="col" data-aos="fade-up" data-aos-delay="100">
+                      <div class="team-member d-flex align-items-start">
+                      <div class="pic"><img src="{{url_for('static', filename='assets/img/doctors/doctors-1.jpg')}}" class="img-fluid" alt=""></div>
+                      <div class="member-info">
+                           <h4>Bert Cesar L. Gabeyeron</h4>
+                           <span>Nurse I</span>
+                           <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                           <div class="social">
+                           <a href=""><i class="bi bi-twitter-x"></i></a>
+                           <a href=""><i class="bi bi-facebook"></i></a>
+                           <a href=""><i class="bi bi-instagram"></i></a>
+                           <a href=""> <i class="bi bi-linkedin"></i> </a>
+                           </div>
+                      </div>
+                      </div>
+                 </div><!-- End Team Member -->
+
+                     <!-- Start of Team Member -->
+                     <div class="col" data-aos="fade-up" data-aos-delay="100">
+                      <div class="team-member d-flex align-items-start">
+                      <div class="pic"><img src="{{url_for('static', filename='assets/img/doctors/doctors-1.jpg')}}" class="img-fluid" alt=""></div>
+                      <div class="member-info">
+                           <h4>Dr. Robert S. Jacobo</h4>
+                           <span>Medical Officer III</span>
+                           <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                           <div class="social">
+                           <a href=""><i class="bi bi-twitter-x"></i></a>
+                           <a href=""><i class="bi bi-facebook"></i></a>
+                           <a href=""><i class="bi bi-instagram"></i></a>
+                           <a href=""> <i class="bi bi-linkedin"></i> </a>
+                           </div>
+                      </div>
+                      </div>
+                 </div><!-- End Team Member -->
 
                     
                     </div>
@@ -433,7 +600,7 @@
         data = data[0]
         const session = await getSession()
 
-        //fixed
+        //Hiding the account icon if it is not logged in
         if (typeof session['isStaff'] === 'undefined' && typeof data === 'undefined') {
           document.getElementById('account-icon').style.display = 'none';
        
@@ -441,6 +608,10 @@
         
        
         if (session["isStaff"]){
+          // Change Background Image source if the Staff is logged in
+          document.getElementById("background").src = "static/assets/img/req/registration.jpg";
+          document.getElementById("staff-description").style.color = "#2C4964";
+
           // remove appointment button if staff
           document.getElementById("appointment-btn").remove()
           document.getElementById("appointment-btn-2").remove()
