@@ -293,78 +293,67 @@ def sort_dates(patients):
 def user_is_staff():
     return get_session('isStaff')
 
+import requests
 
 def sms_confirmed(date, time, contact, *args, **kwargs):
     print("CONFIRMATION SMS SENT", date, time, contact)
-    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
-    payload = json.dumps({
-        "messages": [
-            {
-                "destinations": [{"to":contact}],
-                "from": "447491163443",
-                "text": f"Your appointment has been confirmed for {date}, {time}"
-            }
-        ]
-    })
-    headers = {
-        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+    url = "https://api.movider.co/v1/sms"
+
+    payload = {
+        "api_secret": "KrqFHVwqmJ6OS8ppqk_hcTHZmbdgCF",
+        "api_key": "2v7fbmACO0LjcOZqWsl4zLchjAe",
+        "to": contact,
+        "text":  f"Your appointment has been confirmed for {date}, {time}"
     }
-    conn.request("POST", "/sms/2/text/advanced", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print(res)
-    print(data)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+
+    print(response.text)
     return True
 
 def sms_reject(contact, *args, **kwargs):
     print("REJECT SMS SENT", contact)
-    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
-    payload = json.dumps({
-        "messages": [
-            {
-                "destinations": [{"to":contact}],
-                "from": "447491163443",
-                "text": f"Your appointment has been rejected"
-            }
-        ]
-    })
-    headers = {
-        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+    url = "https://api.movider.co/v1/sms"
+
+    payload = {
+        "api_secret": "KrqFHVwqmJ6OS8ppqk_hcTHZmbdgCF",
+        "api_key": "2v7fbmACO0LjcOZqWsl4zLchjAe",
+        "to": contact,
+        "text":  f"Your appointment has been rejected"
     }
-    conn.request("POST", "/sms/2/text/advanced", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print(res)
-    print(data)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+
+    print(response.text)
     return True
     
 def sms_resched(date, time, contact, *args, **kwargs):
     print("Rescheduling SMS SENT", date, time, contact)
-    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
-    payload = json.dumps({
-        "messages": [
-            {
-                "destinations": [{"to":contact}],
-                "from": "447491163443",
-                "text": f"Your appointment has been rescheduled to {date}, {time}."
-            }
-        ]
-    })
-    headers = {
-        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+    url = "https://api.movider.co/v1/sms"
+
+    payload = {
+        "api_secret": "KrqFHVwqmJ6OS8ppqk_hcTHZmbdgCF",
+        "api_key": "2v7fbmACO0LjcOZqWsl4zLchjAe",
+        "to": contact,
+        "text": f"Your appointment has been rescheduled to {date}, {time}."
     }
-    
-    conn.request("POST", "/sms/2/text/advanced", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print(res)
-    print(data)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+
+    print(response.text)
+  
     return True
 
 def sms_reminder(contact,time):
@@ -372,8 +361,6 @@ def sms_reminder(contact,time):
     timeName = lambda number: "PM" if number < 5 else "AM"
     message = f"Good Day! This is an automated message from ISATU Chatbot Clinic and we would like to remind you that your appointment is in tommorow at {time} {timeName(time)}. Thank you."
     print(message)
-    
-    conn = http.client.HTTPSConnection("xk8r5l.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
@@ -383,15 +370,21 @@ def sms_reminder(contact,time):
             }
         ]
     })
-    headers = {
-        'Authorization': 'App d501d7a7ecdef7ae38dd913a83a867bd-b8ed6ac6-38aa-4fef-a965-a0fc0593bbb7',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+    url = "https://api.movider.co/v1/sms"
+
+    payload = {
+        "api_secret": "KrqFHVwqmJ6OS8ppqk_hcTHZmbdgCF",
+        "api_key": "2v7fbmACO0LjcOZqWsl4zLchjAe",
+        "to": contact,
+        "text":message
     }
-    
-    conn.request("POST", "/sms/2/text/advanced", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print(res)
-    print(data)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+
+    print(response.text)
+  
     return True
