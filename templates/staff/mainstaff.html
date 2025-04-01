@@ -226,7 +226,7 @@
         const session = await getSession()
         if (session["isStaff"]){
              // remove appointment button if staff
-             document.getElementById("user-category-display").innerHTML = "staff"
+             document.getElementById("user-category-display").innerHTML = "NURSE"
         }else{
              document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
         }
