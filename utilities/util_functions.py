@@ -294,9 +294,28 @@ def user_is_staff():
     return get_session('isStaff')
 
 import requests
+from twilio.rest import Client
+def send_message(contact, message):
+    try:
+        account_sid = 'AC85abc35b629db24f138fbc2acc2f218d'#'AC3cbab85a43181a3e553a4d91792ddf8c'
+        auth_token = '22e60bb5fce690ac83aede43f6cc2e1e'#'701ae269416acde49f664ef12aad115f'
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(
+        from_='+19519043577',#'+17087346648',
+        body=message,
+        to='+'+contact,
+        )
+        print("MESSAGE ACCEPTED")
+        print(message.sid)
+    except Exception as e:
+        print(e)
+    return True
+
 
 def sms_confirmed(date, time, contact, *args, **kwargs):
     print("CONFIRMATION SMS SENT", date, time, contact)
+    send_message(contact, f"Your appointment has been confirmed for {date}, {time}")
+    return True
     url = "https://api.movider.co/v1/sms"
 
     payload = {
@@ -317,6 +336,8 @@ def sms_confirmed(date, time, contact, *args, **kwargs):
 
 def sms_reject(contact, *args, **kwargs):
     print("REJECT SMS SENT", contact)
+    send_message(contact, f"Your appointment has been rejected")
+    return True
     url = "https://api.movider.co/v1/sms"
 
     payload = {
@@ -337,6 +358,8 @@ def sms_reject(contact, *args, **kwargs):
     
 def sms_resched(date, time, contact, *args, **kwargs):
     print("Rescheduling SMS SENT", date, time, contact)
+    send_message(contact,  f"Your appointment has been rescheduled to {date}, {time}.")
+    return True
     url = "https://api.movider.co/v1/sms"
 
     payload = {
@@ -361,6 +384,8 @@ def sms_reminder(contact,time):
     timeName = lambda number: "PM" if number < 5 else "AM"
     message = f"Good Day! This is an automated message from ISATU Chatbot Clinic and we would like to remind you that your appointment is in tommorow at {time} {timeName(time)}. Thank you."
     print(message)
+    send_message(contact, message)
+    return True
     payload = json.dumps({
         "messages": [
             {
