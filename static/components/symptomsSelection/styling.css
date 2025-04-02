@@ -147,6 +147,7 @@
     padding: 20px;
     min-height: 40vh;
     width: 50%;
+    min-width: 350px;
     border-radius: 8px;
 }
 
