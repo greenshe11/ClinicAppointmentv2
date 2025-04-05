@@ -2,7 +2,7 @@
 
 import { getAppointmentsFilter, months, getTimeName} from "/static/components/calendarSelection/script.js";
 import { getSymptomsFromDb } from "/static/components/symptomsSelection/script.js"
-import { createRecommendationSent, getSymptomsFromCodeArray} from "/static/pageScripts/utils.js";
+import { createRecommendationSent,  createRecommendationSentFromCode, getSymptomsFromCodeArray} from "/static/pageScripts/utils.js";
 
 // GLOBALS
 let btn = null
@@ -37,6 +37,8 @@ export async function showModal(event){
     const symptomData = await getSymptomsFromDb(appointmentId)
     const symptomCodes = []
     console.log(appointmentId,appointmentData)
+    //const symptomsData = await fetch(`/api/symptoms?Appointment_ID=${appointmentId}`)
+
     for (let i=0; i<symptomData.length; i++){
         console.log(i,symptomData[i]["Appointment_ID"], appointmentData["Appointment_ID"])
         if (symptomData[i]["Appointment_ID"]==appointmentData["Appointment_ID"]){
@@ -45,9 +47,11 @@ export async function showModal(event){
        
     }
     console.log("info", symptomData)
-    const symptomNames = getSymptomsFromCodeArray(symptomCodes)
-    console.log(symptomNames)
-    const symptomResponse = createRecommendationSent(symptomNames)
+    //const symptomNames = getSymptomsFromCodeArray(symptomCodes)
+    //console.log(symptomNames)
+    console.log("CODES", symptomCodes)
+    //const symptomResponse = createRecommendationSent(symptomNames)
+    const symptomResponse = await createRecommendationSentFromCode(symptomCodes)
     console.log(symptomResponse)
     console.log(symptomCodes)
     console.log('symptom_CODES', symptomCodes)
@@ -175,6 +179,7 @@ window.printInfo = (event) =>{
 }
 
 import {getSession} from '/static/pageScripts/session.js'
+//import { createRecommendationSentFromCode } from "../../pageScripts/utils";
 async function removeUserFilterForPatients(){
     console.log('filter',document.getElementById("info-filter"))
     const session = await getSession()

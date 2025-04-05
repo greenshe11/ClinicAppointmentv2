@@ -298,7 +298,7 @@ from twilio.rest import Client
 def send_message(contact, message):
     try:
         account_sid = 'AC85abc35b629db24f138fbc2acc2f218d'#'AC3cbab85a43181a3e553a4d91792ddf8c'
-        auth_token = '22e60bb5fce690ac83aede43f6cc2e1e'#'701ae269416acde49f664ef12aad115f'
+        auth_token = '3c71017151aa9db84efa9e90013ecaa9'#'701ae269416acde49f664ef12aad115f'
         client = Client(account_sid, auth_token)
         message = client.messages.create(
         from_='+19519043577',#'+17087346648',

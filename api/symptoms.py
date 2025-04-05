@@ -4,6 +4,19 @@ from utilities.util_functions import get_query, pull_from_db, push_to_db, update
 
 def symptoms_routes(self, table_name):
     """Define Flask routes."""
+    @self.app.route('/api/symptomsref', methods=['GET'])
+    @cross_origin(supports_credentials=True)
+    def get_symptom_references():
+        data = request.args.to_dict()
+        processed_data = {}
+        for key, value in zip(data.keys(), data.values()):
+            if value != 'null':
+                try:
+                    processed_data[key] = int(value)
+                except ValueError as e:
+                    processed_data[key] = value
+        print(processed_data)
+        return pull_from_db(self, processed_data, "tblsymptomsref")
 
     @self.app.route('/api/symptoms', methods=['GET'])
     @cross_origin(supports_credentials=True)

@@ -1,5 +1,48 @@
+export async function fetchSymptomsRef(filter) {
+    const url = "/api/symptomsref" + filter?"?"+filter:""
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', // Or whatever content type you expect
+          // Add other headers as needed (e.g., authorization)
+        },
+      });
+  
+      if (!response.ok) {
+        // Handle non-2xx HTTP status codes
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json(); // Or response.text() for plain text, etc.
+      return data;
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error('Error fetching data:', error);
+      return null; // Or throw the error, or return an empty object, etc.
+    }
+  }
+  
+export function removeFrontBackSpaces(str) {
+    return str.replace(/^\s+|\s+$/g, '');
+}
 
-  // when adding symptom: recommendation, start at bottom to avoid messing with code name -> symptom conversion
+export const symptomsRef = {
+    getSymptomNameLevels: async (symptomName) => {
+        const symptomNameTrimmed = removeFrontBackSpaces(symptomName)
+        const fetchedSymptomNameData = await fetchSymptomsRef(`SymptomsRef_Name=${symptomName}`)
+        const levels = []
+        for (let index in fetchedSymptomNameData){
+            const targetSymptomNameData = fetchedSymptomNameData[index]
+            levels.append(targetSymptomNameData["SymptomsRef_Level"])
+        }
+        return levels
+
+    }
+}
+
+  
+// when adding symptom: recommendation, start at bottom to avoid messing with code name -> symptom conversion
 export const mildSymptoms = {
     "Fever (37.8 C-39 C)": "Stay hydrated and rest. Use light clothing. Consider over-the-counter medication like acetaminophen or ibuprofen for discomfort",
     "Fever (39 C-40 C)": "Stay hydrated and rest. Use light clothing. Consider over-the-counter medication like acetaminophen or ibuprofen for discomfort",
@@ -255,6 +298,27 @@ export const getSymptomsFromCodeArray = (arr) => {
 }
 
 
+export const createRecommendationSentFromCode = async (symptomArray) => {
+    console.log("creating recommendaiton", symptomArray)
+    let sentence = ''; // Initialize an empty string to hold the final recommendation sentence
+    for (let i = 0; i < symptomArray.length; i++) { // Loop through each symptom in the symptomArray
+        if (symptomArray[i] == "00"){
+            sentence = sentence + `<br>By selecting <u>... Others</u>, you indicate that you are unsure of what you feel or that none of the choices above apply. In this case, consulting a proper health care provider is recommended. </br>`
+            continue
+        }
+        let symptom = symptomArray[i]; // Get the current symptom from the array
+        let temp = ''; // Initialize a temporary string to hold the recommendation for the current symptom
+        let data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${symptom}`)).json())[0]
+        let recommendation = data["SymptomsRef_Recommendation"]
+        let name = data["SymptomsRef_Name"] + "(" + data["SymptomsRef_Level"] + ")"
+        if (recommendation) { // If a recommendation exists
+            recommendation = recommendation
+            temp = `<br>For <u>${name}</u>: ${recommendation} <br>`; // Format it and append it to the temp string
+        }
+        sentence = sentence + temp; // Append the temp string to the final sentence
+    }
+    return sentence; // Return the complete recommendation sentence
+}
 // Function to create a recommendation sentence from an array of symptoms
 export const createRecommendationSent = (symptomArray) => {
     let sentence = ''; // Initialize an empty string to hold the final recommendation sentence
@@ -264,7 +328,7 @@ export const createRecommendationSent = (symptomArray) => {
         let recommendation = getRecommendation(symptom); // Get the recommendation for the current symptom
         if (recommendation) { // If a recommendation exists
             recommendation = recommendation
-            temp = `For <i>${symptomArray[i]}</i>: ${recommendation} <br>`; // Format it and append it to the temp string
+            temp = `For <u>${symptomArray[i]}</u>: ${recommendation} <br>`; // Format it and append it to the temp string
         }
         sentence = sentence + temp; // Append the temp string to the final sentence
     }

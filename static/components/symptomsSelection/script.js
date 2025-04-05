@@ -143,11 +143,58 @@ function smithWaterman(s1,s2){
 
 export let levelQuestions = {}
 
+export async function fetchSymptomsRef(filter) {
+  const url = "/api/symptomsref" + filter?"?"+filter:""
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json', // Or whatever content type you expect
+        // Add other headers as needed (e.g., authorization)
+      },
+    });
+
+    if (!response.ok) {
+      // Handle non-2xx HTTP status codes
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json(); // Or response.text() for plain text, etc.
+    return data;
+  } catch (error) {
+    // Handle network errors or other exceptions
+    console.error('Error fetching data:', error);
+    return null; // Or throw the error, or return an empty object, etc.
+  }
+}
+
+
+export function removeFrontBackSpaces(str) {
+    return str.replace(/^\s+|\s+$/g, '');
+}
+
+export const symptomsRef = {
+    getSymptomNameLevels: async (symptomName) => {
+        const symptomNameTrimmed = removeFrontBackSpaces(symptomName)
+        console.log(symptomNameTrimmed)
+        const fetchedSymptomNameData = await (await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNameTrimmed}`)).json()
+        console.log("FETCHS", fetchedSymptomNameData)
+        const levels = []
+        for (let index in fetchedSymptomNameData){
+            const targetSymptomNameData = fetchedSymptomNameData[index]
+            levels.push(targetSymptomNameData["SymptomsRef_Level"])
+        }
+        return levels
+
+    }
+}
+
 class WordSuggestions{
   constructor(wordBag){
     this.wordBag = wordBag
     this.evaluateInput('')
     this.symptoms = []
+    this.symptoms0 = {}
     this.clearForNext = {'selection-0': true, 'selection-1': true, 'selection-2': true, }
   }
 
@@ -263,12 +310,15 @@ class WordSuggestions{
     
   }
 
-  setClear(index, name){
+  setClear(index, name, id){
+    console.log("CLEARING")
     this.clearForNext[`selection-${index}`] = true
-    this.symptoms[index] = this.symptoms[index] + name
+    this.symptoms[index] = this.symptoms[index]// + name
+    this.symptoms0[id] = name
+    console.log("CLEAR FO RNEXT", this.symptoms, this.symptoms0)
   }
 
-  updateRadio(){
+  async updateRadio(){
     const tagsElement = document.getElementById('symptom-tags-list') // element where to put tags
     levelQuestions = {}
     document.getElementById('selection-0').innerHTML = ''
@@ -281,28 +331,44 @@ class WordSuggestions{
     tagsElement.childNodes.forEach((element)=>{
       symptomNames.push(element.innerHTML)
     })
+    //const data = await (await fetch("api/symptomsref")).json()
     for (let index in symptomNames){
+      if (symptomNames[index] == "... others"){
+        setClear(index, "... others", "00")
+        continue
+      }
+      console.log(symptomNames, "symptomNames")
       const targetRadio = document.getElementById(`selection-${index}`)
       targetRadio.innerHTML = ''
+     
+      //console.log(data, "HAI")
       let question = `<p>How sever is your <b>${symptomNames[index]}</b>?</p>`
       let content = ""
+      //console.log("yp",await symptomsRef.getSymptomNameLevels(symptomNames[index]))
+      const symptomMildData = await ((await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNames[index]}&SymptomsRef_IsMild=1`)).json()) // mildSymptomsLevels[symptomNames[index]]
+      const symptomSevereData = await ((await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNames[index]}&SymptomsRef_IsMild=0`)).json()) // mildSymptomsLevels[symptomNames[index]]
       
-      let levels = mildSymptomsLevels[symptomNames[index]]
+      let levels = symptomMildData.map((value)=>value["SymptomsRef_Level"]) // mildSymptomsLevels[symptomNames[index]]
+      let ids = symptomMildData.map((value)=>value["SymptomsRef_ID"])
+      let names = symptomMildData.map((value)=>value["SymptomsRef_Name"])
+      console.log(levels)
+      console.log("LEVELS")
       if(!levels){
         continue
       }
       if (levels.length > 0){
-        console.log('heav', heavySymptoms)
-        console.log(heavySymptomsLevels[symptomNames[index]])
-        levels = levels.concat(heavySymptomsLevels[symptomNames[index]])
-        
+        //console.log('heav', heavySymptoms)
+        //console.log(heavySymptomsLevels[symptomNames[index]])
+        levels = levels.concat(symptomSevereData.map((value)=>value["SymptomsRef_Level"]))
+        ids = ids.concat(symptomSevereData.map((value)=>value["SymptomsRef_ID"]))
+        names = names.concat(symptomSevereData.map((value)=>value["SymptomsRef_Name"]))
       }else{
         levels = []
       }
       console.log("FINALEVELS", levels)
       for (let levelIndex in levels){
         if (!levels[levelIndex]){continue}
-        content = content + `<button name="${index}" onclick="setClear(${index}, '${levels[levelIndex]}')" value="${levels[levelIndex]}">${levels[levelIndex]}</button>`
+        content = content + `<button name="${index}" onclick="setClear(${index}, '${names[levelIndex]}', '${ids[levelIndex]}')" value="${levels[levelIndex]}">${levels[levelIndex]}</button>`
       }
       console.log('levels', levels.length>0)
       console.log(levels?true:false)
@@ -311,7 +377,7 @@ class WordSuggestions{
         targetRadio.innerHTML = content + '<hr>'
       }
       console.log("levels", levels)
-      console.log(symptomNames[index])
+      //console.log(symptomNames[index])
       if (levels.length<1 || !levels[0]){
         continue
       }
@@ -326,16 +392,18 @@ class WordSuggestions{
   updateTags(element){
     this.symptoms = [] // resets selected symptoms
     element.childNodes.forEach(symptom => { // add symptoms based on name of tag
-
+      console.log(symptom,'sym-s')
       this.symptoms.push(symptom.textContent) 
       //this.symptoms = [...new Set(this.symptoms)];
     });
     console.log(this.symptoms)
+
     this.updateRadio()
   }
 
   addToSelectedSymptomsFromSession(stringArray){
     // add tags from startup with session
+    console.log("Syse", stringArray)
     for (let i=0; i<stringArray.length; i++){
       this.addToElement(stringArray[i].split('(')[0 ])
     }
@@ -354,7 +422,7 @@ class WordSuggestions{
     targetElement.append(tag)
     this.symptoms = [] // resets selected symptoms
     this.updateTags(targetElement) // this will refill data by readding all selected symptoms based on tags
-    console.log(this.symptoms)
+    console.log('sym-',this.symptoms)
   }
 
   addToSelectedSymptoms(element){
@@ -452,13 +520,15 @@ export async function resetSymptomsSelected() {
 }
 
 export async function storeSymptomsSession() {
+  const codesFromSelectedSymptoms = wordSuggestionObj.symptoms0
+  console.log("codes", codesFromSelectedSymptoms)
   try {
       const response = await fetch('/api/session/storeSymptomsSelected', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({"symptoms": wordSuggestionObj.symptoms, "code": getCodesFromSymptomsArray(wordSuggestionObj.symptoms)}),
+          body: JSON.stringify({"symptoms": wordSuggestionObj.symptoms, "code": codesFromSelectedSymptoms}),
       });
 
       if (!response.ok) {
@@ -477,6 +547,7 @@ export async function getSymptomsSession(addToElement=true) {
     const res = await fetch(`/api/session/getSymptomsSelected`)
 
     const resJson = await res.json()
+    console.log("RESTORED SESSION", resJson)
     if (addToElement){
      wordSuggestionObj.addToSelectedSymptomsFromSession(resJson['symptoms_selected'])
     }
@@ -600,9 +671,12 @@ export async function symptomsSelection(element,elementButtons){
     window.toResponse();
     onClickCloseCal();
   }
+  const data = await (await fetch("/api/symptomsref")).json()
+  const uniquesSymptomNames = [...new Set(data.map((value)=>value["SymptomsRef_Name"]))]
+  console.log(data, uniquesSymptomNames,'data')
   const ws = new WordSuggestions(
     // Combine the keys of the two objects into one array
-    [...mildSymptomsKeysInitial(), ...heavySymptomsKeysInitial()]
+    uniquesSymptomNames//[...mildSymptomsKeysInitial(), ...heavySymptomsKeysInitial()]
   )
   // sets to global variables
   wordSuggestionObj = ws

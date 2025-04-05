@@ -50,8 +50,6 @@
      <link rel="stylesheet" href="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
      
      
-     
-     
      <!-- Main CSS File -->
      <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
      
@@ -337,7 +335,7 @@
     
      <!--DONT DELETE-->
      <script>
-
+        
             // Get chatbot elements
         const chatbot = document.getElementById('chatbot');
         const conversation = document.getElementById('conversation');
@@ -638,11 +636,10 @@
                     async function finisher(){
                         // Store the selected symptoms in the session
                         await storeSymptomsSession();
-
+                        console.log("LOG", ss.symptoms)
                         // Store the generated recommendation in the session
-                        storeResponseSession(createRecommendationSent(ss.symptoms));
+                        storeResponseSession(await createRecommendationSent(ss.symptoms));
                         console.log("DONE")
-                        
                         // Redirect to the response page
                         //window.location.href = '/chatbotpage/response';
                         //window.setAppointmentDateStage()
@@ -725,10 +722,10 @@
         * - getSymptomsSession: Fetches the session data for selected symptoms.
         */
         import "/static/components/sidebar/script.js";
-        import {createRecommendationSent, getSeriousSymptoms } from '/static/pageScripts/utils.js'
+        import {createRecommendationSent, createRecommendationSentFromCode, getSeriousSymptoms } from '/static/pageScripts/utils.js'
         import {getSymptomsSession} from "/static/components/symptomsSelection/script.js"
         import {complaintsToSession} from '/static/pageScripts/session.js';
-               
+        import {getSession} from "/static/components/calendarSelection/script.js";
         /**
         * Loads the sidebar component into the specified HTML element.
         * 
@@ -749,23 +746,43 @@
         window.createResponse = async () => {
             // Fetch selected symptoms from the session.
             const symptoms = await getSymptomsSession(false)
+            const session = await getSession()
+            console.log("SEms", session)
             console.log(symptoms)
-            
+            const codes = session["symptoms_selected_code"]
+            const seriousSymptoms0 = []
+            const data = await(await fetch("/api/symptomsref")).json()
+            console.log("sems-data", data)
+            for (let key in codes){
+              if (key=="00"){
+                seriousSymptoms0.push(codes[key])
+                continue
+              }
+              const symptomIdData = await (await fetch(`/api/symptomsref?SymptomsRef_ID=${key}`)).json()
+              console.log(symptomIdData[0])
+              if (!symptomIdData[0]["SymptomsRef_IsMild"]){
+                seriousSymptoms0.push(codes[key])
+                console.log("IS SERIOUS")
+              }
+            }
             // Display the recommendation based on the selected symptoms.
             console.log('seleted',symptoms['symptoms_selected'])
-            document.getElementById('cbp-recommendation').innerHTML = createRecommendationSent(symptoms['symptoms_selected'])
+            let recommendation =  await createRecommendationSentFromCode(Object.keys(codes))
+            document.getElementById('cbp-recommendation').innerHTML = recommendation
+            console.log("RECOMMENDATION", recommendation)
             
             // Get serious symptoms from the selected symptoms.
-            const seriousSymptoms = getSeriousSymptoms(symptoms['symptoms_selected'])
             
+            const seriousSymptoms = getSeriousSymptoms(symptoms['symptoms_selected'])
+            console.log("SYSS", symptoms)
             // Get the "Next" button and the bottom-line text element.
             const nextBtn = document.getElementById('next-button')
             const bottomLine = document.getElementById('cbp-bottom-line')
             
             // If there are serious symptoms, enable the "Next" button and show a message about setting an appointment.
-            if (seriousSymptoms.length > 0) {
+            if (seriousSymptoms0.length > 0) {
                 //nextBtn.disabled = false
-                bottomLine.innerHTML = `The symptoms (${seriousSymptoms.join(',')}) make you in need of professional help. `
+                bottomLine.innerHTML = `<br>The symptoms <u>${seriousSymptoms0.join(',')}</u> make you in need of professional help. `
                 
             } else {
                 // If no serious symptoms are found, disable the "Next" button and display a mild symptoms message.
@@ -788,7 +805,7 @@
    <script type="module">
         import {sidebar, getUserData} from "/static/components/sidebar/script.js";
         import {getSession, getTimeName, createAppointment, getAppointments} from "/static/components/calendarSelection/script.js";
-        import { createRecommendationSent , getCodesFromSymptomsArray} from "/static/pageScripts/utils.js"    
+        import { createRecommendationSent, createRecommendationSentFromCode, getCodesFromSymptomsArray} from "/static/pageScripts/utils.js"    
         sidebar(document.getElementById('home-sidebar-insert-area'))
 
             /**
@@ -801,17 +818,18 @@
         * @returns {Promise<Object>} - A promise that resolves to the response of the symptom creation operation.
         */
         const createSymptoms = async (Appointment_ID, Symptoms_Code) => {
-            console.log(Symptoms_Code)
+            console.log(Symptoms_Code, Appointment_ID, "CREATING SYMPTOM DATA")
             const response = await fetch('/api/symptoms', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             },
             body: JSON.stringify({ Appointment_ID: Appointment_ID, Symptoms_Code: Symptoms_Code }),
-            });
+            }); 
             const resJson = await response.json()
             console.log("createSymptoms()", resJson)
             return resJson
+
         }
 
 
@@ -835,10 +853,13 @@
             const timeName = sessionData.appointment_timeName
             const time = sessionData.appointment_time
             const symptoms = sessionData.symptoms_selected
+            console.log("HELLO", symptoms)
             const symptomsString = symptoms.join(', ') // Join symptoms into a comma-separated string
-            const response = createRecommendationSent(sessionData.symptoms_selected) // Generate response for symptoms
+            console.log(sessionData)
+            //const response = await createRecommendationSent(sessionData.symptoms_selected) // Generate response for symptoms
+            const response = await createRecommendationSentFromCode(Object.keys(sessionData.symptoms_selected_code))
             const userId = sessionData.userId
-            const codes = getCodesFromSymptomsArray(symptoms) // Get symptom codes
+            const codes = sessionData.symptoms_selected_code
             const complaints = sessionData.complaints
             console.log('complaints', complaints)
 
@@ -863,11 +884,12 @@
             }
 
             const newAppointment = await createAppointment(userId, day, month, time, year, 0, complaints) // Create a new appointment
-            for (let i = 0; i < codes.length; i++) {
-                let newSymptoms = await createSymptoms(newAppointment.id, codes[i]) // Create symptoms for the appointment
+            console.log("CODES", codes)
+            for (let i in codes) {
+                let newSymptoms = await createSymptoms(newAppointment.id, i) // Create symptoms for the appointment
                 console.log(i, newAppointment.id, newSymptoms)
             }
-
+            
             window.location.href = '/schedule' // Redirect to success page
             }
 
