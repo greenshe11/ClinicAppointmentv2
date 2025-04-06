@@ -193,8 +193,8 @@ class WordSuggestions{
   constructor(wordBag){
     this.wordBag = wordBag
     this.evaluateInput('')
-    this.symptoms = []
-    this.symptoms0 = {}
+    this.symptoms = [] // deprecated
+    this.symptoms0 = {} // new
     this.clearForNext = {'selection-0': true, 'selection-1': true, 'selection-2': true, }
   }
 
@@ -306,6 +306,12 @@ class WordSuggestions{
   removeSymptomTag(parent, element){
     parent.removeChild(element)
     this.updateTags(parent)
+    for (let key in this.symptoms0){
+      
+      if (this.symptoms0[key] == element.innerHTML){
+        delete this.symptoms0[key]
+      }
+    }
     this.updateRadio()
     
   }
@@ -321,6 +327,7 @@ class WordSuggestions{
   async updateRadio(){
     const tagsElement = document.getElementById('symptom-tags-list') // element where to put tags
     levelQuestions = {}
+    
     document.getElementById('selection-0').innerHTML = ''
     document.getElementById('selection-2').innerHTML = ''
     document.getElementById('selection-1').innerHTML = ''
@@ -329,6 +336,7 @@ class WordSuggestions{
     this.clearForNext['selection-2'] = true
     const symptomNames = []
     tagsElement.childNodes.forEach((element)=>{
+      
       symptomNames.push(element.innerHTML)
     })
     //const data = await (await fetch("api/symptomsref")).json()
@@ -347,7 +355,7 @@ class WordSuggestions{
       //console.log("yp",await symptomsRef.getSymptomNameLevels(symptomNames[index]))
       const symptomMildData = await ((await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNames[index]}&SymptomsRef_IsMild=1`)).json()) // mildSymptomsLevels[symptomNames[index]]
       const symptomSevereData = await ((await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNames[index]}&SymptomsRef_IsMild=0`)).json()) // mildSymptomsLevels[symptomNames[index]]
-      
+      console.log(symptomMildData, symptomSevereData)
       let levels = symptomMildData.map((value)=>value["SymptomsRef_Level"]) // mildSymptomsLevels[symptomNames[index]]
       let ids = symptomMildData.map((value)=>value["SymptomsRef_ID"])
       let names = symptomMildData.map((value)=>value["SymptomsRef_Name"])
@@ -356,15 +364,13 @@ class WordSuggestions{
       if(!levels){
         continue
       }
-      if (levels.length > 0){
-        //console.log('heav', heavySymptoms)
-        //console.log(heavySymptomsLevels[symptomNames[index]])
-        levels = levels.concat(symptomSevereData.map((value)=>value["SymptomsRef_Level"]))
-        ids = ids.concat(symptomSevereData.map((value)=>value["SymptomsRef_ID"]))
-        names = names.concat(symptomSevereData.map((value)=>value["SymptomsRef_Name"]))
-      }else{
-        levels = []
-      }
+     
+      //console.log('heav', heavySymptoms)
+      //console.log(heavySymptomsLevels[symptomNames[index]])
+      levels = levels.concat(symptomSevereData.map((value)=>value["SymptomsRef_Level"]))
+      ids = ids.concat(symptomSevereData.map((value)=>value["SymptomsRef_ID"]))
+      names = names.concat(symptomSevereData.map((value)=>value["SymptomsRef_Name"]))
+    
       console.log("FINALEVELS", levels)
       for (let levelIndex in levels){
         if (!levels[levelIndex]){continue}
