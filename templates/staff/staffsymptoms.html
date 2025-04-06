@@ -125,7 +125,7 @@
                             
                         </select>
                     </div>
-                    <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSymptomsModal">Add Symptoms</button>
+                    <button  class="btn btn-primary" data-bs-toggle="modal" onclick="showCreateModeModal()">Add Symptoms</button>
                 </div>
                 
             </div>
@@ -166,7 +166,7 @@
                 <option value="1">No</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" id="form-submit-button">Submit</button>
           </form>
         </div>
       </div>
@@ -201,7 +201,9 @@
                     <table class="table my-0" id="dataTable" >
                         <thead>
                             <tr>
-                                <th>ID</th>
+
+                                <!--<th>ID</th>-->
+                                <th>Actions</th>
                                 <th>Name</th>
                                 <!---<th>Last Name</th><th>First Name</th>-->
                                 <th>Severity</th>
@@ -236,10 +238,6 @@
     
 </body>
 <!--DONT DELETE-->
-<script type="module">
-    import {SidebarStaff} from "/static/components/sidebarStaff/script.js";
-    SidebarStaff(document.getElementById('home-sidebar-insert-area'))
-</script>
 
      <!-- Vendor JS Files -->
      <script src="{{ url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -292,7 +290,8 @@
     const pageSize = 50;  // Change this to the number of items per page
     let currentPage = 1;  // current page, transfered from function scope into global(here) for accessability
     let allUniqueSymptomNames = [] // for auto adjusting of naming
-
+    let formTargetId = null // if no target (null): create symptom // if has target (string id), edit target symptom
+    
     // window... make it accessable from html for onclick
     window.useSuggestedSymptomAsName=(name)=>{
         // Get the input element by its ID
@@ -320,7 +319,7 @@
     // this will rename fever into Fever (or ' fever ' into 'Fever') if Fever exists on current symptom names
     function autoAdjustNaming(symptomsData, name){
         const normalizedName = name.replace(" ", "").toLowerCase()
-        let finalName = ""
+        let finalName = name
         for (let index in symptomsData){
             const targetData = symptomsData[index]
             const targetName = targetData["SymptomsRef_Name"]
@@ -350,6 +349,76 @@
           }
           return 0;
         });
+    }
+
+    window.deleteSymptomRef = async (SymptomsRef_ID) =>{
+        const data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${SymptomsRef_ID}`)).json())[0]
+        let userChoice = confirm(`This action cannot be undone.\nAre you sure you want to remove?\n\nSymptom Name: ${data.SymptomsRef_Name}\nSeverity: ${data.SymptomsRef_Level}`);
+
+        if (!userChoice) { // selected cancel
+            return
+        }
+        try{
+            const response = await fetch('/api/symptomsref', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({SymptomsRef_ID})
+            })
+            
+            const responseJson = await response.json()
+            getSymptomsRef()
+        }catch(error){
+            console.error('Error:', error);
+            alert('An error occurred while adding symptoms.');
+        }
+    }
+    
+    window.showEditModeModal = async (SymptomsRef_ID) => {
+        formTargetId = SymptomsRef_ID // put to global var
+        const targetData = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${formTargetId}`)).json())[0]
+        document.getElementById('form-submit-button').innerHTML = "Update"
+        document.getElementById("manage-symptoms-suggestions").innerHTML = ""
+        document.getElementById("addSymptomsModalLabel").innerHTML = "Update Symptom"
+        document.getElementById("SymptomsRef_Name").value = targetData.SymptomsRef_Name
+        document.getElementById("SymptomsRef_Level").value = targetData.SymptomsRef_Level
+        document.getElementById("SymptomsRef_Recommendation").value = targetData.SymptomsRef_Recommendation
+        document.getElementById("SymptomsRef_IsMild").value = targetData.SymptomsRef_IsMild
+        setTimeout(()=>{$('#addSymptomsModal').modal('show')}, 50) // add brief delay to set ui changs first
+    }
+
+    window.showCreateModeModal = async () => {
+        if (formTargetId){
+            formTargetId = null  // put to global var
+            document.getElementById('form-submit-button').innerHTML = "Submit"
+             document.getElementById("manage-symptoms-suggestions").innerHTML = ""
+            document.getElementById("addSymptomsModalLabel").innerHTML = "Create Symptom"
+            document.getElementById("SymptomsRef_Name").value = ""
+            document.getElementById("SymptomsRef_Level").value = ""
+            document.getElementById("SymptomsRef_Recommendation").value = ""
+            document.getElementById("SymptomsRef_IsMild").value = "0"
+    
+        }
+       
+        setTimeout(()=>{$('#addSymptomsModal').modal('show')}, 50) // add brief delay to set ui changes first
+    }
+    window.updateSymptomRef = async (data) => {
+        try{
+            const response = await fetch('/api/symptomsref', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            
+            const responseJson = await response.json()
+            getSymptomsRef()
+        }catch(error){
+            console.error('Error:', error);
+            alert('An error occurred while adding symptoms.');
+        }
     }
     
     async function getSymptomsRef(sortBy) {
@@ -389,7 +458,10 @@
                             row.classList.add("symptom-severe-type")
                         }
                         row.innerHTML = `
-                            <td>${item.SymptomsRef_ID}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="deleteSymptomRef('${item.SymptomsRef_ID}')">Delete</button>
+                                <button class="btn btn-primary" onclick="showEditModeModal('${item.SymptomsRef_ID}')" style="margin-left: 5px;">Edit</button>
+                            </td>
                             <td>${item.SymptomsRef_Name}</td>
                             <td>${item.SymptomsRef_Level}</td>
                             <td>${item.SymptomsRef_Recommendation}</td>
@@ -510,25 +582,55 @@
         };
 
 
-        console.log (symptomsData);
-        // Send the data to your backend using fetch or an AJAX request
-        try{
-            const response = await fetch('/api/symptomsref', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(symptomsData)
-            })
-            
-            const responseJson = await response.json()
-            alert("Symptom added successfully!")
-            $('#addSymptomsModal').modal('hide');
-            getSymptomsRef()
-        }catch(error){
-            console.error('Error:', error);
-            alert('An error occurred while adding symptoms.');
+        // EDIT MODE
+
+        if (formTargetId){
+            console.log(formTargetId)
+            console.log(symptomsData)
+            try{
+                const response = await fetch('/api/symptomsref', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({SymptomsRef_ID: formTargetId, ...symptomsData})
+                })
+                
+                const responseJson = await response.json()
+                    
+                alert("Symptom updated successfully!")
+                $('#addSymptomsModal').modal('hide');
+                getSymptomsRef()
+            }catch(error){
+                console.error('Error:', error);
+                alert('An error occurred while adding symptoms.');
+            }
+
+        }else{
+        // CREATE MODE
+
+            try{
+                const response = await fetch('/api/symptomsref', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(symptomsData)
+                })
+                
+                const responseJson = await response.json()
+                alert("Symptom added successfully!")
+                $('#addSymptomsModal').modal('hide');
+                
+            }catch(error){
+                console.error('Error:', error);
+                alert('An error occurred while adding symptoms.');
+            }
+
         }
+        
+
+        getSymptomsRef()
         getAllUniqueSymptomNames() // refresh unique symptom names when adding new symptom
     });
 
