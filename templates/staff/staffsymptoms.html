@@ -290,14 +290,13 @@
     import { getDaysUntilAppointment } from "/static/pageScripts/calendar.js"
 
     const pageSize = 50;  // Change this to the number of items per page
-    let currentPage = 1; 
-    let allUniqueSymptomNames = []
+    let currentPage = 1;  // current page, transfered from function scope into global(here) for accessability
+    let allUniqueSymptomNames = [] // for auto adjusting of naming
 
+    // window... make it accessable from html for onclick
     window.useSuggestedSymptomAsName=(name)=>{
-        
         // Get the input element by its ID
         const inputElement = document.getElementById('SymptomsRef_Name');
-
         // Set the text inside the input
         inputElement.value = name
     }
@@ -453,9 +452,10 @@
             }
         }
 
+    // create suggestions when making input on name
     document.getElementById('SymptomsRef_Name').addEventListener('input', (event)=>{
-        const value = event.target.value
         event.preventDefault()
+        const value = event.target.value
         const countMaxSuggestions = 5
         const suggestions = []
         //console.log(value)
@@ -479,10 +479,13 @@
         elementLocation.innerHTML = newElement
     })
 
+
     document.getElementById('manage-symptoms-sortby').addEventListener('change', ()=>{
-        getSymptomsRef()
         currentPage = 1 // reset page number
+        getSymptomsRef()
+        
     })
+
          // Add event listener for the form submission
     document.getElementById('addSymptomsForm').addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevent the default form submission
@@ -526,7 +529,7 @@
             console.error('Error:', error);
             alert('An error occurred while adding symptoms.');
         }
-        getAllUniqueSymptomNames()
+        getAllUniqueSymptomNames() // refresh unique symptom names when adding new symptom
     });
 
     // show pending count notif
