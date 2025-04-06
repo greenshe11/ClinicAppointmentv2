@@ -55,6 +55,9 @@
                             <div id="pending-count-container" style="display: none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                               <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                           </div></li>
+                          <div id="manage-symptoms-container" style="margin-left: 10px;">
+                           
+                          </div>
                           <li><a href="/profile" class="">Account</a></li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                           
@@ -613,7 +616,7 @@
                 count+=1
             }
         }
-          if (count>0){
+        if (count>0){
             
             document.getElementById("pending-count").innerHTML = count
              document.getElementById("pending-count-container").style.display = "block"
@@ -622,6 +625,7 @@
           document.getElementById("user-category-display").innerHTML = data["PatientCategory"].toUpperCase()
           document.getElementById("user-name").innerHTML = data["PatientLastName"] +", "+ data["PatientName"]      
         }
+        document.getElementById("manage-symptoms-container").innerHTML = ` <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>`
 
         
       }
