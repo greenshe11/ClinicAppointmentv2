@@ -313,7 +313,6 @@ class WordSuggestions{
       }
     }
     this.updateRadio()
-    
   }
 
   setClear(index, name, id){
@@ -374,7 +373,7 @@ class WordSuggestions{
       console.log("FINALEVELS", levels)
       for (let levelIndex in levels){
         if (!levels[levelIndex]){continue}
-        content = content + `<button name="${index}" onclick="setClear(${index}, '${names[levelIndex]}', '${ids[levelIndex]}')" value="${levels[levelIndex]}">${levels[levelIndex]}</button>`
+        content = content + `<button name="${index}" style="text-align: left" onclick="setClear(${index}, '${names[levelIndex]}', '${ids[levelIndex]}')" value="${levels[levelIndex]}">${levels[levelIndex]}</button>`
       }
       console.log('levels', levels.length>0)
       console.log(levels?true:false)

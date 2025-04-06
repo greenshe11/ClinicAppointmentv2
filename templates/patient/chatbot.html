@@ -375,7 +375,7 @@
             // Add user input to conversation
             let message = document.createElement('div');
             message.classList.add('chatbot-message', 'user-message','right-fade');
-            const txt = `<div class="chatbot-text-self" sentTime="${currentTime}">${input}</div>`
+            const txt = `<div class="chatbot-text-self" sentTime="${currentTime}" style="max-width: 50%;"">${input}</div>`
             console.log(txt);
             message.innerHTML = txt
             conversation.appendChild(message);
