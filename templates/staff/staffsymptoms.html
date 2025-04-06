@@ -143,6 +143,13 @@
             <div class="mb-3">
               <label for="SymptomsRef_Name" class="form-label">Symptom Name</label>
               <input type="text" placeholder="(example: Fever)" class="form-control" id="SymptomsRef_Name" required>
+              <div style="align-items:center">
+                <span style="color: gray">Name Suggestions:</span>
+                <div id="manage-symptoms-suggestions">
+                    
+                </div>
+                
+              </div>
             </div>
             <div class="mb-3">
               <label for="SymptomsRef_Level" class="form-label">Symptom Severity/Level</label>
@@ -275,8 +282,50 @@
 
     const pageSize = 50;  // Change this to the number of items per page
     let currentPage = 1; 
+    let allUniqueSymptomNames = []
 
-    function sortSymptomData(symptomData, key = "SymptomRef_Name") {
+    window.useSuggestedSymptomAsName=(name)=>{
+        
+        // Get the input element by its ID
+        const inputElement = document.getElementById('SymptomsRef_Name');
+
+        // Set the text inside the input
+        inputElement.value = name
+    }
+
+    async function getAllUniqueSymptomNames(){
+        const response = await fetch("/api/symptomsref");
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        
+        let data = await response.json();
+        const names = []
+        for (let index in data){
+            names.push(data[index].SymptomsRef_Name)
+        }
+        const uniqueNames = [...new Set(names)]
+        allUniqueSymptomNames = uniqueNames
+        return null
+    }
+
+    // this will rename fever into Fever (or ' fever ' into 'Fever') if Fever exists on current symptom names
+    function autoAdjustNaming(symptomsData, name){
+        const normalizedName = name.replace(" ", "").toLowerCase()
+        let finalName = ""
+        for (let index in symptomsData){
+            const targetData = symptomsData[index]
+            const targetName = targetData["SymptomsRef_Name"]
+            const normalizedTargetName = targetName.replace(" ","").toLowerCase()
+            if (normalizedName==normalizedTargetName){
+                finalName = targetName
+                break
+            }
+        }
+        return finalName
+    }
+
+    function sortSymptomData(symptomData, key) {
         if (!symptomData || symptomData.length === 0) {
           return [];
         }
@@ -394,7 +443,33 @@
                 console.error("Fetch error:", error);
             }
         }
-   
+
+    document.getElementById('SymptomsRef_Name').addEventListener('input', (event)=>{
+        const value = event.target.value
+        event.preventDefault()
+        const countMaxSuggestions = 5
+        const suggestions = []
+        //console.log(value)
+        //console.log(allUniqueSymptomNames)
+        const elementLocation = document.getElementById("manage-symptoms-suggestions")
+        const addButton = (name) => (`<button onclick="useSuggestedSymptomAsName('${name}')" type="button" class="btn" style="background-color: rgb(240,240,240);margin: 5px; " >${name}</button>`)
+        for (let index in allUniqueSymptomNames){
+            if (allUniqueSymptomNames[index].toLowerCase().replace(" ","").startsWith(value.toLowerCase().replace(" ", ""))){
+                if (suggestions.length < countMaxSuggestions){
+                    suggestions.push(allUniqueSymptomNames[index])
+                }else{
+                    break
+                }
+            }
+        }
+
+        let newElement = ""
+        for (let index in suggestions){
+            newElement += addButton(suggestions[index])
+        }
+        elementLocation.innerHTML = newElement
+    })
+
     document.getElementById('manage-symptoms-sortby').addEventListener('change', ()=>{
         getSymptomsRef()
         currentPage = 1 // reset page number
@@ -402,7 +477,12 @@
          // Add event listener for the form submission
     document.getElementById('addSymptomsForm').addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevent the default form submission
-
+        const response = await fetch("/api/symptomsref");
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        
+        let data = await response.json();
         // Get the form field values
         const SymptomsRef_Name = document.getElementById('SymptomsRef_Name').value;
         const SymptomsRef_Level = document.getElementById('SymptomsRef_Level').value;
@@ -411,7 +491,7 @@
 
         // Create an object with the data to send to the backend
         const symptomsData = {
-            SymptomsRef_Name,
+            SymptomsRef_Name: autoAdjustNaming(data, SymptomsRef_Name),
             SymptomsRef_Level,
             SymptomsRef_Recommendation,
             SymptomsRef_IsMild
@@ -437,7 +517,7 @@
             console.error('Error:', error);
             alert('An error occurred while adding symptoms.');
         }
-        
+        getAllUniqueSymptomNames()
     });
 
     // show pending count notif
@@ -463,6 +543,7 @@
 
     getSymptomsRef();
     getPendingCount();
+    getAllUniqueSymptomNames();
     
 </script>
 
