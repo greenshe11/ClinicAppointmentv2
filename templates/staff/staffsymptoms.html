@@ -119,9 +119,10 @@
                     <div style="display:flex; flex-direction:row; align-items:center;">
                         <span style="width: 80px;">Sort By</span>
                         <select class="form-control" id="manage-symptoms-sortby" required>
+                            <option value="?">Last Created</option>
                             <option value="SymptomsRef_Name">Name</option>
                             <option value="SymptomsRef_IsMild">Recommend Appointment</option>
-                            <option value="?">Last Created</option>
+                            
                         </select>
                     </div>
                     <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSymptomsModal">Add Symptoms</button>
@@ -154,8 +155,8 @@
             <div class="mb-3">
               <label for="SymptomsRef_IsMild" class="form-label">Recommend Appointment</label>
               <select class="form-control" id="SymptomsRef_IsMild" required>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
+                <option value="0">Yes</option>
+                <option value="1">No</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -310,6 +311,8 @@
                 const sortByRefValue = document.getElementById("manage-symptoms-sortby").value
                 if (sortByRefValue != "?"){
                     data = sortSymptomData(data, sortByRefValue)
+                }else{
+                    data = data.reverse()
                 }
 
                 // Function to display the current page
