@@ -33,6 +33,15 @@
 
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
+    <style>
+        table tr.symptom-mild-type td { /* Target table cells within mild rows */
+            background-color: rgb(216, 243, 216);
+        }
+
+        table tr.symptom-severe-type td { /* Target table cells within severe rows */
+            background-color: rgb(235, 201, 201);
+        }
+    </style>
 </head>
 
 <body >
@@ -106,7 +115,18 @@
         <div class="card shadow">
             <div class="card-header py-3">
                 <p class="text-primary m-0 fw-bold">Manage Symptoms</p>
-                <button  class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addSymptomsModal">Add Symptoms</button>
+                <div style="width: 100%; justify-content: space-between; display: flex;">
+                    <div style="display:flex; flex-direction:row; align-items:center;">
+                        <span style="width: 80px;">Sort By</span>
+                        <select class="form-control" id="manage-symptoms-sortby" required>
+                            <option value="SymptomsRef_Name">Name</option>
+                            <option value="SymptomsRef_IsMild">Recommend Appointment</option>
+                            <option value="?">Last Created</option>
+                        </select>
+                    </div>
+                    <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSymptomsModal">Add Symptoms</button>
+                </div>
+                
             </div>
 
             <!-- Modal for Adding Symptoms -->
@@ -120,19 +140,19 @@
         <div class="modal-body">
           <form id="addSymptomsForm">
             <div class="mb-3">
-              <label for="SymptomsRef_Name" class="form-label">Symptoms Name</label>
-              <input type="text" class="form-control" id="SymptomsRef_Name" required>
+              <label for="SymptomsRef_Name" class="form-label">Symptom Name</label>
+              <input type="text" placeholder="(example: Fever)" class="form-control" id="SymptomsRef_Name" required>
             </div>
             <div class="mb-3">
-              <label for="SymptomsRef_Level" class="form-label">Level</label>
-              <input type="text" class="form-control" id="SymptomsRef_Level" required>
+              <label for="SymptomsRef_Level" class="form-label">Symptom Severity/Level</label>
+              <input type="text" placeholder="(example: 38 C)" class="form-control" id="SymptomsRef_Level" required>
             </div>
             <div class="mb-3">
-              <label for="SymptomsRef_Recommendation" class="form-label">Recommendation</label>
-              <textarea class="form-control" id="SymptomsRef_Recommendation" required></textarea>
+              <label for="SymptomsRef_Recommendation" class="form-label">Initial Diagnosis</label>
+              <textarea class="form-control" placeholder="(example: Recommendation)" id="SymptomsRef_Recommendation" required></textarea>
             </div>
             <div class="mb-3">
-              <label for="SymptomsRef_IsMild" class="form-label">Is Mild</label>
+              <label for="SymptomsRef_IsMild" class="form-label">Recommend Appointment</label>
               <select class="form-control" id="SymptomsRef_IsMild" required>
                 <option value="1">Yes</option>
                 <option value="0">No</option>
@@ -164,13 +184,12 @@
                     <table class="table my-0" id="dataTable" >
                         <thead>
                             <tr>
-                                <th>SymptomsRef_ID</th>
-                                <th>SymptomsRef_Name</th>
-                                
+                                <th>ID</th>
+                                <th>Name</th>
                                 <!---<th>Last Name</th><th>First Name</th>-->
-                                <th>SymptomsRef_Level</th>
-                                <th>SymptomsRef_Recommendation</th>
-                                <th>SymptomsRef_IsMild</sth>
+                                <th>Severity</th>
+                                <th>Initial Diagnosis</th>
+                                <th>Recommend Appointment</sth>
                                 
                             </tr>
                         </thead>
@@ -253,18 +272,45 @@
     import { InfoModal, showModal } from "/static/components/infoModal/script.js";
     import { getDaysUntilAppointment } from "/static/pageScripts/calendar.js"
 
+    const pageSize = 50;  // Change this to the number of items per page
+    let currentPage = 1; 
 
-    async function getSymptomsRef() {
+    function sortSymptomData(symptomData, key = "SymptomRef_Name") {
+        if (!symptomData || symptomData.length === 0) {
+          return [];
+        }
+      
+        return symptomData.sort((a, b) => {
+          const valueA = a.hasOwnProperty(key) ? String(a[key]).toLowerCase() : "";
+          const valueB = b.hasOwnProperty(key) ? String(b[key]).toLowerCase() : "";
+      
+          if (valueA < valueB) {
+            return -1;
+          }
+          if (valueA > valueB) {
+            return 1;
+          }
+          return 0;
+        });
+    }
+    
+    async function getSymptomsRef(sortBy) {
             try {
                 const response = await fetch("/api/symptomsref");
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
                 
-                const data = await response.json();
-                const pageSize = 50;  // Change this to the number of items per page
+                let data = await response.json();
+                //const pageSize = 50;  // removed. transferred to global scope
                 const totalPages = Math.ceil(data.length / pageSize);
-                let currentPage = 1;
+                //let currentPage = 1; // removed. transfered to global scope for accessability
+
+                // sort data
+                const sortByRefValue = document.getElementById("manage-symptoms-sortby").value
+                if (sortByRefValue != "?"){
+                    data = sortSymptomData(data, sortByRefValue)
+                }
 
                 // Function to display the current page
                 function displayPage(page) {
@@ -277,12 +323,17 @@
                     for (let i = startIndex; i < endIndex; i++) {
                         const item = data[i];
                         const row = document.createElement("tr");
+                        if (item.SymptomsRef_IsMild){
+                            row.classList.add("symptom-mild-type")
+                        }else{
+                            row.classList.add("symptom-severe-type")
+                        }
                         row.innerHTML = `
                             <td>${item.SymptomsRef_ID}</td>
                             <td>${item.SymptomsRef_Name}</td>
                             <td>${item.SymptomsRef_Level}</td>
                             <td>${item.SymptomsRef_Recommendation}</td>
-                            <td>${item.SymptomsRef_IsMild}</td>
+                            <td>${item.SymptomsRef_IsMild?"No":"Yes"}</td>
                         `;
                         tbody.appendChild(row);
                     }
@@ -340,12 +391,13 @@
                 console.error("Fetch error:", error);
             }
         }
-
-     getSymptomsRef();
-
-
+   
+    document.getElementById('manage-symptoms-sortby').addEventListener('change', ()=>{
+        getSymptomsRef()
+        currentPage = 1 // reset page number
+    })
          // Add event listener for the form submission
-        document.getElementById('addSymptomsForm').addEventListener('submit', function(e) {
+    document.getElementById('addSymptomsForm').addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevent the default form submission
 
         // Get the form field values
@@ -365,35 +417,49 @@
 
         console.log (symptomsData);
         // Send the data to your backend using fetch or an AJAX request
-        fetch('/api/symptomsref', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(symptomsData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log (data);
-            // Handle the response from the backend
-            if (data.success) {
-                alert('Symptoms added successfully!');
-                // Close the modal after success
-                $('#addSymptomsModal').modal('hide');
-                // Optionally, you can reload the table or update the data on the frontend here
-            } else {
-                // alert('Failed to add symptoms.');
-                location.reload();
-            }
-        })
-        .catch(error => {
+        try{
+            const response = await fetch('/api/symptomsref', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(symptomsData)
+            })
+            
+            const responseJson = await response.json()
+            alert("Symptom added successfully!")
+            $('#addSymptomsModal').modal('hide');
+            getSymptomsRef()
+        }catch(error){
             console.error('Error:', error);
             alert('An error occurred while adding symptoms.');
-        });
+        }
+        
     });
 
+    // show pending count notif
+    async function getPendingCount(){
+        const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
+        
+        let count = 0;
+        for (let index in appointments){
+            const a = appointments[index]
+            const targetDateTime =  new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+            const currentDateTime = new Date();
+        
+            if ((appointments[index].Appointment_Confirmed == 0)&&
+            (currentDateTime - targetDateTime)<0){
+                count+=1
+            }
+        }
+        if (count>0){
+            document.getElementById("pending-count").innerHTML = count
+            document.getElementById("pending-count-container").style.display = "block"
+       }
+    }
 
-
+    getSymptomsRef();
+    getPendingCount();
     
 </script>
 
