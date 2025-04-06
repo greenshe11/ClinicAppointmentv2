@@ -43,12 +43,6 @@ def symptoms_routes(self, table_name):
         """Add a new user to the database."""
         data = request.json
         return push_to_db(self, data, table_name=table_name)
-    
-    @self.app.route('/api/symptomsref', methods=['POST'])
-    def symptomsref_push():
-        """Add a new user to the database."""
-        data = request.json
-        return push_to_db(self, data, table_name="tblsymptomsref")
        
     @self.app.route('/api/symptomsref', methods=['PUT'])
     def symptomsref_update():
