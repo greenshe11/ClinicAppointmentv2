@@ -310,7 +310,7 @@ export const createRecommendationSentFromCode = async (symptomArray) => {
         let temp = ''; // Initialize a temporary string to hold the recommendation for the current symptom
         let data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${symptom}`)).json())[0]
         let recommendation = data["SymptomsRef_Recommendation"]
-        let name = data["SymptomsRef_Name"] + "(" + data["SymptomsRef_Level"] + ")"
+        let name = '<span style="white-space: pre-line">' + data["SymptomsRef_Name"] + "(" + data["SymptomsRef_Level"] + ")</span>"
         if (recommendation) { // If a recommendation exists
             recommendation = recommendation
             temp = `<br>For <u>${name}</u>: ${recommendation} <br>`; // Format it and append it to the temp string

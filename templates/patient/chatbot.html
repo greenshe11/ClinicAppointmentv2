@@ -783,7 +783,7 @@
             // If there are serious symptoms, enable the "Next" button and show a message about setting an appointment.
             if (seriousSymptoms0.length > 0) {
                 //nextBtn.disabled = false
-                bottomLine.innerHTML = `<br>The symptoms <u>${seriousSymptoms0.join(',')}</u> make you in need of professional help. `
+                bottomLine.innerHTML = `<br><span style="white-space: pre-line">The symptoms <u>${seriousSymptoms0.join(',')}</u> make you in need of professional help. </span>`
                 
             } else {
                 // If no serious symptoms are found, disable the "Next" button and display a mild symptoms message.
