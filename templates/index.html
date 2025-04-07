@@ -591,6 +591,7 @@
         
        
         if (session["isStaff"]){
+          document.getElementById("manage-symptoms-container").innerHTML = ` <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>`
           // Change Background Image source if the Staff is logged in
           document.getElementById("background").src = "static/assets/img/req/registration.jpg";
           document.getElementById("staff-description").style.color = "#2C4964";
@@ -625,7 +626,7 @@
           document.getElementById("user-category-display").innerHTML = data["PatientCategory"].toUpperCase()
           document.getElementById("user-name").innerHTML = data["PatientLastName"] +", "+ data["PatientName"]      
         }
-        document.getElementById("manage-symptoms-container").innerHTML = ` <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>`
+        
 
         
       }

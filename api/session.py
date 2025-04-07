@@ -9,7 +9,7 @@ def session_routes(self):
     def get_session_appointment_date():
         """Add a new user to the database."""
         res = {}
-        for id in ['month','day','year','time','timeName', 'monthName']:
+        for id in ['month','day','year','time','timeName', 'monthName', 'minutes']:
             print(res) 
             res[id] = utils.get_session(f'appointment_{id}')
         return jsonify(res)
@@ -18,7 +18,8 @@ def session_routes(self):
     def set_session_appointment_date():  
         data = request.args.to_dict()
         
-        for id in ['month', 'day', 'year', 'time','timeName','monthName']:
+        for id in ['month', 'day', 'year', 'time','timeName','monthName', 'minutes']:
+            print("NEW SESSION", data[id], f'appointment_{id}')
             utils.set_session(f'appointment_{id}',data[id])
         return jsonify({"success": True})
     

@@ -476,11 +476,12 @@
             const day = appointmentSpec.Appointment_Day; // Extract day
             const status = appointmentSpec.Appointment_Confirmed; // Extract status
             const time = appointmentSpec.Appointment_Time; // Extract time
+            const minutes = appointmentSpec.Appointment_Minutes;
             const appId = appointmentSpec.Appointment_ID; // Extract appointment ID
             const patientId = appointmentSpec.Patient_ID; // Extract patient ID
             const monthName = monthNamesAll[appointmentSpec.Appointment_Month - 1]; // Get month name from array
             const combinedDate = `${monthName} ${day}, ${year}`; // Format date for display
-            const timeName = getTimeName(time); // Get formatted time name
+            const timeName = getTimeName([time, minutes]); // Get formatted time name
             
             // Fetch patient info and ensure only single result is used
             let patientInfo = await getPatientInfo(patientId);
@@ -489,6 +490,7 @@
             const firstName = patientInfo ? patientInfo.PatientName : undefined; // Get first name
             const lastName = patientInfo ? patientInfo.PatientLastName : undefined; // Get last name
             const category = patientInfo ? patientInfo.PatientCategory : undefined
+            
             // Function to return HTML for displaying appointment status and action buttons
             const useFilter = (monthNum, lastName, firstName, year, status) => {
                 let monthFilter = document.getElementById("month-filter").value
@@ -541,7 +543,7 @@
                  <td>${combinedDate} ${timeName}</td>
                  <!--<td>${lastName}</td><td>${firstName}</td>-->
                 <td>${lastName}, ${firstName}</td>
-                <td><button class="btn btn-primary viewer" data-appointmentId="${appId}"  data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: blue" onclick="showModal(event)">Info</button></td>
+                <td><button class="btn btn-primary viewer" data-appointmentId="${appId}"  data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}"  data-minutes="${minutes}" style="background-color: blue" onclick="showModal(event)">Info</button></td>
                 <!---<td><button class="btn btn-danger" data-appointmentId="${appId}" onclick="deleteAppointment(event)">Delete</button></td>-->
                ` 
            if ((getDaysUntilAppointment(month, year, day) > 0)||status==1){

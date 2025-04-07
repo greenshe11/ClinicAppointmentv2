@@ -28,6 +28,7 @@ export async function showModal(event){
     const day = event.srcElement.getAttribute('data-day')
     const userId = event.srcElement.getAttribute('data-userId')
     const time = event.srcElement.getAttribute('data-time')
+    const minutes = event.srcElement.getAttribute('data-minutes')
     const status = event.srcElement.getAttribute('data-status')
     
     const appointmentId = event.srcElement.getAttribute('data-appointmentId')
@@ -44,7 +45,6 @@ export async function showModal(event){
         if (symptomData[i]["Appointment_ID"]==appointmentData["Appointment_ID"]){
             symptomCodes.push(symptomData[i].Symptoms_Code)
         }
-       
     }
     console.log("info", symptomData)
     //const symptomNames = getSymptomsFromCodeArray(symptomCodes)
@@ -71,7 +71,7 @@ export async function showModal(event){
     document.getElementById('im-email').innerHTML = userInfo[0].PatientEmail
     document.getElementById('im-contact-no').innerHTML = userInfo[0].PatientContactNo
     document.getElementById('im-sched-date').innerHTML = `${months[month-1]} ${day}, ${year}`
-    document.getElementById('im-time').innerHTML = getTimeName(time)
+    document.getElementById('im-time').innerHTML = getTimeName([time, minutes])
     document.getElementById('im-status').innerHTML = getStatusDisplay(status)
     document.getElementById('im-sched-response').innerHTML = symptomResponse
     document.getElementById('im-category').innerHTML = userInfo[0].PatientCategory

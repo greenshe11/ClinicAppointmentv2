@@ -266,9 +266,10 @@
             const status = appointmentSpec.Appointment_Confirmed;
             const time = appointmentSpec.Appointment_Time;
             const appId = appointmentSpec.Appointment_ID;
+            const minutes = appointmentSpec.Appointment_Minutes;
             const monthName = monthNamesAll[month - 1];
             const combinedDate = `${monthName} ${day},${year}`;
-            const timeName = getTimeName(time); // Get human-readable time
+            const timeName = getTimeName([time, minutes]); // Get human-readable time
 
             // Function to display the status of the appointment
             const getStatusDisplay = (statusCode) => {
@@ -282,7 +283,7 @@
                 <td>${getStatusDisplay(status)}</td>
                 <td>${combinedDate} ${timeName}</td>
             `;
-            const infoSnippet = `<td><button class="btn btn-primary viewer" data-appointmentId="${appId}" data-userId="${sessionData.userId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: #257ECC" onclick="showModal(event)">Info</button></td>`
+            const infoSnippet = `<td><button class="btn btn-primary viewer" data-appointmentId="${appId}" data-userId="${sessionData.userId}" data-month="${month}" data-minutes="${minutes}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: #257ECC" onclick="showModal(event)">Info</button></td>`
             code = code + infoSnippet
             //const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event)" class="btn btn-primary resched" style="background-color: #257ECC">Reschedule</button></td>` : '<td><i>date lapsed</i></td>'
             //code = code + reschedSnippet

@@ -8,7 +8,7 @@ import { sendMessage } from "/static/pageScripts/utils.js"
  * @param {Object} filter 
  * @returns 
  */
-export async function createAppointment(id, day, month, time, year, diagnosisCode, complaints){
+export async function createAppointment(id, day, month, time, year, minutes, diagnosisCode, complaints){
     const data = {
         Patient_ID: id, 
         Smsnotif_ID: 0,
@@ -16,11 +16,14 @@ export async function createAppointment(id, day, month, time, year, diagnosisCod
         Appointment_Month: month,
         Appointment_Time: time,
         Appointment_Year: year,
+        Appointment_Minutes: minutes,
         Appointment_Confirmed: 0,
         Symptoms_ID: 0,
         Appointment_DiagnosisCode: diagnosisCode,
         Appointment_Complaints: complaints,
     }
+    console.log("NEW DATA", data)
+
     const response = await fetch('/api/appointments', {
         method: 'POST',
         headers: {
@@ -106,6 +109,7 @@ let monthAndYear = null
 function next() {
     timeChooser([]) // resets time 
     selected.time = null
+    selected.minutes = null
     currentYear = currentMonth === 11 ? currentYear + 1 : currentYear; // go to next year is current month is december
     currentMonth = (currentMonth + 1) % 12; // make current month to january when current month is december
     preShowCalendar(currentMonth, currentYear); // re renders calendar
@@ -117,6 +121,7 @@ function next() {
 function previous() {
     timeChooser([])
     selected.time = null
+    selected.minutes = null
     currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
     currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     preShowCalendar(currentMonth, currentYear);
@@ -142,16 +147,28 @@ function resetClassName(newClass, oldClass) {
  */
 function getAvailableTime(data){
     let hoursAll = [8,9,10,11,1,2,3,4];
-    for (let i=0; i<data.length; i++){
-        const valueToRemove = data[i].Appointment_Time;
-        const index = hoursAll.indexOf(valueToRemove);
-        if (index !== -1) {
-            hoursAll.splice(index, 1);
+    let minsAll = [0, 30]
+    let timeAll = []
+    for (let index in hoursAll){
+        for (let index2 in minsAll){
+            timeAll.push([hoursAll[index], minsAll[index2]])
         }
     }
+    for (let i=0; i<data.length; i++){
+        // hours
+        const valueToRemove = data[i].Appointment_Time;
+        const minuteToRemove = data[i].Appointment_Minutes;
+        console.log("data",valueToRemove, minuteToRemove)
+        timeAll = timeAll.filter(t => !(t[0] == valueToRemove && t[1] == minuteToRemove));
+        // minutes
+        
+        /*if (index !== -1) {
+            hoursAll.splice(index, 1);
+        }*/
+    }
 
-    
-    return hoursAll;
+    console.log("ALL TIME",timeAll)
+    return timeAll
 }
 
 /**
@@ -171,32 +188,38 @@ function fetchAppointments(month, year, day, callback){
 /**
  * @description sets ui to contain hours available for appointment
  */
-function timeChooser(hours) {
+function timeChooser(time) {
+
     const dropDowns = document.getElementsByClassName("dr-hoursChoices");
     const dropDown = dropDowns[0];
     dropDown.innerHTML = '';
     let initial = '';
-    if (hours.length  <= 0){
+    if (time.length  <= 0){
         selected.time = null
+        selected.minutes = null
         return
     }
     
     if (dropDowns.length > 0) {
         
         const createChoice = (time) => {
-            let value = time;
+            let value = time[0];
+            let min = time[1]
             if (time >= 8) {
-                return `<option value="${value}">${value}:00 AM</option>`;
+                return `<option value="${value}:${min||"00"}">${value}:${min||"00"} AM</option>`;
             } else {
-                return `<option value="${value}">${value}:00 PM</option>`;
+                return `<option value="${value}:${min||"00"}">${value}:${min||"00"} PM</option>`;
             }
         };
-        for (let i = 0; i < hours.length; i++) {
-            initial += createChoice(hours[i]);
+        for (let i = 0; i < time.length; i++) {
+            initial += createChoice(time[i]);
         }
         dropDown.innerHTML = initial;
     try{
-        selected.time = document.getElementById('dr-month1').childNodes[0].value
+        const valuee = document.getElementById('dr-month1').childNodes[0].value
+        console.log(valuee, "VALUEEEE")
+        selected.time = valuee.split(":")[0]
+        selected.minutes = valuee.split(":")[1]
     }catch(e){
 
     }
@@ -343,7 +366,7 @@ function daysInMonth(iMonth, iYear) {
  */
 // GLOBALS
 export let selected = {month: null, date: null, year: null, time:null, monthName:null, timeName:null, 
-    appointmentId:null, contact:null} // used for rescheduling only
+    appointmentId:null, contact:null, minutes:null} // used for rescheduling only
 export let btn = null
 let dialogChat = null
 let purposeClass = null
@@ -430,8 +453,11 @@ function outsideClickListener(event) {
  */
 function onChangeTime(event){
     console.log("Changed to value:",event.target.value)
-    selected.time = event.target.value
-    console.log('SET TIME TO:', selected.time)
+    console.log(event)
+    const value = event.target.value
+    selected.time = value.split(":")[0]
+    selected.minutes = value.split(":")[1]
+    console.log('SET TIME TO:', selected.time, selected.minutes)
 }
 
 /**
@@ -459,8 +485,8 @@ export function getDaysUntilAppointment() {
  * @description store session; 
  */
 export async function storeAppointmentSession() {
-    
-    const res = await fetch(`/api/session/storeAppointmentDate?month=${selected.month}&day=${selected.day}&year=${selected.year}&time=${selected.time}&timeName=${selected.timeName}&monthName=${selected.monthName}`)
+    console.log("SESSION", selected)
+    const res = await fetch(`/api/session/storeAppointmentDate?month=${selected.month}&day=${selected.day}&year=${selected.year}&minutes=${selected.minutes}&time=${selected.time}&timeName=${selected.timeName}&monthName=${selected.monthName}`)
     const resJson = await res.json()
     console.log(resJson)
     
@@ -496,11 +522,17 @@ export async function getSession(){
  * @returns 
  */
 export const getTimeName = (time) =>{
-    if (time<8){
-        return `${time}:00 PM`
-    }else{
-        return `${time}:00 AM`
-    }
+    console.log("TIME NAME", time)
+    const createChoice = (time) => {
+        let value = time[0];
+        let min = time[1]
+        if (time >= 8) {
+            return `${value}:${min=="0"?"00":min} AM`;
+        } else {
+            return `${value}:${min=="0"?"00":min} PM`;
+        }
+    };
+    return createChoice(time)
 }
 
 /**
@@ -517,8 +549,9 @@ function onSetFunction(){
     let day = selected.day
     let year = selected.year
     let time = selected.time
+    let minutes = selected.minutes
     let monthName = months[month-1]
-    let timeName = getTimeName(time)
+    let timeName = getTimeName([time, minutes])
     selected.monthName = monthName
     selected.timeName = timeName
     purposeClass.onSetAdditionalFunction()
@@ -550,7 +583,7 @@ const response = await fetch('/api/appointments', {
 
 }
 
-export async function rescheduleAppointment(appointment_id, month, day, year, time){
+export async function rescheduleAppointment(appointment_id, month, day, year, time, minutes){
     const response = await fetch('/api/appointments', {
         method: 'PUT',
         headers: {
@@ -561,6 +594,7 @@ export async function rescheduleAppointment(appointment_id, month, day, year, ti
             Appointment_Month: month,
             Appointment_Day: day,
             Appointment_Year: year,
+            Appointment_Minutes: minutes,
             Appointment_Time: time,
             Appointment_Confirmed: 0}),
         });
@@ -609,6 +643,7 @@ schedulesPatient.onSetAdditionalFunction = () => {
     const day = selected.day
     const year = selected.year
     const time = selected.time
+    const minutes = selected.minutes
     const monthName = selected.monthName
     const timeName = selected.timeName
     const contact = selected.contact
@@ -617,7 +652,7 @@ schedulesPatient.onSetAdditionalFunction = () => {
         alert("Error: You need to set the time and date to make an appointment!")
     } else{
         onClickCloseCal()
-        rescheduleAppointment(selected.appointmentId, month, day, year, time)
+        rescheduleAppointment(selected.appointmentId, month, day, year, time, minutes)
         sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, 3)
         return selected
     }
@@ -644,7 +679,7 @@ cbpAppointment.initialRun = () => {
         console.log(allowance)
         const value = await getAppointments(session.month, session.year, session.day)
         for (let i=0; i<value.length; i++){
-            if (value[i].Appointment_Time == session.time){
+            if (value[i].Appointment_Time == session.time && value[i].Appointment_Minutes == session.minutes){
                 return null
             }
         }

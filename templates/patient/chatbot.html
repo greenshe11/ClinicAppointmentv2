@@ -520,6 +520,7 @@
         window.chatConfirmDate = () => {
              
             if (selected.month && selected.time){
+                console.log("CONFIRM DATE", selected)
                 disableFinishedChats()
                 createChatFromBot(`You will have an appointment on ${selected.monthName} ${selected.day} ${selected.year} @ ${selected.timeName}. Is this correct?`);
                 createChatFromUser(`<div style="display: flex; flex-direction: row" ><button style="width: 100px; height: 30px" onclick="chatSummaryStage()">Yes</button><button style="width: 100px; height: 30px" onclick="setAppointmentDateStage()">No</button></div>`)
@@ -852,6 +853,7 @@
             const year = sessionData.appointment_year
             const timeName = sessionData.appointment_timeName
             const time = sessionData.appointment_time
+            const minutes = sessionData.appointment_minutes
             const symptoms = sessionData.symptoms_selected
             console.log("HELLO", symptoms)
             const symptomsString = symptoms.join(', ') // Join symptoms into a comma-separated string
@@ -876,14 +878,14 @@
             const toHome = async () => {
             const value = await getAppointments(month, year, day) // Check for existing appointments
             for (let i = 0; i < value.length; i++) {
-                if (value[i].Appointment_Time == time) { // If there's an appointment at the same time
-                    alert("Selected date is not available / is taken.")
-                    window.location.href = '/chatbotpage/response/appointment' // Redirect to appointment page
+                if (value[i].Appointment_Time == time && value[i].Appointment_Minutes===minutes) { // If there's an appointment at the same time
+                    alert("Selected date is not available / is taken just a while ago. Please try again.")
+                    window.location.href = '/chatbotpage' // Redirect to appointment page
                     return null
                 }
             }
 
-            const newAppointment = await createAppointment(userId, day, month, time, year, 0, complaints) // Create a new appointment
+            const newAppointment = await createAppointment(userId, day, month, time, year, minutes, 0, complaints) // Create a new appointment
             console.log("CODES", codes)
             for (let i in codes) {
                 let newSymptoms = await createSymptoms(newAppointment.id, i) // Create symptoms for the appointment
