@@ -206,7 +206,7 @@ function timeChooser(time) {
         const createChoice = (time) => {
             let value = time[0];
             let min = time[1]
-            if (time >= 8) {
+            if (value >= 8) {
                 return `<option value="${value}:${min||"00"}">${value}:${min||"00"} AM</option>`;
             } else {
                 return `<option value="${value}:${min||"00"}">${value}:${min||"00"} PM</option>`;
@@ -527,7 +527,7 @@ export const getTimeName = (time) =>{
     const createChoice = (time) => {
         let value = time[0];
         let min = time[1]
-        if (time >= 8) {
+        if (value >= 8) {
             return `${value}:${min=="0"?"00":min} AM`;
         } else {
             return `${value}:${min=="0"?"00":min} PM`;
