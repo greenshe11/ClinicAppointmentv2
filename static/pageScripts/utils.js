@@ -1,3 +1,4 @@
+import {getSession} from '/static/pageScripts/session.js'
 export async function fetchSymptomsRef(filter) {
     const url = "/api/symptomsref" + filter?"?"+filter:""
     try {
@@ -296,7 +297,72 @@ export const getSymptomsFromCodeArray = (arr) => {
     console.log(temp)
     return temp
 }
+export const createCustomRecommendationFromCode = async (symptomArray, symptomData) => {
+    let isStaff = false
+    const session = await getSession()
 
+    //Hiding the account icon if it is not logged in
+    if (typeof session['isStaff'] != 'undefined' && session["isStaff"]) {
+      isStaff = true
+   
+    }
+    console.log("SESSION", session)
+    console.log("creating recommendaiton", symptomArray, symptomData)
+    
+    let sentence = ''; // Initialize an empty string to hold the final recommendation sentence
+    for (let i = 0; i < symptomArray.length; i++) { // Loop through each symptom in the symptomArray
+        let symptom = symptomArray[i]; // Get the current symptom from the array
+        console.log("SYM", symptom)
+        const symptomId = symptomData[i].Symptoms_ID
+        console.log(symptomId)
+        let customSymptomsData = (await(await fetch(`/api/customsymptoms?Symptoms_ID=${symptomId}`)).json())[0]
+        let symptomsData = (await (await fetch(`/api/symptoms?Symptoms_ID=${symptomId}`)).json())[0]
+        console.log(customSymptomsData)
+        console.log(symptomsData)
+        const elementId = `${customSymptomsData.CustomSymptoms_ID}-${symptomId}-textarea-${symptom}`
+        const btnId = `${customSymptomsData.CustomSymptoms_ID}-${symptomId}-btn-${symptom}`
+        const textArea = `<textarea oninput="document.getElementById('${btnId}').disabled = false" style="width:100%; min-height: 100px;" id="${elementId}">${customSymptomsData.CustomSymptoms_DiagnosisInfo}</textarea>`
+        if (symptomArray[i] == "00"){
+            if (isStaff){
+                
+                sentence = sentence + `<div style="display: flex;flex-direction: row; align-items: flex-start; width: 100%">
+                    <div style="width: 25%; padding-right: 5px;">By selecting <u>... Others</u>:</div>
+                    <div style="width: 50%;">${textArea}</div>
+                    <div style="width:25%;padding-left:10px; padding-right:10px; align-items:flex-start">
+                        <button disabled id="${btnId}" style="width:100%" class="btn btn-primary" onclick="updateCustomSymptom('${customSymptomsData.CustomSymptoms_ID}','${elementId}', '${btnId}')">Update</button>
+                    </div>
+                </div>`
+            
+            }else{
+                sentence = sentence + `<br>For <u>... others</u>: ${customSymptomsData.CustomSymptoms_DiagnosisInfo} <br>`; // Format it and append it to the temp string
+            }
+            continue
+        }
+        
+        let temp = ''; // Initialize a temporary string to hold the recommendation for the current symptom
+        let data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${symptom}`)).json())[0]
+        let recommendation = data["SymptomsRef_Recommendation"]
+        let name = '<span style="white-space: pre-line">' + data["SymptomsRef_Name"] + "(" + data["SymptomsRef_Level"] + ")</span>"
+        
+        if (recommendation) { // If a recommendation exists
+            recommendation = recommendation
+            if (!isStaff){
+
+                temp = `<br>For <u>${name}</u>: ${customSymptomsData.CustomSymptoms_DiagnosisInfo} <br>`; // Format it and append it to the temp string
+            }else{
+                temp = `<div style="display: flex;flex-direction: row; align-items: flex-start; width: 100%">
+                    <div style="width: 25%; padding-right: 5px;">For <u>${name}</u>:</div>
+                    <div style="width: 50%;">${textArea}</div>
+                    <div style="width:25%;padding-left:10px; padding-right:10px; align-items:flex-start">
+                        <button disabled  id="${btnId}" style="width:100%" class="btn btn-primary" onclick="updateCustomSymptom('${customSymptomsData.CustomSymptoms_ID}','${elementId}', '${btnId}')">Update</button>
+                    </div>
+                </div>`
+            }
+        }
+        sentence = sentence + temp; // Append the temp string to the final sentence
+    }
+    return sentence; // Return the complete recommendation sentence
+}
 
 export const createRecommendationSentFromCode = async (symptomArray) => {
     console.log("creating recommendaiton", symptomArray)

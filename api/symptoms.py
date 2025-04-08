@@ -4,6 +4,20 @@ from utilities.util_functions import get_query, pull_from_db, push_to_db, update
 
 def symptoms_routes(self, table_name):
     """Define Flask routes."""
+
+    @self.app.route('/api/customsymptoms', methods=['GET'])
+    @cross_origin(supports_credentials=True)
+    def customsymptoms_pull():
+        data = request.args.to_dict()
+        processed_data = {}
+        for key, value in data.items():
+            if value != 'null':
+                try:
+                    processed_data[key] = int(value)
+                except ValueError:
+                    processed_data[key] = value
+        return pull_from_db(self, processed_data, "tblcustomsymptoms")
+
     @self.app.route('/api/symptomsref', methods=['GET'])
     @cross_origin(supports_credentials=True)
     def get_symptom_references():
@@ -38,6 +52,13 @@ def symptoms_routes(self, table_name):
         data = request.json
         return push_to_db(self, data, table_name="tblsymptomsref")
     
+    @self.app.route('/api/customsymptoms', methods=['POST'])
+    def customsymptoms_push():
+        """Add a new user to the database."""
+        data = request.json
+        return push_to_db(self, data, table_name="tblcustomsymptoms")
+    
+
     @self.app.route('/api/symptoms', methods=['POST'])
     def symptoms_push():
         """Add a new user to the database."""
@@ -50,6 +71,11 @@ def symptoms_routes(self, table_name):
         print(data)
         return update_db(self, data, "tblsymptomsref", filter_names=['SymptomsRef_ID'])  
   
+    @self.app.route('/api/customsymptoms', methods=['PUT'])
+    def customsymptoms_update():
+        """Add a new user to the database."""
+        data = request.json
+        return update_db(self, data, table_name="tblcustomsymptoms", filter_names=["CustomSymptoms_ID"])
     
     @self.app.route('/api/symptoms', methods=['PUT'])
     def symptoms_update():
@@ -62,6 +88,12 @@ def symptoms_routes(self, table_name):
         data = request.json
         print(data)
         return delete_from_db(self, data, "tblsymptomsref", filter_names=['SymptomsRef_ID'])
+    
+    @self.app.route('/api/customsymptoms', methods=['DELETE'])
+    def customsymptoms_delete():
+        """Add a new user to the database."""
+        data = request.json
+        return delete_from_db(self, data, table_name="tblcustomsymptoms", filter_names=["CustomSymptoms_ID"])
     
     @self.app.route('/api/symptoms', methods=['DELETE'])
     def symptoms_delete():

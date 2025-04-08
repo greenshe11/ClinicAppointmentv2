@@ -23,7 +23,7 @@ export async function createAppointment(id, day, month, time, year, minutes, dia
         Appointment_Complaints: complaints,
     }
     console.log("NEW DATA", data)
-
+   
     const response = await fetch('/api/appointments', {
         method: 'POST',
         headers: {
@@ -31,6 +31,7 @@ export async function createAppointment(id, day, month, time, year, minutes, dia
         },
         body: JSON.stringify(data),
         });
+
     const resJson = await response.json()
     console.log("createAppointment() ", resJson)
     return resJson

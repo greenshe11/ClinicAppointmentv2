@@ -2,7 +2,7 @@
 
 import { getAppointmentsFilter, months, getTimeName} from "/static/components/calendarSelection/script.js";
 import { getSymptomsFromDb } from "/static/components/symptomsSelection/script.js"
-import { createRecommendationSent,  createRecommendationSentFromCode, getSymptomsFromCodeArray} from "/static/pageScripts/utils.js";
+import { createRecommendationSent,  createRecommendationSentFromCode, createCustomRecommendationFromCode, getSymptomsFromCodeArray} from "/static/pageScripts/utils.js";
 
 // GLOBALS
 let btn = null
@@ -20,6 +20,33 @@ export async function getUserData(userId){
 /**
  * @description shows calendar
  */
+
+window.updateCustomSymptom = async (customSymptomId, elementId, btnId) => {
+    const textAreaElementValue = document.getElementById(elementId).value
+    const data = {
+        CustomSymptoms_ID: customSymptomId,
+        CustomSymptoms_DiagnosisInfo: textAreaElementValue
+    }
+    try{
+        const response = await fetch('/api/customsymptoms', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        
+        const responseJson = await response.json()
+        alert("Diagnosis info is updated!")
+        console.log("BUTTON", document.getElementById(btnId))
+        document.getElementById(btnId).disabled = true
+        
+    }catch(error){
+        console.error('Error:', error);
+        alert('An error occurred while updating diagnosis info.');
+    }
+}
+
 export async function showModal(event){
 
     console.log(event.srcElement)   
@@ -51,7 +78,7 @@ export async function showModal(event){
     //console.log(symptomNames)
     console.log("CODES", symptomCodes)
     //const symptomResponse = createRecommendationSent(symptomNames)
-    const symptomResponse = await createRecommendationSentFromCode(symptomCodes)
+    const symptomResponse = await createCustomRecommendationFromCode(symptomCodes, symptomData)
     console.log(symptomResponse)
     console.log(symptomCodes)
     console.log('symptom_CODES', symptomCodes)
