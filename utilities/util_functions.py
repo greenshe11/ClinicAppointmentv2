@@ -295,20 +295,37 @@ def user_is_staff():
 
 import requests
 from twilio.rest import Client
+from dotenv import load_dotenv
+import os
+load_dotenv()
+import clicksend_client
+from clicksend_client import SmsMessage
+from clicksend_client.rest import ApiException
+
+
+# Configure HTTP basic authorization: BasicAuth
+configuration = clicksend_client.Configuration()
+configuration.username = os.getenv('CLICKSEND_USERNAME')
+configuration.password = os.getenv('CLICKSEND_SECRET') 
+print("INFO", configuration.username, configuration.password)
+# create an instance of the API class
+api_instance = clicksend_client.SMSApi(clicksend_client.ApiClient(configuration))
+
 def send_message(contact, message):
+    # If you want to explictly set from, add the key _from to the message.
+    sms_message = SmsMessage(source="php",
+                            body=message,
+                            to="+"+contact)
+
+    sms_messages = clicksend_client.SmsMessageCollection(messages=[sms_message])
+
     try:
-        account_sid = 'AC85abc35b629db24f138fbc2acc2f218d'#'AC3cbab85a43181a3e553a4d91792ddf8c'
-        auth_token = '3c71017151aa9db84efa9e90013ecaa9'#'701ae269416acde49f664ef12aad115f'
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(
-        from_='+19519043577',#'+17087346648',
-        body=message,
-        to='+'+contact,
-        )
-        print("MESSAGE ACCEPTED")
-        print(message.sid)
-    except Exception as e:
-        print(e)
+        # Send sms message(s)
+        api_response = api_instance.sms_send_post(sms_messages)
+        print(api_response)
+    except ApiException as e:
+        print("Exception when calling SMSApi->sms_send_post: %s\n" % e)
+
     return True
 
 

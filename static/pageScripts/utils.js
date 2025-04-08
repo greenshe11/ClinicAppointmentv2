@@ -364,6 +364,33 @@ export const createCustomRecommendationFromCode = async (symptomArray, symptomDa
     return sentence; // Return the complete recommendation sentence
 }
 
+export const createRecommendationSentFromCodePlusCustomInfo = async (symptomArray, appointmentId) => {
+    console.log("creating recommendaiton", symptomArray)
+    let sentence = ''; // Initialize an empty string to hold the final recommendation sentence
+    let customSymptomsData = (await(await fetch(`/api/customsymptoms?Appointment_ID=${appointmentId}`)).json())[0]
+    const textAreaElementId = `${customSymptomsData.CustomSymptoms_ID}-${appointmentId}-textarea-${Date.now().toString()}`
+    const btnElementId = `${customSymptomsData.CustomSymptoms_ID}-${appointmentId}-btn-${Date.now().toString()}`
+    for (let i = 0; i < symptomArray.length; i++) { // Loop through each symptom in the symptomArray
+        if (symptomArray[i] == "00"){
+            sentence = sentence + `<br>By selecting <u>... Others</u>, you indicate that you are unsure of what you feel or that none of the choices above apply. In this case, consulting a proper health care provider is recommended. </br>`
+            continue
+        }
+        let symptom = symptomArray[i]; // Get the current symptom from the array
+        let temp = ''; // Initialize a temporary string to hold the recommendation for the current symptom
+        let data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${symptom}`)).json())[0]
+        let recommendation = data["SymptomsRef_Recommendation"]
+        let name = '<span style="white-space: pre-line">' + data["SymptomsRef_Name"] + "(" + data["SymptomsRef_Level"] + ")</span>"
+        if (recommendation) { // If a recommendation exists
+            recommendation = recommendation
+            temp = `<br>For <u>${name}</u>: ${recommendation} <br>`; // Format it and append it to the temp string
+        }
+        
+        sentence = sentence + temp; // Append the temp string to the final sentence
+    }
+    
+    return sentence; // Return the complete recommendation sentence
+}
+
 export const createRecommendationSentFromCode = async (symptomArray) => {
     console.log("creating recommendaiton", symptomArray)
     let sentence = ''; // Initialize an empty string to hold the final recommendation sentence

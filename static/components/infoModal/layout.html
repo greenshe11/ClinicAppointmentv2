@@ -19,12 +19,22 @@
                     <p><b>Schedule Time: </b><span id="im-time"></span></p>
                     <p><b>Status: </b><span id="im-status"></span></p>
                     <p><b>Initial Diagnosis: </b><span id="im-sched-response"></span></p>
+                    <p><b>Additional Diagnosis: </b><span id="im-sched-more-response">
+                        <textarea oninput="document.getElementById('im-save-changes-button').disabled = false"  style="width:100%; min-height: 100px;" id="im-sched-more-response-textarea"></textarea>
+                        <span style="white-space: pre-line" id="im-sched-more-response-text"></span>
+                    </span></p>
+                    
+                   
                     <p><b>Additional Complaints: </b><span id="im-sched-complaints"></span></p>
+
                 </div>
             </div>
-            <div style="padding: 10px; border-width:0px;border-top-width: 1px; border-style:solid; ">
-                <button class="btn btn-primary" style="margin: 5px;" id="info-print" onclick="printInfo(event)">Print</button>
-                <button class="btn btn-primary" style="margin: 5px;" id="info-filter" onclick="filterUser(event)">See user records</button>
+            <div style="display:flex; flex-direction:row;padding: 10px; border-width:0px;border-top-width: 1px; border-style:solid; justify-content: space-between">
+                <div>
+                    <button class="btn btn-primary" style="margin: 5px;" id="info-print" onclick="printInfo(event)">Print</button>
+                    <button class="btn btn-primary" style="margin: 5px;" id="info-filter" onclick="filterUser(event)">See user records</button>
+                </div>
+                <button disabled class="btn btn-success" style="margin: 5px;" id="im-save-changes-button" onclick="">Save Changes</button>
             </div>
             
     </div>

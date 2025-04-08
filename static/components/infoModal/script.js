@@ -3,7 +3,7 @@
 import { getAppointmentsFilter, months, getTimeName} from "/static/components/calendarSelection/script.js";
 import { getSymptomsFromDb } from "/static/components/symptomsSelection/script.js"
 import { createRecommendationSent,  createRecommendationSentFromCode, createCustomRecommendationFromCode, getSymptomsFromCodeArray} from "/static/pageScripts/utils.js";
-
+import {getSession} from '/static/pageScripts/session.js'
 // GLOBALS
 let btn = null
 let dialogChat = null
@@ -21,22 +21,47 @@ export async function getUserData(userId){
  * @description shows calendar
  */
 
-window.updateCustomSymptom = async (customSymptomId, elementId, btnId) => {
-    const textAreaElementValue = document.getElementById(elementId).value
+const updateCustomSymptom = async (appointmentId) => {
+    const btnId = 'im-save-changes-button'
+    const textAreaElementValue = document.getElementById('im-sched-more-response-textarea').value
     const data = {
-        CustomSymptoms_ID: customSymptomId,
+        Appointment_ID: appointmentId,
         CustomSymptoms_DiagnosisInfo: textAreaElementValue
     }
+    const customSymptomsData = (await(await fetch(`/api/customsymptoms?Appointment_ID=${appointmentId}`)).json())
+    
+    const haveExisting = customSymptomsData.length > 0
+    console.log("HAVE EXISTING?",haveExisting)
+    if (!haveExisting){
+        try{
+            const customSymptomsResponse = await fetch('/api/customsymptoms', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            alert("Diagnosis info is updated!")
+            console.log("BUTTON", document.getElementById(btnId))
+            document.getElementById(btnId).disabled = true
+        }catch(error){
+            console.error('Error:', error);
+            alert('An error occurred while creating diagnosis info.');
+        }
+        return 
+    }
+
     try{
         const response = await fetch('/api/customsymptoms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({...data, CustomSymptoms_ID: customSymptomsData[0].CustomSymptoms_ID })
         })
-        
+      
         const responseJson = await response.json()
+        console.log("RESPONSE",responseJson)
         alert("Diagnosis info is updated!")
         console.log("BUTTON", document.getElementById(btnId))
         document.getElementById(btnId).disabled = true
@@ -48,7 +73,13 @@ window.updateCustomSymptom = async (customSymptomId, elementId, btnId) => {
 }
 
 export async function showModal(event){
+    let isStaff = false
+    const session = await getSession()
 
+    //Hiding the account icon if it is not logged in
+    if (typeof session['isStaff'] != 'undefined' && session["isStaff"]) {
+      isStaff = true
+    }
     console.log(event.srcElement)   
     const month = event.srcElement.getAttribute('data-month') 
     const year = event.srcElement.getAttribute('data-year')
@@ -78,11 +109,32 @@ export async function showModal(event){
     //console.log(symptomNames)
     console.log("CODES", symptomCodes)
     //const symptomResponse = createRecommendationSent(symptomNames)
-    const symptomResponse = await createCustomRecommendationFromCode(symptomCodes, symptomData)
+    const symptomResponse = await createRecommendationSentFromCode(symptomCodes)
     console.log(symptomResponse)
     console.log(symptomCodes)
     console.log('symptom_CODES', symptomCodes)
     console.log("USER INFO", userInfo)
+    const responseTextarea = document.getElementById("im-sched-more-response-textarea")
+    const responseText = document.getElementById("im-sched-more-response-text")
+    if (isStaff){
+        responseText.style.display = "none"
+        responseTextarea.style.display = "block"
+    }else{
+        responseText.style.display = "block"
+        responseTextarea.style.display = "none"
+    }
+    let customSymptomsText = isStaff?"":"N/A"
+    let customSymptomsData = (await(await fetch(`/api/customsymptoms?Appointment_ID=${appointmentId}`)).json())[0]
+    if (customSymptomsData){
+        customSymptomsText = customSymptomsData.CustomSymptoms_DiagnosisInfo&&customSymptomsData.CustomSymptoms_DiagnosisInfo
+    }
+    responseTextarea.value = customSymptomsText
+    responseText.innerHTML = customSymptomsText
+    const saveChangesButton = document.getElementById("im-save-changes-button")
+    saveChangesButton.style.display = isStaff?"block":"none"
+    saveChangesButton.onclick = () =>{
+        updateCustomSymptom(appointmentId)
+    }
     const getStatusDisplay = (statusCode) =>{ 
         const color = ['black','green','red']
         const name = ['Pending','Confirmed','Rejected']
@@ -205,7 +257,6 @@ window.printInfo = (event) =>{
     printDiv("im-scrollview")
 }
 
-import {getSession} from '/static/pageScripts/session.js'
 //import { createRecommendationSentFromCode } from "../../pageScripts/utils";
 async function removeUserFilterForPatients(){
     console.log('filter',document.getElementById("info-filter"))

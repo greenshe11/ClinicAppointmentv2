@@ -833,28 +833,7 @@
             const symptomId = resJson.id
             const symptomsRefData = (await (await (fetch(`/api/symptomsref?SymptomsRef_ID=${Symptoms_Code}`))).json())[0]
             console.log(symptomsRefData, "REF DATA")
-            let symptomsRefRecommendation =""
-            if (typeof symptomsRefData != "undefined"){
-              symptomsRefRecommendation = symptomsRefData.SymptomsRef_Recommendation
-            }else{
-              symptomsRefRecommendation = `You indicate that you are unsure of what you feel or that none of the choices above apply. In this case, consulting a proper health care provider is recommended.`
-            }
-            
-            console.log(symptomsRefRecommendation)
-          
-          
-            const customSymptomsData = {
-              Symptoms_ID: symptomId,
-              CustomSymptoms_DiagnosisInfo: symptomsRefRecommendation 
-            }
-            const customSymptomsResponse = await fetch('/api/customsymptoms', {
-              method: 'POST',
-              headers: {
-              'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(customSymptomsData),
-            });
-            console.log("createSymptoms()", resJson)
+           
             return resJson
 
         }
