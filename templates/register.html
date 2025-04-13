@@ -236,7 +236,24 @@
      <!-- Section: Design Block -->
      <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
      <script>
-
+          const sendRegistrationMessage = async (contact,fullname) => {
+               const url = '/api/sms/registration'; // API endpoint for sending SMS
+               const data = { contact,fullname}; // Prepare data for the request
+               try {
+                   const response = await fetch(url, {
+                       method: 'POST', // Specify POST method
+                       headers: { 'Content-Type': 'application/json' }, // Set content type to JSON
+                       body: JSON.stringify(data) // Convert data object to JSON string
+                   });
+       
+                   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); // Check for errors
+       
+                   const result = await response.json(); // Parse the JSON response
+                   console.log(result); // Log the result
+               } catch (error) {
+                   console.error('Error:', error); // Log any errors encountered
+               }
+           };
          
           function validatePhoneNumber() {
                const input = document.getElementById('contact');
@@ -345,6 +362,7 @@
                     }
 
                     const result = await response.json();
+                    console.log(result, "REG RESULT")
                     console.log(result.hasOwnProperty('customError')) // Shows error created from server
                     //Debug
                     
@@ -355,6 +373,7 @@
                     
 
                     //alert('REGISTRATION IS A SUCCESS!')
+                    await sendRegistrationMessage(PatientContactNo, `${PatientLastName}, ${PatientName}`)
                     window.location.href = '/login'
                     // Handle the result (e.g., show a success message to the user)
                } catch (error) {

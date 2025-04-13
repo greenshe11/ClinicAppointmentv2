@@ -13,6 +13,7 @@ from api.diagnosis import diagnosis_routes
 from api.sms import sms_routes
 from api.session import session_routes
 from api.symptoms import symptoms_routes
+from api.staff import staff_routes
 
 # utils
 from utilities import util_functions as util
@@ -67,6 +68,15 @@ class App:
             except Exception as e:
                 return f"Error: {e}", 500
         
+        @self.app.route('/regconfirm')
+        def staffregconfirm():
+            if util.no_user_logged_in() or not util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('staff/staffRegConfirm.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
         @self.app.route('/login')
         def patient_login(): #login page
             """Go to Home if logged in else go to login.html"""
@@ -222,6 +232,7 @@ class App:
         sms_routes(self, 'tblsmsnotif')
         session_routes(self)
         symptoms_routes(self, 'tblsymptoms')
+        staff_routes(self, 'tblstaff')
 
     def run(self):
         """Run the Flask application."""

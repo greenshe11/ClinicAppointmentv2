@@ -69,17 +69,19 @@ def patient_routes(self, table_name):
                     print("CRED", credentials)
                     if len(credentials) == 0:
                         return jsonify({"customError": "Password or Email is incorrect!"}), 200
-
+ 
                     correct_password = (data['PatientPassword'] == credentials[0]['staffPassword']) # staff password is not encrypted
                     is_staff = True
                 else:  # if theres a record
                     correct_password = check_password(data["PatientPassword"], credentials[0]["PatientPassword"])
                     is_staff = False
+                    if (correct_password):
+                        print("CREDENTIALS", credentials[0])
+                        if (credentials[0]["PatientIsConfirmed"]!=1):
+                            return jsonify({"customError": "Cannot Login. Please wait for a nurse to confirm your registration. You will be notified via SMS once login becomes available."}), 200
+                        
                     
                 if correct_password:
-                    print("CREDENTIALS", credentials[0])
-                    if (credentials[0]["PatientIsConfirmed"]!=1):
-                        return jsonify({"customError": "Cannot Login. Please wait for a nurse to confirm your registration. You will be notified via SMS once login becomes available."}), 200
                     set_session('isStaff', is_staff) # set session with key isStaff to is_staff (true/false)
                     if is_staff:
                         set_session('userId', credentials[0]['staff_ID']) # from data retrieved get data from column: staff_id if from staff
@@ -98,7 +100,10 @@ def patient_routes(self, table_name):
                 remove_sessions()
                 return jsonify({}), 201
                 
-
+        staffData = pull_from_db(self, {}, 'tblstaff',jsonify_return=False)[0]
+        print("STAFF DATA", staffData)
+        if (staffData["staffAutoConfirm"]==1):
+            data["PatientIsConfirmed"] = "1"
         return push_to_db(self, data, table_name=table_name)
 
     @self.app.route('/api/patient', methods=['PUT'])
@@ -107,7 +112,7 @@ def patient_routes(self, table_name):
         # print(data)
         # return update_db(self, data, table_name, filter_names=['Patient_ID'])
         data = request.json
-
+        print(data)
         # Assuming `update_db` is a function that updates data in the database
         return update_db(self, data, table_name=table_name, filter_names=['Patient_ID'])
     

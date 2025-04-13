@@ -42,6 +42,61 @@
             background-color: rgb(235, 201, 201);
         }
     </style>
+   <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+  
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 26px;
+    }
+  
+    .slider::before {
+      position: absolute;
+      content: "";
+      height: 20px; width: 20px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+  
+    input:checked + .slider::before {
+      transform: translateX(24px);
+    }
+  
+    #toggleBox {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #eee;
+      border: 1px solid #ccc;
+    }
+  
+    #toggleSwitch:checked ~ #toggleBox {
+      display: block;
+    }
+    </style>
+  
 </head>
 
 <body >
@@ -68,18 +123,16 @@
                             <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                                 <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                             </div>
-                        </li>   
+                        </li>
                         <li>
-                            <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>
+                            <a href="/regconfirm" id="reg-confirm-title" class="active">View Registrants</a>
                             <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                                 <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                             </div>
                         </li>
-                            <li class="text-white"><a href="/staffsymptoms" class="active">Manage Symptoms</a></li>
-                        
-                      
-                       <li><a href="/profile" class="">Account</a></li>
+                        <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
                        
+                        <li><a href="/profile" class="">Account</a></li>
                        <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                       
                      </ul>
@@ -110,7 +163,7 @@
       
     <div id="home-container" style="margin-top: 50px;">
         <div id="home" class="container-fluid" >
-            <h1 class="title-opening" style="font-size: 30px;">Manage Symptoms</h1>
+            <h1 class="title-opening" style="font-size: 30px;">All Registrants</h1>
         </div>
          
     </div>
@@ -121,59 +174,69 @@
         
         <div class="card shadow">
             <div class="card-header py-3">
-                <p class="text-primary m-0 fw-bold">Manage Symptoms</p>
+                <!--<p class="text-primary m-0 fw-bold">Manage Patients</p>-->
                 <div style="width: 100%; justify-content: space-between; display: flex;">
                     <div style="display:flex; flex-direction:row; align-items:center;">
-                        <span style="width: 80px;">Sort By</span>
-                        <select class="form-control" id="manage-symptoms-sortby" required>
+                        <span style="width: 100px;">Sort By</span>
+                        <select class="form-control" id="reg-confirm-sortby" required>
                             <option value="?">Last Created</option>
-                            <option value="SymptomsRef_Name">Name</option>
-                            <option value="SymptomsRef_IsMild">Recommend Appointment</option>
-                            
+                            <option value="PatientIsConfirmed">Verification</option>
+                            <option value="PatientName">First Name</option>
+                            <option value="PatientLastName">Last Name</option>
+                            <option value="PatientCategory">Patient Type</option>
                         </select>
                     </div>
-                    <button  class="btn btn-primary" data-bs-toggle="modal" onclick="showCreateModeModal()">Add Symptoms</button>
+                    <div style="align-items:center; flex-direction:column; display:flex;" >
+                        <div style="width:100%; justify-content: flex-end; display:flex;">
+                            <span >Auto-Confirm</span>
+                            <label style="margin-left: 8px;" class="switch">
+                                <input type="checkbox" id="toggleSwitch">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <p style="font-size: small; color: gray; height: 16px; text-align:right;"><i>Auto-confirms incoming registrants<br>and no registration SMS will be sent to the users.</i></p>
+                    </div>
                 </div>
                 
             </div>
 
             <!-- Modal for Adding Symptoms -->
-<div class="modal fade" id="addSymptomsModal" tabindex="-1" aria-labelledby="addSymptomsModalLabel" aria-hidden="true">
+<div class="modal fade" id="regConfirmModal" tabindex="-1" aria-labelledby="regConfirmModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addSymptomsModalLabel">Add Symptoms</h5>
+          <h5 class="modal-title" id="regConfirmModalLabel">Add Symptoms</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="addSymptomsForm">
+          <form id="regConfirmForm">
             <div class="mb-3">
-              <label for="SymptomsRef_Name" class="form-label">Symptom Name</label>
-              <input type="text" placeholder="(example: Fever)" class="form-control" id="SymptomsRef_Name" required>
-              <div style="align-items:center">
-                <span style="color: gray">Name Suggestions:</span>
-                <div id="manage-symptoms-suggestions">
-                    
-                </div>
-                
+                <label for="regConfirm_Email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="regConfirm_Email" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="regConfirm_FirstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="regConfirm_FirstName" required>
+            </div>
+            <div class="mb-3">
+                <label for="regConfirm_LastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="regConfirm_LastName" required>
               </div>
-            </div>
+              <div class="mb-3">
+                <label for="regConfirm_PatientType" class="form-label">Patient Type</label>
+                <select class="form-control" id="regConfirm_PatientType" required>
+                  <option value="student">student</option>
+                  <option value="community">community</option>
+                  <option value="faculty">faculty</option>
+                  <option value="office staff">office staff</option>
+                </select>
+              </div>
             <div class="mb-3">
-              <label for="SymptomsRef_Level" class="form-label">Type</label>
-              <textarea  placeholder="(example: 38 C)" class="form-control" id="SymptomsRef_Level" required></textarea>
+              <label for="regConfirm_ContactNo" class="form-label">Contact No.</label>
+              <input type="text" class="form-control" id="regConfirm_ContactNo" value="63"  oninput="contactOnChange(event)" required>
             </div>
-            <div class="mb-3">
-              <label for="SymptomsRef_Recommendation" class="form-label">Initial Diagnosis</label>
-              <textarea class="form-control" placeholder="(example: Recommendation)" id="SymptomsRef_Recommendation" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="SymptomsRef_IsMild" class="form-label">Recommend Appointment</label>
-              <select class="form-control" id="SymptomsRef_IsMild" required>
-                <option value="0">Yes</option>
-                <option value="1">No</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary" id="form-submit-button">Submit</button>
+           
+            <button type="button" class="btn btn-primary" id="form-submit-button" onclick="saveChanges(event)">Save Changes</button>
           </form>
         </div>
       </div>
@@ -194,28 +257,17 @@
                         <!---<div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>-->
                     </div>
                 </div>
-                <div>
-                    <div style="display:flex; flex-direction:row">
-                        <div style="width: 20px;height:20px; background-color: rgb(216, 243, 216); margin-right: 10px;"></div>
-                        <span>Mild (Does not require appointment)</span>
-                    </div>
-                    <div style="display:flex; flex-direction:row">
-                        <div style="width: 20px;height:20px; background-color: rgb(235, 201, 201); margin-right: 10px;"></div>
-                        <span>Severe (Appointment is recommended)</span>
-                    </div>
-                </div>
                 <div class="table-responsive table mt-2"   id="dataTable" role="grid" aria-describedby="dataTable_info">
                     <table class="table my-0" id="dataTable" >
                         <thead>
                             <tr>
-
-                                <!--<th>ID</th>-->
-                                <th>Actions</th>
-                                <th>Name</th>
-                                <!---<th>Last Name</th><th>First Name</th>-->
-                                <th>Type</th>
-                                <th>Initial Diagnosis</th>
-                                <th>Recommend Appointment</sth>
+                               <!--<th>ID</th>-->
+                               <th>Name</th>
+                               <th>Patient Type</th>
+                               <!---<th>Last Name</th><th>First Name</th>-->
+                               <th>Contact No.</th>
+                               <th>Edit</th>
+                               <th>Verification</th>
                                 
                             </tr>
                         </thead>
@@ -298,62 +350,25 @@
     let currentPage = 1;  // current page, transfered from function scope into global(here) for accessability
     let allUniqueSymptomNames = [] // for auto adjusting of naming
     let formTargetId = null // if no target (null): create symptom // if has target (string id), edit target symptom
-    
-    // window... make it accessable from html for onclick
-    window.useSuggestedSymptomAsName=(name)=>{
-        // Get the input element by its ID
-        const inputElement = document.getElementById('SymptomsRef_Name');
-        // Set the text inside the input
-        inputElement.value = name
-    }
-
-    async function getAllUniqueSymptomNames(){
-        const response = await fetch("/api/symptomsref");
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        
-        let data = await response.json();
-        const names = []
-        for (let index in data){
-            names.push(data[index].SymptomsRef_Name)
-        }
-        const uniqueNames = [...new Set(names)]
-        allUniqueSymptomNames = uniqueNames
-        return null
-    }
-    // show pending count notif
-    async function getRegistrationPendingCount(){
-        const patients = (await (await fetch("/api/patient")).json())
-        let count = 0;
-        for (let index in patients){
-            const a = patients[index]
-            if (a.PatientIsConfirmed=="0"){
-                count+=1
-            }
-        }
-        console.log("COUUNT", count)
-        if (count>0){
-            document.getElementById("reg-confirm-pending-count").innerHTML = count
-            document.getElementById("reg-confirm-pending-count-container" ).style.display = "block"
-    }
-    }
-    getRegistrationPendingCount()
-    // this will rename fever into Fever (or ' fever ' into 'Fever') if Fever exists on current symptom names
-    function autoAdjustNaming(symptomsData, name){
-        const normalizedName = name.replace(" ", "").toLowerCase()
-        let finalName = name
-        for (let index in symptomsData){
-            const targetData = symptomsData[index]
-            const targetName = targetData["SymptomsRef_Name"]
-            const normalizedTargetName = targetName.replace(" ","").toLowerCase()
-            if (normalizedName==normalizedTargetName){
-                finalName = targetName
-                break
-            }
-        }
-        return finalName
-    }
+    let selectedUserId = ""
+    window.contactOnChange = (event) => {
+        const contactField = document.getElementById('contact');
+        const prefix = "63";
+     console.log(event.target.value); // Logs the new value
+     if (event.target.value == '6'){
+        event.target.value = '63'
+        return
+     }
+     if (!event.target.value.startsWith(prefix)) {
+        event.target.value = prefix + event.target.value.replace(new RegExp(`^${prefix}`), '');
+      }
+      const input = document.getElementById('regConfirm_ContactNo');
+      input.value = input.value.replace(/\D/g, '');  // Removes non-digit characters
+      if (input.value.length > 12) {
+          input.value = input.value.slice(0, 12);    // Ensures max length is 10 digits
+      }
+      validateApply()
+   };
 
     function sortSymptomData(symptomData, key) {
         if (!symptomData || symptomData.length === 0) {
@@ -373,58 +388,54 @@
           return 0;
         });
     }
-
-    window.deleteSymptomRef = async (SymptomsRef_ID) =>{
-        const data = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${SymptomsRef_ID}`)).json())[0]
-        let userChoice = confirm(`This action cannot be undone.\nAre you sure you want to remove?\n\nSymptom Name: ${data.SymptomsRef_Name}\nSeverity: ${data.SymptomsRef_Level}`);
-
-        if (!userChoice) { // selected cancel
-            return
+    window.saveChanges = async (event) => {
+        event.preventDefault()
+        console.log(selectedUserId, "id")
+        const userData = (await (await fetch(`/api/patient?Patient_ID=${selectedUserId}`)).json())[0]
+        console.log(userData, 'userdata')
+        const data = {
+            Patient_ID: userData?.Patient_ID,
+            PatientName:document.getElementById("regConfirm_FirstName").value,
+            PatientLastName: document.getElementById("regConfirm_LastName").value,
+            PatientContactNo: document.getElementById("regConfirm_ContactNo").value,
+            PatientCategory: document.getElementById("regConfirm_PatientType").value,
         }
+        console.log('sent data', data)
         try{
-            const response = await fetch('/api/symptomsref', {
-                method: 'DELETE',
+            const response = await fetch('/api/patient', {
+                method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({SymptomsRef_ID})
-            })
-            
-            const responseJson = await response.json()
-            getSymptomsRef()
+                body: JSON.stringify(data),
+            });
+            console.log(await response.json())
+            $('#regConfirmModal').modal('hide')
+            getProfiles()
         }catch(error){
             console.error('Error:', error);
-            alert('An error occurred while adding symptoms.');
+            alert("An error occurred while editing patient information.");
         }
-    }
-    
-    window.showEditModeModal = async (SymptomsRef_ID) => {
-        formTargetId = SymptomsRef_ID // put to global var
-        const targetData = (await (await fetch(`/api/symptomsref?SymptomsRef_ID=${formTargetId}`)).json())[0]
-        document.getElementById('form-submit-button').innerHTML = "Update"
-        document.getElementById("manage-symptoms-suggestions").innerHTML = ""
-        document.getElementById("addSymptomsModalLabel").innerHTML = "Update Symptom"
-        document.getElementById("SymptomsRef_Name").value = targetData.SymptomsRef_Name
-        document.getElementById("SymptomsRef_Level").value = targetData.SymptomsRef_Level
-        document.getElementById("SymptomsRef_Recommendation").value = targetData.SymptomsRef_Recommendation
-        document.getElementById("SymptomsRef_IsMild").value = targetData.SymptomsRef_IsMild
-        setTimeout(()=>{$('#addSymptomsModal').modal('show')}, 50) // add brief delay to set ui changs first
-    }
 
-    window.showCreateModeModal = async () => {
-        if (formTargetId){
-            formTargetId = null  // put to global var
-            document.getElementById('form-submit-button').innerHTML = "Submit"
-             document.getElementById("manage-symptoms-suggestions").innerHTML = ""
-            document.getElementById("addSymptomsModalLabel").innerHTML = "Create Symptom"
-            document.getElementById("SymptomsRef_Name").value = ""
-            document.getElementById("SymptomsRef_Level").value = ""
-            document.getElementById("SymptomsRef_Recommendation").value = ""
-            document.getElementById("SymptomsRef_IsMild").value = "0"
+    }
     
-        }
-       
-        setTimeout(()=>{$('#addSymptomsModal').modal('show')}, 50) // add brief delay to set ui changes first
+    window.showUserModal = async (id) => {
+        // autofills
+        
+        const userData = (await (await fetch(`/api/patient?Patient_ID=${id}`)).json())[0]
+        selectedUserId = userData?.Patient_ID
+        const firstName = document.getElementById("regConfirm_FirstName")
+        const lastName = document.getElementById("regConfirm_LastName")
+        const contactNo = document.getElementById("regConfirm_ContactNo")
+        const patientType = document.getElementById("regConfirm_PatientType")
+        const email = document.getElementById("regConfirm_Email")
+        // console.log(firstName, lastName, email, contactNo, patientType)
+        email.value = userData?.PatientEmail
+        firstName.value = userData?.PatientName
+        lastName.value = userData?.PatientLastName
+        contactNo.value = userData?.PatientContactNo
+        patientType.value = userData?.PatientCategory
+        setTimeout(()=>{$('#regConfirmModal').modal('show')}, 50) // add brief delay to set ui changes first
     }
     window.updateSymptomRef = async (data) => {
         try{
@@ -437,29 +448,76 @@
             })
             
             const responseJson = await response.json()
-            getSymptomsRef()
+            getProfiles()
         }catch(error){
             console.error('Error:', error);
             alert('An error occurred while adding symptoms.');
         }
     }
-    
-    async function getSymptomsRef(sortBy) {
+    async function sendRegistrationConfirmation (contact, fullname){
+        const url = "/api/sms/registration/confirmed"
+        const data = {
+            contact,
+            fullname,
+        }
+        try{
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            console.log(await response.json(), "SMS RESULT")
+       }catch(error){
+            console.error('Error:', error);
+            alert("An error occurred while sending sms confirmation");
+    }
+
+    }
+    window.ConfirmRegistration = async (event) => {
+        const userId = event.srcElement.getAttribute('data-userId')
+        const userData = (await (await fetch(`/api/patient?Patient_ID=${userId}`)).json())[0]
+        console.log(userData)
+        const newData = {
+            Patient_ID: userId,
+            PatientIsConfirmed: 1,
+       }
+       try{
+            const response = await fetch('/api/patient', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newData),
+            });
+            getProfiles()
+            getRegistrationPendingCount();
+            sendRegistrationConfirmation(userData.PatientContactNo, `${userData.PatientLastName}, ${userData.PatientName}`)
+       }catch(error){
+            console.error('Error:', error);
+            alert("An error occurred while confirming the patient's registration.");
+    }
+      
+    }
+    async function getProfiles(sortBy) {
             try {
-                const response = await fetch("/api/symptomsref");
+                const response = await fetch(`/api/patient`);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
                 
                 let data = await response.json();
+                console.log("DATA", data)
                 //const pageSize = 50;  // removed. transferred to global scope
                 const totalPages = Math.ceil(data.length / pageSize);
                 //let currentPage = 1; // removed. transfered to global scope for accessability
 
                 // sort data
-                const sortByRefValue = document.getElementById("manage-symptoms-sortby").value
+                const sortByRefValue = document.getElementById("reg-confirm-sortby").value
                 if (sortByRefValue != "?"){
                     data = sortSymptomData(data, sortByRefValue)
+                    
                 }else{
                     data = data.reverse()
                 }
@@ -475,20 +533,21 @@
                     for (let i = startIndex; i < endIndex; i++) {
                         const item = data[i];
                         const row = document.createElement("tr");
-                        if (item.SymptomsRef_IsMild){
-                            row.classList.add("symptom-mild-type")
+                        let verification = ""
+                        
+                        if (item?.PatientIsConfirmed == 1){
+                            verification = `<td><span style="color: green">Confirmed</span></td>`
                         }else{
-                            row.classList.add("symptom-severe-type")
+                            verification = `<td><button class="btn btn-success" data-userId=${item.Patient_ID} onclick="ConfirmRegistration(event)">Confirm</button></td>`
                         }
+                        
                         row.innerHTML = `
-                            <td>
-                                <button class="btn btn-danger" onclick="deleteSymptomRef('${item.SymptomsRef_ID}')">Delete</button>
-                                <button class="btn btn-primary" onclick="showEditModeModal('${item.SymptomsRef_ID}')" style="margin-left: 5px;">View</button>
-                            </td>
-                            <td>${item.SymptomsRef_Name}</td>
-                            <td>${item.SymptomsRef_Level.substring(0,50)}</td>
-                            <td>${item.SymptomsRef_Recommendation.substring(0,50)}</td>
-                            <td>${item.SymptomsRef_IsMild?"No":"Yes"}</td>
+                            <td>${item.PatientLastName}, ${item.PatientName}</td>
+                             <td>${item.PatientCategory}</td>
+                             <td>${item.PatientContactNo}</td>
+                            <td><button class="btn btn-primary"  onclick="showUserModal(${item.Patient_ID})">Edit</button></td>
+                            ${verification}
+                            
                         `;
                         tbody.appendChild(row);
                     }
@@ -547,115 +606,30 @@
             }
         }
 
-    // create suggestions when making input on name
-    document.getElementById('SymptomsRef_Name').addEventListener('input', (event)=>{
-        event.preventDefault()
-        const value = event.target.value
-        const countMaxSuggestions = 5
-        const suggestions = []
-        //console.log(value)
-        //console.log(allUniqueSymptomNames)
-        const elementLocation = document.getElementById("manage-symptoms-suggestions")
-        const addButton = (name) => (`<button onclick="useSuggestedSymptomAsName('${name}')" type="button" class="btn" style="background-color: rgb(240,240,240);margin: 5px; " >${name}</button>`)
-        for (let index in allUniqueSymptomNames){
-            if (allUniqueSymptomNames[index].toLowerCase().replace(" ","").startsWith(value.toLowerCase().replace(" ", ""))){
-                if (suggestions.length < countMaxSuggestions){
-                    suggestions.push(allUniqueSymptomNames[index])
-                }else{
-                    break
-                }
-            }
-        }
+   
 
-        let newElement = ""
-        for (let index in suggestions){
-            newElement += addButton(suggestions[index])
-        }
-        elementLocation.innerHTML = newElement
-    })
-
-
-    document.getElementById('manage-symptoms-sortby').addEventListener('change', ()=>{
+    document.getElementById('reg-confirm-sortby').addEventListener('change', ()=>{
         currentPage = 1 // reset page number
-        getSymptomsRef()
+        getProfiles()
         
     })
 
-         // Add event listener for the form submission
-    document.getElementById('addSymptomsForm').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Prevent the default form submission
-        const response = await fetch("/api/symptomsref");
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        
-        let data = await response.json();
-        // Get the form field values
-        const SymptomsRef_Name = document.getElementById('SymptomsRef_Name').value;
-        const SymptomsRef_Level = document.getElementById('SymptomsRef_Level').value;
-        const SymptomsRef_Recommendation = document.getElementById('SymptomsRef_Recommendation').value;
-        const SymptomsRef_IsMild = document.getElementById('SymptomsRef_IsMild').value;
-
-        // Create an object with the data to send to the backend
-        const symptomsData = {
-            SymptomsRef_Name: autoAdjustNaming(data, SymptomsRef_Name),
-            SymptomsRef_Level,
-            SymptomsRef_Recommendation,
-            SymptomsRef_IsMild
-        };
-
-
-        // EDIT MODE
-
-        if (formTargetId){
-            console.log(formTargetId)
-            console.log(symptomsData)
-            try{
-                const response = await fetch('/api/symptomsref', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({SymptomsRef_ID: formTargetId, ...symptomsData})
-                })
-                
-                const responseJson = await response.json()
-                    
-                alert("Symptom updated successfully!")
-                $('#addSymptomsModal').modal('hide');
-                getSymptomsRef()
-            }catch(error){
-                console.error('Error:', error);
-                alert('An error occurred while adding symptoms.');
+    // show pending count notif
+    async function getRegistrationPendingCount(){
+        const patients = (await (await fetch("/api/patient")).json())
+        let count = 0;
+        for (let index in patients){
+            const a = patients[index]
+            if (a.PatientIsConfirmed=="0"){
+                count+=1
             }
-
-        }else{
-        // CREATE MODE
-
-            try{
-                const response = await fetch('/api/symptomsref', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(symptomsData)
-                })
-                
-                const responseJson = await response.json()
-                alert("Symptom added successfully!")
-                $('#addSymptomsModal').modal('hide');
-                
-            }catch(error){
-                console.error('Error:', error);
-                alert('An error occurred while adding symptoms.');
-            }
-
         }
-        
-
-        getSymptomsRef()
-        getAllUniqueSymptomNames() // refresh unique symptom names when adding new symptom
-    });
+        console.log("COUUNT", count)
+        if (count>0){
+            document.getElementById("reg-confirm-pending-count").innerHTML = count
+            document.getElementById("reg-confirm-pending-count-container" ).style.display = "block"
+       }
+    }
 
     // show pending count notif
     async function getPendingCount(){
@@ -678,10 +652,42 @@
        }
     }
 
-    getSymptomsRef();
+    async function getAutoConfirmState(){
+        const staffData = (await (await fetch("/api/staff")).json())[0]
+        console.log(staffData, "STAFF DATA")
+        document.getElementById('toggleSwitch').checked = staffData.staffAutoConfirm?true:false;
+    }
+   
+
+    document.getElementById('toggleSwitch').addEventListener('change', async () => {
+        const state = document.getElementById('toggleSwitch').checked
+        const session = await getSession()
+        const staffId = session?.userId
+        const data = {
+            staff_ID: staffId,
+            staffAutoConfirm: state?"1":"0"
+        }
+        console.log("DATAS",data)
+        try{
+            const response = await fetch('/api/staff', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            console.log(await response.json())
+            getProfiles()
+        }catch(error){
+            console.error('Error:', error);
+            alert("An error occurred while toggling");
+        }
+    });
+
+    getProfiles();
     getPendingCount();
-    getAllUniqueSymptomNames();
-    
+    getRegistrationPendingCount();
+    getAutoConfirmState();
 </script>
 
 

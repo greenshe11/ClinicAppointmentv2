@@ -51,6 +51,12 @@
                               <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                                   <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                               </div></li>
+                              <li>
+                                   <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>
+                                   <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                                       <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                                   </div>
+                               </li>
                          <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
                           <li><a href="/profile" class="active">Account</a>
                          </li>
@@ -299,6 +305,22 @@
                     
 
                }
+               async function getRegistrationPendingCount(){
+                    const patients = (await (await fetch("/api/patient")).json())
+                    let count = 0;
+                    for (let index in patients){
+                        const a = patients[index]
+                        if (a.PatientIsConfirmed=="0"){
+                            count+=1
+                        }
+                    }
+                    console.log("COUUNT", count)
+                    if (count>0){
+                        document.getElementById("reg-confirm-pending-count").innerHTML = count
+                        document.getElementById("reg-confirm-pending-count-container" ).style.display = "block"
+                }
+                }
+                getRegistrationPendingCount()
                // Attach the function to the global scope
                window.contactOnChange = (event) => {
                     const contactField = document.getElementById('contact');

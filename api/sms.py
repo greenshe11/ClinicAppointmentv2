@@ -4,6 +4,7 @@ from utilities.util_functions import pull_from_db, push_to_db, update_db, delete
 import utilities.util_functions as utils
 
 def sms_routes(self, table_name):
+    
     """Define Flask routes."""
     @self.app.route('/api/sms', methods=['POST'])
     @cross_origin(supports_credentials=True)
@@ -14,9 +15,27 @@ def sms_routes(self, table_name):
             1: sms_confirmed,
             2: sms_reject,
             3: sms_resched,
-            4: sms_after_registration,
-            5: sms_registration_confirmation,
         }
         print("SENDING SMS", data, data['statusCode'])
         purposes[data['statusCode']](date=data['date'], time=data['time'], contact=data['contact'], fullname=data['fullname'])
+        return jsonify({'success': True})
+
+    @self.app.route('/api/sms/registration', methods=['POST'])
+    @cross_origin(supports_credentials=True)
+    def sms_send_registration():
+        # url parameters will are used for filtering
+        data = request.json
+        staffData = pull_from_db(self, {}, 'tblstaff',jsonify_return=False)[0]
+        print("STAFF DATA", staffData)
+        if (staffData["staffAutoConfirm"]==0):
+            sms_after_registration(contact=data['contact'], fullname=data['fullname'])
+        return jsonify({'success': True})
+    
+    @self.app.route('/api/sms/registration/confirmed', methods=['POST'])
+    @cross_origin(supports_credentials=True)
+    def sms_send_registration_confirmed():
+        # url parameters will are used for filtering
+        data = request.json
+        
+        sms_registration_confirmation(contact=data['contact'], fullname=data['fullname'])
         return jsonify({'success': True})

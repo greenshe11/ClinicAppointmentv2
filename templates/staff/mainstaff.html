@@ -61,6 +61,12 @@
                             <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                                 <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                             </div>
+                            <li>
+                                <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>
+                                <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                                    <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                                </div>
+                            </li>
                             <li class="text-white"><a href="/staffsymptoms">Manage Symptoms</a></li>
                         </li>
                        <li><a href="/profile" class="">Account</a></li>
@@ -263,7 +269,6 @@
     import { deleteSymptomsFromDb } from "/static/components/symptomsSelection/script.js";
     import { InfoModal, showModal } from "/static/components/infoModal/script.js";
     import { getDaysUntilAppointment } from "/static/pageScripts/calendar.js"
-
     /**
     * Global Constants and Variables
     */
@@ -273,7 +278,6 @@
     let currentPage = 1; // Tracks the current page number for pagination
     let sessionData = null; // Holds session data (initially null)
     let appointments = null; // Holds appointment data (initially null)
-  
     /**
     * Show the calendar when a date is clicked.
     * @param {Event} event - The click event that triggered the calendar display.
@@ -309,7 +313,6 @@
         setPaginationNumber(); // Update pagination display
         await renderPage(); // Render the appointments for the new page
     };
-
     /**
     * Delete an appointment and its associated symptoms from the database.
     * @param {Event} event - The click event triggering the deletion.
@@ -403,7 +406,22 @@
             console.error('Error:', error); // Log any errors encountered
         }
     };
-
+    async function getRegistrationPendingCount(){
+        const patients = (await (await fetch("/api/patient")).json())
+        let count = 0;
+        for (let index in patients){
+            const a = patients[index]
+            if (a.PatientIsConfirmed=="0"){
+                count+=1
+            }
+        }
+        console.log("COUUNT", count)
+        if (count>0){
+            document.getElementById("reg-confirm-pending-count").innerHTML = count
+            document.getElementById("reg-confirm-pending-count-container" ).style.display = "block"
+    }
+    }
+    getRegistrationPendingCount()
     /**
     * Update pagination display based on the current page and total appointments.
     */
@@ -557,7 +575,7 @@
            if ((getDaysUntilAppointment(month, year, day) > 0)||status==1){
             code = code + `<td>${getStatusDisplay(status)}</td>`
            }else{
-            code = code + '<td><i><button class="btn btn-success viewer" data-appointmentId="${appId}" style="background-color:gray" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" disabled onclick="showModal(event)">Confirm</button></td></i></td>'
+            code = code + `<td><i><button class="btn btn-success viewer" data-appointmentId="${appId}" style="background-color:gray" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" disabled onclick="showModal(event)">Confirm</button></td></i></td>`
            }
             code = code + `
                 

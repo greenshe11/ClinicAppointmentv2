@@ -326,14 +326,17 @@ def send_message(contact, message):
         print("Exception when calling SMSApi->sms_send_post: %s\n" % e)
     return True
 
-def sms_after_registration(fullname):
-    send_message(f"""Hello {fullname}, your account is being verified by our nurse.
-Please wait a moment before logging in. We’ll notify you once your account is ready
+def sms_after_registration(contact, fullname):
+    send_message(contact, f"""Hello {fullname}, your account is being verified by our nurse.
+Please wait a moment before logging in. We’ll notify you once your account is ready.
+                 
+A Message from: ISAT-U Medical Clinic (Old Site), Burgos St., La Paz, Iloilo City
 """)
 
-def sms_registration_confirmation(fullname):
-    send_message(f"""Hello {fullname},
-The nurse have confirmed your registration and you may now log in to access our services.""")
+def sms_registration_confirmation(contact, fullname):
+    send_message(contact, f"""Hello {fullname}, the nurse have confirmed your registration and you may now log in to access our services.
+
+A Message from: ISAT-U Medical Clinic (Old Site), Burgos St., La Paz, Iloilo City""")
 
 def sms_confirmed(date, time, contact, fullname, *args, **kwargs):
     print("CONFIRMATION SMS SENT", date, time, contact)
