@@ -192,7 +192,6 @@
                     const PatientPassword = document.getElementById("password").value
                     const passwordInput = document.getElementById('password');
                     const data = {PatientEmail, PatientPassword}
-                                     
                     try {
                          const response = await fetch('/api/patient?for=login', {
                          method: 'POST',
@@ -209,7 +208,7 @@
                          const result = await response.json();
                          console.log(result.hasOwnProperty('customError'))
                          if (result.hasOwnProperty('customError')) {
-                              //alert(result.customError)
+                              alert(result.customError)
                               passwordInput.classList.add('invalid-input', 'flash');
                               passwordInput.classList.add('is-invalid');
 

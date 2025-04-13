@@ -11,7 +11,7 @@ let dialogChat = null
 let firstName = ""
 let lastName = ""
 //
-
+let forceStopScroll = null
 export async function getUserData(userId){
     const res = await fetch(`/api/patient?Patient_ID=${userId}`)
     return await res.json()
@@ -73,9 +73,12 @@ const updateCustomSymptom = async (appointmentId) => {
 }
 
 export async function showModal(event){
+    //previousScrollYNum = window.scrollY
+    
     let isStaff = false
     const session = await getSession()
-
+    const pos = scrollY
+    
     //Hiding the account icon if it is not logged in
     if (typeof session['isStaff'] != 'undefined' && session["isStaff"]) {
       isStaff = true
@@ -166,9 +169,9 @@ export async function showModal(event){
     const dimmer = document.getElementById('im-dimmer')
     calendar.style.display = "flex"
     dimmer.style.display = "flex"
-    
+    //window.scrollTo({ top: 0, behavior: 'smooth' });
     document.addEventListener('click', outsideClickListener);
-
+    
 
 
     
@@ -178,6 +181,7 @@ export async function showModal(event){
  * @description Closes when pressed x button
  */
 function onClickCloseCal(){
+    //window.scrollTo(0, previousScrollYNum);
     console.log("CLOSING")
     const calendar = document.getElementById('im-modal')
     const dimmer = document.getElementById('im-dimmer')

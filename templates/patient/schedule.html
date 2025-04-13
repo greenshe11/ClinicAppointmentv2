@@ -36,7 +36,7 @@
      <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
 </head>
 
-<body>
+<body style="margin-bottom: 24px;">
     <!--Start-->
       <!--DONT DELETE: THIS AREA IS WHERE THE SIDE BAR WILL BE INSERTED-->
     <!--<div id="home-sidebar-insert-area"></div>-->
@@ -101,6 +101,15 @@
             <div class="card-header py-3">
                 <p class="text-primary m-0 fw-bold">Schedule Info</p>
             </div>
+            <div style="display:flex; width: 250px; margin-left: 20px; margin-top: 10px;flex-direction:row; align-items:center;">
+                <span style="width: 80px;">Sort By</span>
+                <select class="form-control" id="schedule-sortby" required>
+                    <option value="datetime">Datetime</option>
+                    <option value="request">Request</option>
+                   
+                    
+                </select>
+            </div>
             <div class="card-body">
                 
                 <div class="row">
@@ -154,6 +163,7 @@
         </div>
         <div>end of list</div>
     </div>
+   
 </body>
 <!--DONT DELETE-->
 <script type="module">
@@ -249,14 +259,18 @@
         const sessionData = await getSession(); // Get session data
         let appointments = await getAppointmentsFilter({ Patient_ID: sessionData.userId }); // Get filtered appointments for user
         let node = ''; // Empty string to build table rows
-
+        const sortByValue = document.getElementById("schedule-sortby").value
         // Sort appointments by year, month, day, and time
-        appointments.sort((a, b) => {
-            const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time); // Date A
-            const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time); // Date B
-            return dateB - dateA; // Sort by descending order
-        });
-
+        if (sortByValue=="datetime"){
+            appointments.sort((a, b) => {
+                const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time); // Date A
+                const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time); // Date B
+                return dateB - dateA; // Sort by descending order
+            });    
+        }else{
+            appointments = appointments.reverse()
+        }
+       
         // Iterate over each appointment and generate the table rows
         for (let i = 0; i < appointments.length; i++) {
             const appointmentSpec = appointments[i];
@@ -307,6 +321,10 @@
         );
     }
 
+    document.getElementById('schedule-sortby').addEventListener('change', ()=>{
+        renderAppointments();
+        
+    })
     // Render the appointments when the page loads
     renderAppointments();
 

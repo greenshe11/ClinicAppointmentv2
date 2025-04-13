@@ -149,6 +149,15 @@
             <div class="card-header py-3">
                 <p class="text-primary m-0 fw-bold">Schedule Info</p>
             </div>
+            <div style="display:flex; width: 250px; margin-left: 20px; margin-top: 10px;flex-direction:row; align-items:center;">
+                <span style="width: 80px;">Sort By</span>
+                <select class="form-control" id="schedule-sortby" required>
+                    <option value="datetime">Datetime</option>
+                    <option value="request">Request</option>
+                   
+                    
+                </select>
+            </div>
             <div class="card-body">
                 
                 <div class="row">
@@ -260,7 +269,7 @@
     */
     const monthNamesAll = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // Array of month names for display
     const tableBody = document.getElementById('sched-table-body'); // Reference to the table body where appointments will be rendered
-    const itemsPerPage = 5; // Number of appointments displayed per page
+    const itemsPerPage = 15; // Number of appointments displayed per page
     let currentPage = 1; // Tracks the current page number for pagination
     let sessionData = null; // Holds session data (initially null)
     let appointments = null; // Holds appointment data (initially null)
@@ -326,9 +335,9 @@
     * @param {string} contact - The contact number.
     * @param {number} statusCode - The status code of the appointment.
     */
-    const sendMessage = async (date, time, contact, statusCode) => {
+    const sendMessage = async (date, time, contact, statusCode, fullname) => {
         const url = '/api/sms'; // API endpoint for sending SMS
-        const data = { date, time, contact, statusCode }; // Prepare data for the request
+        const data = { date, time, contact, statusCode, fullname}; // Prepare data for the request
         try {
             const response = await fetch(url, {
                 method: 'POST', // Specify POST method
@@ -365,7 +374,7 @@
         const year = event.srcElement.getAttribute('data-year'); // Get year
         const timeName = event.srcElement.getAttribute('data-timeName'); // Get time name
         const contact = event.srcElement.getAttribute('data-contact'); // Get contact information
-
+        const fullname = event.srcElement.getAttribute('data-fullname'); // Get contact information
         const url = '/api/appointments'; // API endpoint for updating appointments
         const data = {
             Appointment_ID: appointmentId,
@@ -387,7 +396,7 @@
             td.innerHTML = getStatusDisplay(statusCode); // Update the status display
 
             // Send an SMS notification
-            sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode);
+            sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode, fullname);
             getPendingCount()
             location.reload()
         } catch (error) {
@@ -404,7 +413,7 @@
         statement.innerHTML = ""; // Clear previous info
         let finalLength = itemsPerPage * currentPage; // Calculate the final item index to display
         finalLength = finalLength >= count ? count: finalLength; // Ensure it does not exceed total appointments
-        statement.innerHTML = `Showing ${currentPage} to ${finalLength} of ${count}`; // Display current pagination info
+        statement.innerHTML = `Showing ${(itemsPerPage*(currentPage-1))+1}-${finalLength} of ${count}`; // Display current pagination info
 
         const paginationContainer = document.getElementById('pagination'); // Reference to pagination container
         paginationContainer.innerHTML = ""; // Clear previous pagination buttons
@@ -482,7 +491,6 @@
             const monthName = monthNamesAll[appointmentSpec.Appointment_Month - 1]; // Get month name from array
             const combinedDate = `${monthName} ${day}, ${year}`; // Format date for display
             const timeName = getTimeName([time, minutes]); // Get formatted time name
-            
             // Fetch patient info and ensure only single result is used
             let patientInfo = await getPatientInfo(patientId);
             patientInfo = patientInfo[0]; // Look only for single result
@@ -490,7 +498,7 @@
             const firstName = patientInfo ? patientInfo.PatientName : undefined; // Get first name
             const lastName = patientInfo ? patientInfo.PatientLastName : undefined; // Get last name
             const category = patientInfo ? patientInfo.PatientCategory : undefined
-            
+            const fullname = `${lastName}, ${firstName}`
             // Function to return HTML for displaying appointment status and action buttons
             const useFilter = (monthNum, lastName, firstName, year, status) => {
                 let monthFilter = document.getElementById("month-filter").value
@@ -530,7 +538,7 @@
             }
             const getStatusDisplay = (statusCode) => {
                 if (statusCode == 0) { // If status is pending
-                    return `<button class="btn btn-success viewer" data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" style="background-color: green" onclick="setAppointmentStatus(event, 1)">Confirm</button>`
+                    return `<button class="btn btn-success viewer" data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" data-fullname="${fullname}" style="background-color: green" onclick="setAppointmentStatus(event, 1)">Confirm</button>`
                     //<button class="btn btn-danger" data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" onclick="setAppointmentStatus(event, 2)">Reject</button>`;
                 }
                 const color = ['black', 'green', 'red']; // Colors for status display
@@ -600,20 +608,26 @@
     const setAppointmentsData = async () => {
         sessionData = await getSession(); // Get session data
         appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
- 
-        appointments.sort((a, b) => {
-            // Create date objects for comparison, using only the hour
-            const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
-            const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time);
-            let diff = dateB - dateA; // Sort by date and hour (latest first)
-            return diff;
-        });
-
+        const sortByValue = document.getElementById("schedule-sortby").value
+        // Sort appointments by year, month, day, and time
+        if (sortByValue=="datetime"){
+            appointments.sort((a, b) => {
+                // Create date objects for comparison, using only the hour
+                const dateA = new Date(a.Appointment_Year, a.Appointment_Month - 1, a.Appointment_Day, a.Appointment_Time);
+                const dateB = new Date(b.Appointment_Year, b.Appointment_Month - 1, b.Appointment_Day, b.Appointment_Time);
+                let diff = dateB - dateA; // Sort by date and hour (latest first)
+                return diff;
+            });
+        }else{
+            appointments = appointments.reverse()
+        }
         console.log("SORTED APPOINTMENTS", appointments)
         //setPaginationNumber(appointments.length)
      
     };
-    
+    document.getElementById('schedule-sortby').addEventListener('change', ()=>{
+        renderAppointmentsInitial()
+    })
     /**
     * Render the initial appointments and setup components.
     */

@@ -55,7 +55,6 @@
     align-items: center;
     width: 100%;
 }
-
 #im-dimmer {
     display: none; 
     background-color: rgba(0,0,0,0.5); 
@@ -76,9 +75,9 @@
     width: 100%;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     top: 0px;
-    z-index: 1201;
+    z-index: 1501;
 }
 
 #im-body{

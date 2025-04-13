@@ -302,7 +302,7 @@ function showCalendar(month, year, monthData) {
     }
 
     const evaluateCount = (cell=null) =>{
-        if (getFilledCount(date, year)>=8){
+        if (getFilledCount(date, year)>=16){
             cell.className = `${cell.className} dr-filled`;
             return true;
         }

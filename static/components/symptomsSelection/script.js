@@ -349,7 +349,7 @@ class WordSuggestions{
       targetRadio.innerHTML = ''
      
       //console.log(data, "HAI")
-      let question = `<p>How sever is your <b>${symptomNames[index]}</b>?</p>`
+      let question = `<p>How would you describe your <b>${symptomNames[index]}</b>?</p>`
       let content = ""
       //console.log("yp",await symptomsRef.getSymptomNameLevels(symptomNames[index]))
       const symptomMildData = await ((await fetch(`/api/symptomsref?SymptomsRef_Name=${symptomNames[index]}&SymptomsRef_IsMild=1`)).json()) // mildSymptomsLevels[symptomNames[index]]
@@ -408,6 +408,7 @@ class WordSuggestions{
 
   addToSelectedSymptomsFromSession(stringArray){
     // add tags from startup with session
+    return 
     console.log("Syse", stringArray)
     for (let i=0; i<stringArray.length; i++){
       this.addToElement(stringArray[i].split('(')[0 ])

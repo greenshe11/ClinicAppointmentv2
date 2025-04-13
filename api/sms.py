@@ -1,11 +1,10 @@
 from flask import request, jsonify, session
 from flask_cors import cross_origin
-from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, sms_confirmed, sms_reject, sms_resched
+from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, sms_confirmed, sms_reject, sms_resched, sms_after_registration, sms_registration_confirmation
 import utilities.util_functions as utils
 
 def sms_routes(self, table_name):
     """Define Flask routes."""
-
     @self.app.route('/api/sms', methods=['POST'])
     @cross_origin(supports_credentials=True)
     def sms_send():
@@ -14,9 +13,10 @@ def sms_routes(self, table_name):
         purposes = {
             1: sms_confirmed,
             2: sms_reject,
-            3: sms_resched
+            3: sms_resched,
+            4: sms_after_registration,
+            5: sms_registration_confirmation,
         }
         print("SENDING SMS", data, data['statusCode'])
-        purposes[data['statusCode']](date=data['date'], time=data['time'], contact=data['contact'])
-    
+        purposes[data['statusCode']](date=data['date'], time=data['time'], contact=data['contact'], fullname=data['fullname'])
         return jsonify({'success': True})

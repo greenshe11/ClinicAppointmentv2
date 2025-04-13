@@ -540,13 +540,13 @@
              }
         }
         
-        window.setAppointmentDateStage = async () => {
+        window.setAppointmentDateStage = async (includeBotMessage=true) => {
             
             document.querySelectorAll('#cbp-set-date-btn').forEach(element => {
                 element.id = ""
             })
             disableFinishedChats()
-            createChatFromBot('Please choose a date and time for your appointment.')
+            includeBotMessage?('Please choose a date and time for your appointment.'):null
             createChatFromUser(' <button id="cbp-set-date-btn"onclick="onClickShowCal()">Select Date and Time</button>')
             await window.setupCalendar()
             console.log(document.getElementById('dr-confirm-button'))
@@ -881,23 +881,30 @@
             
             // Function to navigate to home after checking appointment availability and creating a new appointment
             const toHome = async () => {
-            const value = await getAppointments(month, year, day) // Check for existing appointments
-            for (let i = 0; i < value.length; i++) {
-                if (value[i].Appointment_Time == time && value[i].Appointment_Minutes===minutes) { // If there's an appointment at the same time
-                    alert("Selected date is not available / is taken just a while ago. Please try again.")
-                    window.location.href = '/chatbotpage' // Redirect to appointment page
-                    return null
-                }
-            }
+              const value = await getAppointments(month, year, day) // Check for existing appointments
+              for (let i = 0; i < value.length; i++) {
+                  console.log("CHECKING", (value[i].Appointment_Time == time && value[i].Appointment_Minutes==minutes))
+                  console.log('hour', value[i].Appointment_Time, time, value[i].Appointment_Time==time)
+                  console.log('minutes', value[i].Appointment_Minutes, minutes, value[i].Appointment_Minutes==minutes)
+                  if ((value[i].Appointment_Time == time) && (value[i].Appointment_Minutes==minutes)) { // If there's an appointment at the same time
+                      //alert("Selected date is not available / is taken just a while ago. Please try again.")
+                      
+                      document.getElementById('cbp-send-request')?.removeAttribute('id');
+                      createChatFromBot('Unfortunately, someone just took the selected date and time.<br><br>To avoid any conflicts, please select a different time.')
+                      window.setAppointmentDateStage(false)
+                      return null
+                  }
+                  
+              }
 
-            const newAppointment = await createAppointment(userId, day, month, time, year, minutes, 0, complaints) // Create a new appointment
-            console.log("CODES", codes)
-            for (let i in codes) {
-                let newSymptoms = await createSymptoms(newAppointment.id, i) // Create symptoms for the appointment
-                console.log(i, newAppointment.id, newSymptoms)
-            }
-            
-            window.location.href = '/schedule' // Redirect to success page
+              const newAppointment = await createAppointment(userId, day, month, time, year, minutes, 0, complaints) // Create a new appointment
+              console.log("CODES", codes)
+              for (let i in codes) {
+                  let newSymptoms = await createSymptoms(newAppointment.id, i) // Create symptoms for the appointment
+                  console.log(i, newAppointment.id, newSymptoms)
+              }
+              
+            window.location.href = '/schedule'
             }
 
             // Add click event to send button
@@ -912,6 +919,10 @@
         window.chatSummaryStage = () => {
             disableFinishedChats()
             console.log("CHAT SUMMARY STAGE")
+            const idsToReset = ['sum-datetime', 'sum-symptoms', 'sum-name', 'sum-email', 'sum-contact', 'sum-response', 'sum-complaints']
+            for (let index in idsToReset){
+              document.getElementById(idsToReset[index])?.removeAttribute('id');
+            }
             createChatFromBot(` <div class="cbp-dialog" style=" height: 100%; flex-direction: column;">
                     <p><b>Appointment Datetime: </b><span id="sum-datetime"></span>
                     </p>
