@@ -312,7 +312,6 @@ api_instance = clicksend_client.SMSApi(clicksend_client.ApiClient(configuration)
 
 def send_message(contact, message):
     print("MESSAGE SENT", message)
-    return
     # If you want to explictly set from, add the key _from to the message.
     sms_message = SmsMessage(source="php",
                             body=message,
@@ -326,28 +325,17 @@ def send_message(contact, message):
         print("Exception when calling SMSApi->sms_send_post: %s\n" % e)
     return True
 
-def sms_after_registration(contact, fullname):
-    send_message(contact, f"""Hello {fullname}, your account is being verified by our nurse.
-Please wait a moment before logging in. We’ll notify you once your account is ready.
-                 
-A Message from: ISAT-U Medical Clinic (Old Site), Burgos St., La Paz, Iloilo City
+def sms_after_registration(contact, fullname, *args, **kwargs):
+    send_message(contact, f"""Hello {fullname}! your account is being verified. Please wait before logging in. – ISAT-U Medical Clinic, Burgos St., La Paz, Iloilo City.
 """)
 
-def sms_registration_confirmation(contact, fullname):
-    send_message(contact, f"""Hello {fullname}, the nurse have confirmed your registration and you may now log in to access our services.
-
-A Message from: ISAT-U Medical Clinic (Old Site), Burgos St., La Paz, Iloilo City""")
+def sms_registration_confirmation(contact, fullname, *args, **kwargs):
+    send_message(contact, f"""Hello {fullname}, your registration is confirmed. You may now log in. – ISAT-U Medical Clinic, Burgos St., La Paz, Iloilo City.""")
 
 def sms_confirmed(date, time, contact, fullname, *args, **kwargs):
     print("CONFIRMATION SMS SENT", date, time, contact)
     #send_message(contact, f"Your appointment has been confirmed for {date}, {time}")
-    send_message(contact, f"""Details:
-Name: {fullname}
-Date: {date}
-Time: {time}
-Location: ISAT-U Medical Clinic (Old Site), Burgos St., La Paz, Iloilo City
-
-Please arrive 10 minutes before your scheduled time and bring your ID.""")
+    send_message(contact, f"""Name: {fullname} | {date} {time} | ISAT-U Med Clinic (Old Site), Burgos St, La Paz, Iloilo City. Arrive 10 mins early with ID.""")
     return True
     url = "https://api.movider.co/v1/sms"
 
