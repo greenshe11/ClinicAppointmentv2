@@ -39,12 +39,12 @@ def otp_routes(self, table_name):
             print(otp_data[0])
             
             update_db(self, otp_data[0], table_name, filter_names=["Otp_ID"])
-            #sms_otp(contact=otp_contact, otp=new_otp)
+            sms_otp(contact=otp_contact, otp=new_otp)
         else:
             new_otp =  ''.join(random.choices(string.digits, k=5))
            
             push_to_db(self, {"Otp_Code": new_otp, "Otp_Contact": otp_contact}, table_name)
-            #sms_otp(contact=otp_contact, otp=new_otp)
+            sms_otp(contact=otp_contact, otp=new_otp)
         return jsonify({'success': True,"email": target_user["PatientEmail"]})
     
     """Define Flask routes."""
