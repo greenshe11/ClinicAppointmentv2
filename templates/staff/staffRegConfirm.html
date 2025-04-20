@@ -232,7 +232,13 @@
                                          </div>
                                     </div>
                                </div>
-
+                               <div class="col-md-12 mb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                     <input type="text" id="address"
+                                          class="form-control" required>
+                                     <label class="form-label" for="form3Example1"><span class="required">*</span>Address</label>
+                                </div>
+                           </div>   
                                <!-- Contact input -->
                                <div data-mdb-input-init class="form-outline mb-4">
                                     <div style="display: flex; flex-direction: row; align-items:center;">
@@ -311,6 +317,11 @@
             <div class="mb-3">
                 <label for="regConfirm_LastName" class="form-label">Last Name</label>
                 <input type="text" class="form-control" id="regConfirm_LastName" required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="regConfirm_Address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="regConfirm_Address" required>
               </div>
               <div class="mb-3">
                 <label for="regConfirm_PatientType" class="form-label">Patient Type</label>
@@ -434,7 +445,7 @@
         const PatientName = document.getElementById("firstname").value
         const PatientLastName = document.getElementById("lastname").value
         const PatientContactNo = '63' + document.getElementById("contact").value
-   
+        const PatientAddress = document.getElementById("address").value
         const PatientEmail = document.getElementById("email").value
         
         const contactInput = document.getElementById('contact');
@@ -442,7 +453,7 @@
         const PatientPasswordConfirm = document.getElementById("password2").value
         const memberType = document.getElementById("member-type").value
 
-        data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientCategory: memberType, PatientIsConfirmed: 1}
+        data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientAddress, PatientCategory: memberType, PatientIsConfirmed: 1}
 
         const contact = document.getElementById("contact-warn");
         
@@ -523,7 +534,9 @@
              document.getElementById("password2").value = ""
              document.getElementById("member-type").value = "student"
              $('#customModal').modal('hide')
+             location.reload()
              await sendRegistrationMessage(PatientContactNo, `${PatientLastName}, ${PatientName}`)
+           
              //window.location.href = '/login'
              // Handle the result (e.g., show a success message to the user)
         } catch (error) {
@@ -629,6 +642,7 @@
             Patient_ID: userData?.Patient_ID,
             PatientName:document.getElementById("regConfirm_FirstName").value,
             PatientLastName: document.getElementById("regConfirm_LastName").value,
+            PatientAddress: document.getElementById("regConfirm_Address").value,
             PatientContactNo: document.getElementById("regConfirm_ContactNo").value,
             PatientCategory: document.getElementById("regConfirm_PatientType").value,
         }
@@ -642,6 +656,7 @@
                 body: JSON.stringify(data),
             });
             console.log(await response.json())
+            alert("Changes Saved!")
             $('#regConfirmModal').modal('hide')
             getProfiles()
         }catch(error){
@@ -658,11 +673,13 @@
         selectedUserId = userData?.Patient_ID
         const firstName = document.getElementById("regConfirm_FirstName")
         const lastName = document.getElementById("regConfirm_LastName")
+        const address = document.getElementById("regConfirm_Address")
         const contactNo = document.getElementById("regConfirm_ContactNo")
         const patientType = document.getElementById("regConfirm_PatientType")
         const email = document.getElementById("regConfirm_Email")
         // console.log(firstName, lastName, email, contactNo, patientType)
         email.value = userData?.PatientEmail
+        address.value = userData?.PatientAddress
         firstName.value = userData?.PatientName
         lastName.value = userData?.PatientLastName
         contactNo.value = userData?.PatientContactNo
@@ -719,6 +736,7 @@
             Patient_ID: userData?.Patient_ID,
             PatientName:document.getElementById("regConfirm_FirstName").value,
             PatientLastName: document.getElementById("regConfirm_LastName").value,
+            PatientAddress: document.getElementById("regConfirm_Address").value,
             PatientContactNo: document.getElementById("regConfirm_ContactNo").value,
             PatientCategory: document.getElementById("regConfirm_PatientType").value,
         }
@@ -951,6 +969,7 @@
     });
 
     getProfiles();
+    window.getProfiles = getProfiles
     getPendingCount();
     getRegistrationPendingCount();
     getAutoConfirmState();

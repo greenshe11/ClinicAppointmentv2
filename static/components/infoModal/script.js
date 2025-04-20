@@ -91,16 +91,13 @@ export async function showModal(event){
     const time = event.srcElement.getAttribute('data-time')
     const minutes = event.srcElement.getAttribute('data-minutes')
     const status = event.srcElement.getAttribute('data-status')
-    
     const appointmentId = event.srcElement.getAttribute('data-appointmentId')
     const appointmentData = (await getAppointmentsFilter({Appointment_ID: appointmentId}))[0]
     const userInfo = await getUserData(userId)
-   
     const symptomData = await getSymptomsFromDb(appointmentId)
     const symptomCodes = []
     console.log(appointmentId,appointmentData)
     //const symptomsData = await fetch(`/api/symptoms?Appointment_ID=${appointmentId}`)
-
     for (let i=0; i<symptomData.length; i++){
         console.log(i,symptomData[i]["Appointment_ID"], appointmentData["Appointment_ID"])
         if (symptomData[i]["Appointment_ID"]==appointmentData["Appointment_ID"]){
@@ -143,13 +140,13 @@ export async function showModal(event){
         const name = ['Pending','Confirmed','Rejected']
         return `<span style="color: ${color[statusCode]}">${name[statusCode]}</span>`
     }
-
     //global setting
     firstName =  userInfo[0].PatientName
     lastName = userInfo[0].PatientLastName
     //
     document.getElementById('im-first-name').innerHTML = userInfo[0].PatientName
     document.getElementById('im-last-name').innerHTML = userInfo[0].PatientLastName
+    document.getElementById("im-address").innerHTML = userInfo[0].PatientAddress
     document.getElementById('im-email').innerHTML = userInfo[0].PatientEmail
     document.getElementById('im-contact-no').innerHTML = userInfo[0].PatientContactNo
     document.getElementById('im-sched-date').innerHTML = `${months[month-1]} ${day}, ${year}`

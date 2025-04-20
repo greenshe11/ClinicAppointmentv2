@@ -36,6 +36,7 @@
 
 
           <!-- Navigations -->
+           
           <div class="branding d-flex align-items-center">
                <div class="position-relative d-flex align-items-center justify-content-between" style="width:100%; padding-left: 20px; padding-right: 20px;">
                     <a href="/" class="logo d-flex align-items-center me-auto">
@@ -102,7 +103,11 @@
                                                   <!-- Last name -->
                                                   <div class="col-md-6">
                                                        <label class="form-label">Last Name *</label>
-                                                       <input type="text" id="last-name" class="form-control" placeholder="" oninput="validateApply()" aria-label="Last name" value="">
+                                                       <input type="text" id="last-name" class="form-control" placeholder=""  oninput="validateApply()" aria-label="Last name"  value="">
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Address *</label>
+                                                       <input type="text" id="address" class="form-control" placeholder="" oninput="validateApply()"  aria-label="address"   value="">
                                                   </div>
                                                   <!-- Phone number -->
                                                   <div class="col-md-6">
@@ -193,6 +198,7 @@
                     const firstName = document.getElementById('first-name')
                     const lastName = document.getElementById('last-name')
                     const contact = document.getElementById('contact')
+                    const address = document.getElementById('address')
                     const applyBtn = document.getElementById('apply')
                     const cancelBtn = document.getElementById('cancel')
                     
@@ -214,6 +220,10 @@
                     if (contact.value != data.PatientContactNo){
                          result = true
                          console.log('contact changed')
+                    }
+                    if (address.value != data.PatientAddress){
+                         result = true
+                         console.log('address changed')
                     }
                     console.log(getTypeSelected(), data.PatientCategory)
                     if (data.PatientCategory != getTypeSelected()){
@@ -267,7 +277,7 @@
                     const firstName = document.getElementById('first-name')
                     const lastName = document.getElementById('last-name')
                     const contact = document.getElementById('contact')
-                    
+                    const address = document.getElementById("address")
                     
                     const disableEmail = () => {email.setAttribute('disabled', "true")} 
                     const enableEmail = () => {email.removeAttribute('disabled')}
@@ -275,6 +285,7 @@
                     email.value = data.PatientEmail
                     disableEmail()
                     console.log(data)
+                    address.value = data.PatientAddress
                     firstName.value = data.PatientName 
                     lastName.value = data.PatientLastName 
                     contact.value = data.PatientContactNo 
@@ -357,6 +368,7 @@
                          PatientName: document.getElementById('first-name').value,
                          PatientLastName: document.getElementById('last-name').value,
                          PatientContactNo: document.getElementById('contact').value,
+                         PatientAddress: document.getElementById('address').value,
                          PatientCategory: getTypeSelected()
                     }
                     const response = await fetch('/api/patient', {

@@ -152,7 +152,13 @@
                                                        </div>
                                                   </div>
                                              </div>
-
+                                             <div class="col-md-12 mb-4">
+                                                  <div data-mdb-input-init class="form-outline">
+                                                       <input type="text" id="address"
+                                                            class="form-control" required>
+                                                       <label class="form-label" for="form3Example1"><span class="required">*</span>Address</label>
+                                                  </div>
+                                             </div>
                                              <!-- Contact input -->
                                              <div data-mdb-input-init class="form-outline mb-4">
                                                   <div style="display: flex; flex-direction: row; align-items:center;">
@@ -177,7 +183,7 @@
                                                   <label class="form-label" for="password1"><span class="required">*</span>Password</label>
                                                   <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
                                              </div>
-                                             
+                                            
                                              <!-- Confirm Password input -->
                                              <div class="form-outline mb-4 position-relative">
                                                   <input type="password" id="password2" class="form-control" required/>
@@ -307,6 +313,7 @@
                let data = undefined;
                const PatientName = document.getElementById("firstname").value
                const PatientLastName = document.getElementById("lastname").value
+               const PatientAddress = document.getElementById("address").value
                const PatientContactNo = '63' + document.getElementById("contact").value
           
                const PatientEmail = document.getElementById("email").value
@@ -316,7 +323,7 @@
                const PatientPasswordConfirm = document.getElementById("password2").value
                const memberType = document.getElementById("member-type").value
 
-               data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientCategory: memberType}
+               data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientCategory: memberType, PatientAddress}
 
                const contact = document.getElementById("contact-warn");
                
