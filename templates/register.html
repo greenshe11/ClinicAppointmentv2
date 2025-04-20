@@ -172,15 +172,17 @@
                                              </div>
 
                                              <!-- Password input -->
-                                             <div data-mdb-input-init class="form-outline mb-4">
+                                             <div class="form-outline mb-4 position-relative">
                                                   <input type="password" id="password1" class="form-control" required/>
-                                                  <label class="form-label" for="form3Example4"><span class="required">*</span>Password</label>
+                                                  <label class="form-label" for="password1"><span class="required">*</span>Password</label>
+                                                  <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
                                              </div>
-
-                                              <!-- Password input -->
-                                              <div data-mdb-input-init class="form-outline mb-4">
+                                             
+                                             <!-- Confirm Password input -->
+                                             <div class="form-outline mb-4 position-relative">
                                                   <input type="password" id="password2" class="form-control" required/>
-                                                  <label class="form-label" for="form3Example4"><span class="required">*</span>Confirm Password</label>
+                                                  <label class="form-label" for="password2"><span class="required">*</span>Confirm Password</label>
+                                                  <span onclick="togglePassword('password2', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
                                              </div>
                                              <div data-mdb-input-init class="form-outline mb-4">
                                                   <label class="form-label">Patient Type</label>
@@ -236,6 +238,17 @@
      <!-- Section: Design Block -->
      <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
      <script>
+          function togglePassword(fieldId, icon) {
+               const input = document.getElementById(fieldId);
+               if (input.type === "password") {
+                    input.type = "text";
+                    icon.textContent = "Hide"; // change icon to closed-eye
+               } else {
+                    input.type = "password";
+                    icon.textContent = "Show"; // change icon to open-eye
+               }
+          }
+               
           const sendRegistrationMessage = async (contact,fullname) => {
                const url = '/api/sms/registration'; // API endpoint for sending SMS
                const data = { contact,fullname}; // Prepare data for the request

@@ -1,6 +1,6 @@
 from flask import request, jsonify, session
 from flask_cors import cross_origin
-from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, sms_confirmed, sms_reject, sms_resched, sms_after_registration, sms_registration_confirmation
+from utilities.util_functions import pull_from_db, sms_otp, push_to_db, update_db, delete_from_db, sms_confirmed, sms_reject, sms_resched, sms_after_registration, sms_registration_confirmation
 import utilities.util_functions as utils
 
 def sms_routes(self, table_name):
@@ -31,11 +31,19 @@ def sms_routes(self, table_name):
             sms_after_registration(contact=data['contact'], fullname=data['fullname'])
         return jsonify({'success': True})
     
+    @self.app.route('/api/sms/otp', methods=['POST'])
+    @cross_origin(supports_credentials=True)
+    def sms_send_otp():
+        # url parameters will are used for filtering
+        data = request.json
+        
+        sms_otp(contact=data['contact'], otp=data['otp'])
+        return jsonify({'success': True})
+    
     @self.app.route('/api/sms/registration/confirmed', methods=['POST'])
     @cross_origin(supports_credentials=True)
     def sms_send_registration_confirmed():
         # url parameters will are used for filtering
         data = request.json
-        
         sms_registration_confirmation(contact=data['contact'], fullname=data['fullname'])
         return jsonify({'success': True})

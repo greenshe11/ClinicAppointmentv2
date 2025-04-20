@@ -185,6 +185,7 @@
                             <option value="PatientLastName">Last Name</option>
                             <option value="PatientCategory">Patient Type</option>
                         </select>
+                        <button class="btn btn-primary" style="margin-left: 10px; width: 200px" data-bs-toggle="modal" data-bs-target="#customModal">Add a User</button>
                     </div>
                     <div style="align-items:center; flex-direction:column; display:flex;" >
                         <div style="width:100%; justify-content: flex-end; display:flex;">
@@ -199,7 +200,96 @@
                 </div>
                 
             </div>
+<!-- Custom Modal -->
+<div class="modal fade" id="customModal" tabindex="-1" aria-labelledby="customModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="customModalLabel">Add a User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <div class="card">
+                     <div class="card-body py-5 px-md-5">
+                          <form>
+                               <!-- 2 column grid layout with text inputs for the first and last names -->
+                               <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                         <div data-mdb-input-init class="form-outline">
+                                              <input type="text" id="firstname"
+                                                   class="form-control" required>
+                                              <label class="form-label" for="form3Example1"><span class="required">*</span>First
+                                                   name</label>
+                                         </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                         <div data-mdb-input-init class="form-outline">
+                                              <input type="text" id="lastname"
+                                                   class="form-control" required>
+                                              <label class="form-label" for="form3Example2"><span class="required">*</span>Last
+                                                   name</label>
+                                         </div>
+                                    </div>
+                               </div>
 
+                               <!-- Contact input -->
+                               <div data-mdb-input-init class="form-outline mb-4">
+                                    <div style="display: flex; flex-direction: row; align-items:center;">
+                                         <span style="color: gray; margin-right: 10px;">+63</span>
+                                         <input type="text" id="contact" class="form-control" maxlength="10" oninput="validatePhoneNumber()" required/>
+                                    </div>
+                                    <label class="form-label" for="form3Example3"><span class="required">*</span>Contact</label>
+                                    <p id="contact-warn" style="color: red; font-size: 12px;"></p>
+                               </div>
+
+                               <!-- Email input -->
+                               <div data-mdb-input-init class="form-outline mb-4">
+                                   
+                                    <input type="email" id="email" class="form-control" required/>
+                                    
+                                    <label class="form-label" for="form3Example3"><span class="required">*</span>Email address</label>
+                               </div>
+
+                               <!-- Password input -->
+                               <div class="form-outline mb-4 position-relative">
+                                    <input type="password" id="password1" class="form-control" required/>
+                                    <label class="form-label" for="password1"><span class="required">*</span>Password</label>
+                                    <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                               </div>
+                               
+                               <!-- Confirm Password input -->
+                               <div class="form-outline mb-4 position-relative">
+                                    <input type="password" id="password2" class="form-control" required/>
+                                    <label class="form-label" for="password2"><span class="required">*</span>Confirm Password</label>
+                                    <span onclick="togglePassword('password2', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                               </div>
+                               <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label">Patient Type</label>
+                                    <select class="form-select" id="member-type" aria-label="Default select example" onchange="validateApply()">
+                                         <option value="student">student</option>
+                                         <option value="community">community</option>
+                                         <option value="faculty">faculty</option>
+                                         <option value="office staff">office staff</option>
+                                         <!---<option value="staff">staff</option>-->
+                                  </select>
+                               </div>
+                               <!-- Submit button -->
+                               <button id="buttons" type="submit" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-block mb-4 btn-primary"  onclick="register(event)">
+                                    Add User
+                               </button>
+
+                               <!-- Register buttons -->
+                              
+                          </form>
+                     </div>
+                </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
             <!-- Modal for Adding Symptoms -->
 <div class="modal fade" id="regConfirmModal" tabindex="-1" aria-labelledby="regConfirmModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -235,8 +325,13 @@
               <label for="regConfirm_ContactNo" class="form-label">Contact No.</label>
               <input type="text" class="form-control" id="regConfirm_ContactNo" value="63"  oninput="contactOnChange(event)" required>
             </div>
+            <div style="display:flex; flex-direction:row; justify-content:space-between">
+                <button type="button" class="btn btn-danger" id="form-submit-button" onclick="deleteUser(event)">Delete User</button>
+                
+                <button type="button" class="btn btn-primary" id="form-submit-button" onclick="saveChanges(event)">Save Changes</button>
+               
+            </div>
            
-            <button type="button" class="btn btn-primary" id="form-submit-button" onclick="saveChanges(event)">Save Changes</button>
           </form>
         </div>
       </div>
@@ -306,7 +401,144 @@
      <script src="{{ url_for('static',filename='assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
      <script src="{{ url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
 
+    <script>
+        function togglePassword(fieldId, icon) {
+            const input = document.getElementById(fieldId);
+            if (input.type === "password") {
+                 input.type = "text";
+                 icon.textContent = "Hide"; // change icon to closed-eye
+            } else {
+                 input.type = "password";
+                 icon.textContent = "Show"; // change icon to open-eye
+            }
+       }
+            
+        function validatePhoneNumber() {
+            const input = document.getElementById('contact');
+            input.value = input.value.replace(/\D/g, '');  // Removes non-digit characters
+            if (input.value.length > 10) {
+                input.value = input.value.slice(0, 10);    // Ensures max length is 10 digits
+            }
+       }
+       async function register(event){
+        event.preventDefault()
 
+        const form = event.target.closest('form');
+
+        if (!form.checkValidity()){
+             form.reportValidity();
+             return;
+        }
+
+        let data = undefined;
+        const PatientName = document.getElementById("firstname").value
+        const PatientLastName = document.getElementById("lastname").value
+        const PatientContactNo = '63' + document.getElementById("contact").value
+   
+        const PatientEmail = document.getElementById("email").value
+        
+        const contactInput = document.getElementById('contact');
+        const PatientPassword = document.getElementById("password1").value
+        const PatientPasswordConfirm = document.getElementById("password2").value
+        const memberType = document.getElementById("member-type").value
+
+        data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientCategory: memberType, PatientIsConfirmed: 1}
+
+        const contact = document.getElementById("contact-warn");
+        
+      
+        for (let key in data){
+             if (data[key] == ""){
+                  //alert(`${key} cannot be empty` )
+                  return;
+             } 
+        }
+        
+        if (contactInput.value.length < 10){
+             //alert("Contact Number must be 10 digits.")
+             contact.innerHTML = "Contact number must be 10 digits";
+             contactInput.classList.add('invalid-input', 'flash');
+             contactInput.classList.add('is-invalid');
+
+             setTimeout(function() {
+                  contact.innerHTML = ""; // Clear the error message after 3 seconds
+                  contactInput.classList.remove('invalid-input', 'flash');
+             }, 3000);
+
+            
+
+             return null;
+        }
+
+
+        /*
+        if (!validateEmail(PatientEmail)){
+             alert(`Email: ${PatientEmail} is not a valid email.` )
+             return null
+        }
+        */  
+
+
+        if (PatientPassword!=PatientPasswordConfirm){
+             alert("Confirmed password must be the same password!")
+             return null
+        }
+            
+
+        //Submit To API
+     
+        try {
+             const response = await fetch('/api/patient?for=registration', {
+             method: 'POST',
+             headers: {
+             'Content-Type': 'application/json',
+             },
+             body: JSON.stringify(data),
+             });
+   
+             if (!response.ok) {
+                  throw new Error('Network response was not ok');
+             }
+
+             const result = await response.json();
+             console.log(result, "REG RESULT")
+             console.log(result.hasOwnProperty('customError')) // Shows error created from server
+             //Debug
+             
+             if (result.hasOwnProperty('customError')) {
+                  alert( result.customError)
+                  return
+             }
+             
+
+             alert('REGISTRATION IS A SUCCESS!')
+             document.getElementById("firstname").value = ""
+             document.getElementById("lastname").value = ""
+             document.getElementById("contact").value = ""
+        
+             document.getElementById("email").value = ""
+             
+             document.getElementById('contact').value = ""
+              document.getElementById("password1").value = ""
+             document.getElementById("password2").value = ""
+             document.getElementById("member-type").value = "student"
+             $('#customModal').modal('hide')
+             await sendRegistrationMessage(PatientContactNo, `${PatientLastName}, ${PatientName}`)
+             //window.location.href = '/login'
+             // Handle the result (e.g., show a success message to the user)
+        } catch (error) {
+             console.error('Error:', error);
+             // Handle errors (e.g., show an error message to the user)
+        }
+       
+
+        
+
+        
+   };
+
+
+    </script>
      <!-- Main JS File -->
      <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
      <script type="module">
@@ -473,6 +705,40 @@
             console.error('Error:', error);
             alert("An error occurred while sending sms confirmation");
     }
+
+    }
+
+    window.deleteUser = async (event) => {
+        event.preventDefault()
+        console.log(selectedUserId, "id")
+        const userData = (await (await fetch(`/api/patient?Patient_ID=${selectedUserId}`)).json())[0]
+        const confirmed = confirm("This action is irreversible. Are you sure you want to delete this user?")
+        if (!confirmed){return}
+        console.log(userData, 'userdata')
+        const data = {
+            Patient_ID: userData?.Patient_ID,
+            PatientName:document.getElementById("regConfirm_FirstName").value,
+            PatientLastName: document.getElementById("regConfirm_LastName").value,
+            PatientContactNo: document.getElementById("regConfirm_ContactNo").value,
+            PatientCategory: document.getElementById("regConfirm_PatientType").value,
+        }
+        console.log('sent data', data)
+        try{
+            const response = await fetch('/api/patient', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            console.log(await response.json())
+            alert("A user has been successfully removed.")
+            $('#regConfirmModal').modal('hide')
+            getProfiles()
+        }catch(error){
+            console.error('Error:', error);
+            alert("An error occurred while editing patient information.");
+        }
 
     }
     window.ConfirmRegistration = async (event) => {

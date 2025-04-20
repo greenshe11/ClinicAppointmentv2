@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+     <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+          <style>
+            .divider:after,
+            .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+            }
+            .h-custom {
+            height: calc(100% - 73px);
+            }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+            }
+            #buttons {
+              background-color: #00008b;
+              color: white;
+            }
+
+            body {
+              background: linear-gradient(to right, #00008b,  #87CEEB);
+              font-family: 'Roboto', sans-serif;
+              padding: 20px;
+            }
+
+            label {
+              color: white;
+            }
+
+            p {
+              color: white;
+            }
+
+            #fg-pass {
+              color: #00008b;
+            }
+
+            #logo {
+              opacity: 0;
+              padding: 20px;
+              animation: logo-animation 1s ease-in-out forwards;
+            }
+
+            @keyframes logo-animation {
+              from {
+                opacity: 0;
+                transform: translateX(-100px);
+              }
+              to{
+                opacity: 1;
+                transform: translateX(0px)
+              }
+            }
+
+
+            /* Invalid Input Effect */
+          .invalid-input {
+               border: 2px solid red;
+               animation: shake 0.3s ease-in-out;
+          }
+
+          /* Shake Animation */
+          @keyframes shake {
+               0% {
+                    transform: translateX(0);
+               }
+
+               25% {
+                    transform: translateX(-5px);
+               }
+
+               50% {
+                    transform: translateX(5px);
+               }
+
+               75% {
+                    transform: translateX(-5px);
+               }
+
+               100% {
+                    transform: translateX(0);
+               }
+          }
+
+          /* Flash Animation */
+          @keyframes flash {
+
+               0%,
+               100% {
+                    background-color: white;
+               }
+
+               50% {
+                    background-color: #ffcccc;
+               }
+          }
+
+          /* Red Flash Effect */
+          .flash {
+               animation: flash 0.8s ease-in-out;
+          }
+
+          </style>
+     </head>
+
+     <body>
+          
+          <section class="vh-100">
+               <div class="container-fluid h-custom">
+                 <div class="row d-flex justify-content-center align-items-center h-100">
+                   <div class="col-md-9 col-lg-6 col-xl-5">
+                     <a href="/"><img id="logo" src="{{ url_for('static',filename='assets/logo.png')}}"
+                       class="img-fluid" alt="Sample image"></a>
+                   </div>
+                   <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                     <form onsubmit="return false">
+                       <!--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                         <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                         <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-facebook-f"></i>
+                         </button>
+             
+                         <button  id="buttons" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-twitter"></i>
+                         </button>
+             
+                         <button  id="buttons" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-floating mx-1">
+                           <i class="fab fa-linkedin-in"></i>
+                         </button>
+                       </div>
+             
+                       <div class="divider d-flex align-items-center my-4">
+                         <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                       </div>-->
+             
+                       <!-- Email input -->
+                       <h2 id="contact-header" style="color:white; display: none">Password Reset</h2>
+                       <h2 id="otp-header" style="color:white; display:none">Enter OTP</h2>
+                       <h2 id="password-header" style="color:white;display:none">Enter New Password</h2>
+                       <h4 id="password-email" style="color:white;display:none"></h4>
+                       <!-- Password input -->
+                       <div id="contact-input" data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" id="email" class="form-control form-control-lg"
+                          placeholder="Enter a valid email address" />
+                        <label class="form-label" for="email" >Email address</label>
+                      </div>
+                       
+                       <!-------------------->
+                        <!-------------------->
+                       <div id="otp-input" data-mdb-input-init class="form-outline mb-3" style="display:none" >
+                        <div style="display: flex; flex-direction: row; align-items:center;"> 
+                          <input type="text" id="otp" class="form-control" maxlength="10" placeholder="5-digit code" oninput="validateOTP()" required/>
+                            
+                      </div>
+                        <label class="form-label" for="email" id="otp-label"></label><br>
+                        <button class="btn btn-primary" id="send-otp" onclick="sendNewOtp()">Send new OTP</button><span style="margin-left: 10px; color:white;" id="otp-cooldown">in 5 seconds</span>
+                      </div>
+                       <!-------------------->
+                        <!-------------------->
+                       <!-- Password input -->
+                       <div id="password-input" style="display:none">
+                        <!-- New Password -->
+                        <div data-mdb-input-init class="form-outline mb-4 position-relative">
+                          <input type="password" id="password1" class="form-control" />
+                          <label class="form-label" for="password1"><span class="required">*</span>New Password</label>
+                          <span onclick="togglePassword('password1', this)" class="toggle-password"
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                        </div>
+                      
+                        <!-- Confirm New Password -->
+                        <div data-mdb-input-init class="form-outline mb-4 position-relative">
+                          <input type="password" id="password2" class="form-control" />
+                          <label class="form-label" for="password2"><span class="required">*</span>Confirm New Password</label>
+                          <span onclick="togglePassword('password2', this)" class="toggle-password"
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                        </div>
+                      </div>
+                      
+
+                         <!-------------------->
+                       <!--<div class="d-flex justify-content-between align-items-center">
+                         <!-
+                         <div class="form-check mb-0">
+                           <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                           <label class="form-check-label" for="form2Example3">
+                             Remember me
+                           </label>
+                         </div>
+                         <a id="fg-pass" href="#!">Forgot password?</a>
+                       </div>-->
+             
+                       <div id="contact-submit" class="text-center text-lg-start mt-4 pt-2" style="display:none">
+                         <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
+                           style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="showStage2OTP()">Send OTP</button>
+                     
+                       </div>
+                       <div id="otp-submit" class="text-center text-lg-start mt-4 pt-2" style="display:none">
+                        <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
+                          style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="showStage3Password()">Reset Password</button>
+                    
+                      </div>
+                      <div id="password-submit" class="text-center text-lg-start mt-4 pt-2" style="display:none">
+                        <button id="buttons"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
+                          style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="resetPassword()">Set New Password</button>
+                    
+                      </div>
+             
+                     </form>
+                   </div>
+                 </div>
+               </div>
+               
+             </section>
+          <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
+          <script>
+            function togglePassword(fieldId, icon) {
+              const input = document.getElementById(fieldId);
+              if (input.type === "password") {
+                input.type = "text";
+                icon.textContent = "Hide"; // Show 'hide' icon
+              } else {
+                input.type = "password";
+                icon.textContent = "Show"; // Show 'show' icon
+              }
+            }
+            </script>
+            
+          <script>
+            let cooldownSeconds = 0
+            let contact = ""
+            function validateOTP() {
+              const input = document.getElementById('otp');
+              input.value = input.value.replace(/\D/g, '');  // Removes non-digit characters
+              if (input.value.length > 5) {
+                  input.value = input.value.slice(0, 5);    // Ensures max length is 10 digits
+              }
+            }
+
+            function validatePhoneNumber() {
+              const input = document.getElementById('contact');
+              input.value = input.value.replace(/\D/g, '');  // Removes non-digit characters
+              if (input.value.length > 10) {
+                  input.value = input.value.slice(0, 10);    // Ensures max length is 10 digits
+              }
+            }
+            async function sendNewOtp(){
+              const contactNo = contact
+              try{
+                const response = await fetch('/api/otp_create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({contact:`${contactNo}`})
+                })
+                
+                const responseJson = await response.json()
+                if (!responseJson.success){
+                  throw new Error()
+                }else{
+                  alert("OTP Sent")
+                  setCooldown()
+                }
+              }catch(error){
+                  console.error('Error:', error);
+                  alert('An error has occured!');
+              }
+            }
+            async function showStage2OTP(){
+              const email = document.getElementById("email").value
+              const response = await fetch(`/api/patient?PatientEmail=${email}`);
+              const data = await response.json();
+              const patient = data[0];
+              console.log("TARGET PATIENT", patient, data, patient, response, email);
+              if (!patient){
+                alert(`Account with ${email} does not exist.`)
+                return
+              }
+              contact = patient.PatientContactNo
+              console.log("target contact:", contact)
+              document.getElementById("contact-header").style.display = 'none'
+              document.getElementById("contact-input").style.display = 'none'
+              document.getElementById("contact-submit").style.display = 'none'
+              document.getElementById("otp-header").style.display = 'block'
+              document.getElementById("otp-input").style.display = 'block'
+              document.getElementById("otp-submit").style.display = 'block'
+              
+              document.getElementById("otp-label").innerHTML = `We sent an sms to +63******${contact?.slice(-3)}`
+              sendNewOtp()
+              setCooldown()
+            }
+            setInterval(()=>{
+            
+              if (cooldownSeconds==0){
+                document.getElementById("send-otp").disabled = false
+                document.getElementById("otp-cooldown").innerHTML = ``
+              }else{
+                cooldownSeconds = cooldownSeconds>0?cooldownSeconds - 1:0
+                document.getElementById("otp-cooldown").innerHTML = `in ${cooldownSeconds} seconds`
+              }
+            }, 1000)
+            function setCooldown(){
+              document.getElementById("send-otp").disabled = true
+              cooldownSeconds = 30
+            }
+            function showStage1Contact(){
+              //document.getElementById("contact").value = ""
+              document.getElementById("contact-header").style.display = 'block'
+              document.getElementById("contact-input").style.display = 'block'
+              document.getElementById("contact-submit").style.display = 'block'
+             
+            }
+
+            async function resetPassword(){
+              const password1 = document.getElementById("password1").value
+              const password2 = document.getElementById("password2").value
+              console.log("PASS", password1, password2)
+              if ((password1==password2)&&password2&&password1){
+                const contactNo = contact
+                const otp = document.getElementById("otp").value
+                try{
+                    const response = await fetch('/api/otp_reset', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({contact:`${contactNo}`, otp, password: password1})
+                    })
+                    
+                    const responseJson = await response.json()
+                    if (!responseJson.success){
+                      return
+                      throw new Error()
+                      
+                    }else{
+                      alert("Password updated! You may now login using your new password")
+                      location.href  = "/login"
+                    }
+                }catch(error){
+                    console.error('Error:', error);
+                    alert('An error has occured.', error);
+                }
+              }else{
+                alert("Password must be the same.")
+              }
+            }
+            async function showStage3Password(){
+              const contactNo = contact
+              const otp = document.getElementById("otp").value
+              try{
+                  const response = await fetch('/api/otp_compare', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({contact:`${contactNo}`, otp})
+                  })
+                  
+                  const responseJson = await response.json()
+                  if (!responseJson.success){
+                    alert("Incorrect OTP Code")
+                    return
+                    throw new Error()
+                    
+                  }else{
+                    alert("OTP Confirmed")
+                    document.getElementById("otp-header").style.display = 'none'
+                    document.getElementById("otp-input").style.display = 'none'
+                    document.getElementById("otp-submit").style.display = 'none'
+                     document.getElementById("password-header").style.display = 'block'
+                     document.getElementById("password-email").style.display = 'block'
+                      document.getElementById("password-input").style.display = 'block'
+                     document.getElementById("password-submit").style.display = 'block'
+                  }
+              }catch(error){
+                  console.error('Error:', error);
+                  alert('Incorrect OTP', error);
+                  return
+              }
+
+            
+              
+            }
+            
+            showStage1Contact()
+            function toRegister(){
+                    window.location.href = '/register';
+               }
+
+               async function login0(){
+                    const PatientEmail = document.getElementById("email").value
+                    const PatientPassword = document.getElementById("password").value
+                    const passwordInput = document.getElementById('password');
+                    const data = {PatientEmail, PatientPassword}
+                    try {
+                         const response = await fetch('/api/patient?for=login', {
+                         method: 'POST',
+                         headers: {
+                         'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify(data),
+                         });
+               
+                         if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                         }
+
+                         const result = await response.json();
+                         console.log(result.hasOwnProperty('customError'))
+                         if (result.hasOwnProperty('customError')) {
+                              alert(result.customError)
+                              passwordInput.classList.add('invalid-input', 'flash');
+                              passwordInput.classList.add('is-invalid');
+
+                              setTimeout(() => {
+                                    passwordInput.classList.remove('invalid-input', 'flash');
+                              }, 800);
+                              return 
+                         }
+                         
+                         alert("LOGIN IS A SUCCESS!")
+                         window.location.replace('/')
+                         // Handle the result (e.g., show a success message to the user)
+                    } catch (error) {
+                         
+                         console.error('Error:', error);
+                         // Handle errors (e.g., show an error message to the user)
+                    }
+               };
+          </script>
+     </body>
+</html>

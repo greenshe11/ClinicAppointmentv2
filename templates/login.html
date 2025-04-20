@@ -150,13 +150,13 @@
                          <label class="form-label" for="email">Email address</label>
                        </div>
              
-                       <!-- Password input -->
-                       <div data-mdb-input-init class="form-outline mb-3">
-                         <input type="password" id="password" class="form-control form-control-lg"
-                           placeholder="Enter password" />
-                         <label class="form-label" for="password">Password</label>
-                       </div>
-                       
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-3 position-relative">
+                      <input type="password" id="password" class="form-control form-control-lg" placeholder="Enter password" />
+                      <label class="form-label" for="password">Password</label>
+                      <span onclick="togglePassword('password', this)" class="toggle-password"
+                            style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                    </div>
                        <!--<div class="d-flex justify-content-between align-items-center">
                          <!-
                          <div class="form-check mb-0">
@@ -173,6 +173,9 @@
                            style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="login0()">Login</button>
                          <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/register"
                              class="link-danger">Register</a></p>
+                             <p class="small fw-bold mt-2 pt-1 mb-0">Forgot Password?
+                              <a href="/resetPassword"
+                              class="link-danger">Reset it here.</a></p>
                        </div>
              
                      </form>
@@ -182,6 +185,19 @@
                
              </section>
           <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
+          <script>
+            function togglePassword(fieldId, icon) {
+                const input = document.getElementById(fieldId);
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.textContent = "Hide"; // optional: hide icon
+                } else {
+                    input.type = "password";
+                    icon.textContent = "Show"; // optional: show icon
+                }
+            }
+            </script>
+            
           <script>
             function toRegister(){
                     window.location.href = '/register';

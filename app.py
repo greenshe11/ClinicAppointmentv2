@@ -14,6 +14,7 @@ from api.sms import sms_routes
 from api.session import session_routes
 from api.symptoms import symptoms_routes
 from api.staff import staff_routes
+from api.otp import otp_routes
 
 # utils
 from utilities import util_functions as util
@@ -84,10 +85,20 @@ class App:
                 print("NO USER LOGGED IN")
                 return redirect('/')
             try:
-                return render_template('login.html') #kas?
+                return render_template('login.html') 
             except Exception as e:
                 return f"Error: {e}", 500
-
+            
+        @self.app.route('/resetPassword')
+        def patient_otp(): #login page
+            """Go to Home if logged in else go to login.html"""
+            if not util.no_user_logged_in():
+                print("NO USER LOGGED IN")
+                return redirect('/')
+            try:
+                return render_template('reset.html')
+            except Exception as e:
+                return f"Error: {e}", 500
         @self.app.route('/register')
         def patient_register():  # registration page
             if not util.no_user_logged_in(): # proceeds to home if logged in
@@ -96,7 +107,7 @@ class App:
                 return render_template('register.html')
             except Exception as e:
                 return f"Error: {e}", 500
-           
+    
         @self.app.route('/home')
         def patient_home():
             if util.no_user_logged_in(): #proceeds to login page if not logged in
@@ -233,6 +244,7 @@ class App:
         session_routes(self)
         symptoms_routes(self, 'tblsymptoms')
         staff_routes(self, 'tblstaff')
+        otp_routes(self, "tblotp")
 
     def run(self):
         """Run the Flask application."""

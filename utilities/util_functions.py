@@ -313,6 +313,7 @@ api_instance = clicksend_client.SMSApi(clicksend_client.ApiClient(configuration)
 def send_message(contact, message):
     print("MESSAGE SENT", message)
     # If you want to explictly set from, add the key _from to the message.
+    
     sms_message = SmsMessage(source="php",
                             body=message,
                             to="+"+contact)
@@ -325,6 +326,10 @@ def send_message(contact, message):
         print("Exception when calling SMSApi->sms_send_post: %s\n" % e)
     return True
 
+def sms_otp(contact, otp):
+    send_message(contact, f"""ISAT-U Med Clinic
+Your OTP is {otp}.""")
+    
 def sms_after_registration(contact, fullname, *args, **kwargs):
     send_message(contact, f"""Hello {fullname}! your account is being verified. Please wait before logging in. – ISAT-U Medical Clinic, Burgos St., La Paz, Iloilo City.
 """)
