@@ -34,7 +34,50 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/main.css')}}">
 </head>
+<style>
+    .switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
 
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+</style>
 <body >
     <!--Start hello-->
     
@@ -69,7 +112,6 @@
                             </li>
                             <li class="text-white"><a href="/staffsymptoms">Manage Symptoms</a></li>
                         </li>
-                       <li><a href="/profile" class="">Account</a></li>
                        <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                       
                      </ul>
@@ -77,12 +119,20 @@
                  </nav>
 
                  <!--<a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>-->
-                 <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
-                    <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                 <div style="border-width: 1px; border-color: white; border-radius: 16px;; border-style: solid;margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none; border: none; color: white;">
+                    <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" id="account-icon" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                    <div style="flex-direction:column; margin-right: 10px;">
+                      <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span>
+                      <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
+                    </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" onclick="logout()" href="/" style="color:red" >Logout</a></li>
+                  </ul>
                   
-                    <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
-                  
-                  </div>  
+                  </div>   
 
                
             </div>
@@ -155,14 +205,26 @@
             <div class="card-header py-3">
                 <p class="text-primary m-0 fw-bold">Schedule Info</p>
             </div>
-            <div style="display:flex; width: 250px; margin-left: 20px; margin-top: 10px;flex-direction:row; align-items:center;">
-                <span style="width: 80px;">Sort By</span>
-                <select class="form-control" id="schedule-sortby" required>
-                    <option value="datetime">Datetime</option>
-                    <option value="request">Request</option>
-                   
+            <div style="width: 100%;  display: flex; flex-direction:row;justify-content: space-between">
+                <div style="display:flex; width: 250px; margin-left: 20px; margin-top: 10px;flex-direction:row; align-items:center;">
+                    <span style="width: 80px;">Sort By</span>
+                    <select class="form-control" id="schedule-sortby" required>
+                        <option value="datetime">Datetime</option>
+                        <option value="request">Request</option>
                     
-                </select>
+                        
+                    </select>
+                    
+                </div>
+                <div style="align-items:center; flex-direction:column; display:flex;  justify-content:center;; padding: 16px;">
+                    <div style="width:100%; justify-content: flex-end; align-items:center; display:flex;">
+                        <span >Exclude Lapsed Records</span>
+                        <label style="margin-left: 8px;" class="switch">
+                            <input type="checkbox" id="toggleSwitch" onchange="useFilter()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 
@@ -251,8 +313,37 @@
         }
 
         applyProfile()
+         // show pending count notif
+       window.logout = async () => {
+        try {
+            const response = await fetch('/api/patient?for=logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            if (result.hasOwnProperty('customError')) {
+                window.location.href = '/login';
+                alert(result.customError);
+                return;
+            }
+    
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Error:', error);
+            window.location.href = '/home';
+        }
+    }
    </script>
 <script type="module">
+   
     // Imports necessary modules and functions for handling calendar and appointment data
     import {
         CalendarSelection,
@@ -425,9 +516,9 @@
     /**
     * Update pagination display based on the current page and total appointments.
     */
-    const setPaginationNumber = async () => {
+    const setPaginationNumber = async (count) => {
         const statement = document.getElementById('dataTable_info'); // Reference to the pagination info element
-        const count = appointments.length
+        count = count?count:appointments.length
         statement.innerHTML = ""; // Clear previous info
         let finalLength = itemsPerPage * currentPage; // Calculate the final item index to display
         finalLength = finalLength >= count ? count: finalLength; // Ensure it does not exceed total appointments
@@ -517,8 +608,13 @@
             const lastName = patientInfo ? patientInfo.PatientLastName : undefined; // Get last name
             const category = patientInfo ? patientInfo.PatientCategory : undefined
             const fullname = `${lastName}, ${firstName}`
+            const dateIso = new Date(year, month - 1, day, time, minutes);
             // Function to return HTML for displaying appointment status and action buttons
-            const useFilter = (monthNum, lastName, firstName, year, status) => {
+            const useFilter = (monthNum, lastName, firstName, year, status, dateIso) => {
+                let excludeLapsed = document.getElementById("toggleSwitch")
+                if ((new Date() - dateIso > 0)&&excludeLapsed.checked){
+                    return false
+                }
                 let monthFilter = document.getElementById("month-filter").value
                 monthFilter = monthFilter=="0"?monthNum:monthFilter
                 if (!(monthNum==monthFilter)){
@@ -549,7 +645,7 @@
                 return true
 
             }
-            if (!useFilter(month, lastName, firstName, year.toString(), status)){
+            if (!useFilter(month, lastName, firstName, year.toString(), status, dateIso)){
                 continue
             }else{
                 count+=1
@@ -595,7 +691,7 @@
         console.log("COUNT", count)
         const btnUpdated = document.getElementsByClassName('resched'); // Re-update button elements for calendar selection
         setCalendarButtonOpeners(btnUpdated); // Initialize calendar button functionality
-        setPaginationNumber(); // Update pagination display
+        setPaginationNumber(count); // Update pagination display
     };
     
     /**
@@ -681,7 +777,6 @@
     }
     // Expose showModal function globally for use in HTML
     window.showModal = showModal;
-
     
 </script>
 

@@ -120,5 +120,6 @@ def patient_routes(self, table_name):
     def patient_delete():
         data = request.json
         print(data)
+        delete_from_db(self, data, "tblappointment", filter_names=["Patient_ID"])
         return delete_from_db(self, data, table_name, filter_names = ['Patient_ID'])
     

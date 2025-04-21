@@ -30,12 +30,33 @@
                                 <tbody id="dr-calendar-body"></tbody>
                             </table>
                         </div>
+                       
                         <div id="dr-actions">
+                            <div style="display: flex; flex-direction: column ">
+                                <div style="display: flex; flex-direction: row; align-items:center;">
+                                    <div style="width: 15px; height: 15px; background-color: #B2B2B2; margin-right: 8px;">
+                                        
+                                    </div>
+                                    <span>(Lapsed) Not Available </span>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items:center;">
+                                    <div style="width: 15px; height: 15px; background-color: red; margin-right: 8px;">
+                                        
+                                    </div>
+                                    <span>(Closed) Not Available </span>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items:center;">
+                                    <div style="width: 15px; height: 15px; background-color: white; border-width: 1px; border-color: gray; border-style:solid; margin-right: 8px;">
+                                        
+                                    </div>
+                                    <span>(Vacant) Available </span>
+                                </div>
+                            </div>
                             <div id="dr-event-section">
                                 <div class="dr-footer-container-calendar dr-set-time">
                                     <label for="dr-month1">Time: </label>
                                     <!-- Dropdowns to select a specific time -->
-                                    <select id="dr-month1" class="dr-hoursChoices" onchange="onChangeTime(event)">
+                                    <select id="dr-month1" class="dr-hoursChoices" onchange="onChangeTime(event)" >
                                     </select>
                                 </div>
                             </div>

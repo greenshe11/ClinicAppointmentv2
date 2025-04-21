@@ -186,6 +186,17 @@ function fetchAppointments(month, year, day, callback){
     });
 }
 
+function EnableSetButton(){
+    document.getElementById("dr-confirm-button").style.opacity = 1
+    document.getElementById("dr-confirm-button").innerHTML = "Set Appointment"
+    document.getElementById('dr-month1').style.borderWidth = "1px"
+}
+
+function disabledSetButton(){
+    document.getElementById("dr-confirm-button").style.opacity = 0.7
+    document.getElementById('dr-month1').style.borderWidth = "5px"
+    document.getElementById("dr-confirm-button").innerHTML = "Select a Date"
+}
 /**
  * @description sets ui to contain hours available for appointment
  */
@@ -198,7 +209,13 @@ function timeChooser(time) {
     if (time.length  <= 0){
         selected.time = null
         selected.minutes = null
+        disabledSetButton()
+        document.getElementById('dr-month1').style.borderColor = "pink"
+
         return
+    }else{
+        EnableSetButton()
+         document.getElementById('dr-month1').style.borderColor = "black"
     }
     
     if (dropDowns.length > 0) {
@@ -218,6 +235,7 @@ function timeChooser(time) {
         dropDown.innerHTML = initial;
     try{
         const valuee = document.getElementById('dr-month1').childNodes[0].value
+    
         console.log(valuee, "VALUEEEE")
         selected.time = valuee.split(":")[0]
         selected.minutes = valuee.split(":")[1]
@@ -279,7 +297,9 @@ function showCalendar(month, year, monthData) {
     let firstDay = new Date(year, month, 1).getDay();
     let tbl = document.getElementById("dr-calendar-body");
     tbl.innerHTML = "";
-
+    document.getElementById('dr-month1').style.borderWidth = "5px"
+    document.getElementById('dr-month1').style.borderColor = "pink"
+    disabledSetButton()
     let newRow = document.createElement('tr')
     for (let i = 0; i < days.length; i++) {
         const newCell = document.createElement('td');
@@ -447,6 +467,7 @@ function outsideClickListener(event) {
         }
     }
 }
+
 
 /**
  * @description Runs when changing time

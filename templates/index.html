@@ -51,18 +51,17 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="active">Home</a></li>
-                          <li><a href="/schedule" class="" id="schedule-title">View Appointments</a>
-                            <div id="pending-count-container" style="display: none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                          <li><a href="/schedule" class="" id="schedule-title" style="margin-right: -15px;">View Appointments</a>
+                            <div id="pending-count-container" style="display: none;right: -10px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                               <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                           </div></li>
                           <li id="reg-confirm-container">
 
                           </li>
                           
-                          <div id="manage-symptoms-container" style="margin-left: 10px;">
+                          <div id="manage-symptoms-container" >
                            
                           </div>
-                          <li><a href="/profile" class="">Account</a></li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                           
                         </ul>
@@ -70,13 +69,19 @@
                     </nav>
 
                     <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
-                    <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                    <div id="account-menu" style="border-width: 1px; border-color: white; border-radius: 16px;; border-style: solid;margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                      <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none; border: none; color: white;">
                       <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" id="account-icon" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
                       <div style="flex-direction:column; margin-right: 10px;">
                         <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span><br id="user-name-br">
                         <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
                       </div>
-                      
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                        <li><a class="dropdown-item" href="/profile" id="account-button">Account</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" onclick="logout()" href="/" style="color:red" >Logout</a></li>
+                    </ul>
                     
                     </div>   
                </div>
@@ -575,6 +580,33 @@
         
       }, 50)
        // show pending count notif
+       window.logout = async () => {
+        try {
+            const response = await fetch('/api/patient?for=logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            if (result.hasOwnProperty('customError')) {
+                alert(result.customError);
+                window.location.href = '/login';
+                return;
+            }
+    
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Error:', error);
+            window.location.href = '/login';
+        }
+    }
     async function getRegistrationPendingCount(){
       const patients = (await (await fetch("/api/patient")).json())
       let count = 0;
@@ -594,22 +626,28 @@
 
       async function applyProfile(){
 
-
+       
         let data = await getUserData()
 
        
         let count = 0;
         data = data[0]
         const session = await getSession()
-
+        const accountMenu = document.getElementById("account-menu")
         //Hiding the account icon if it is not logged in
         if (typeof session['isStaff'] === 'undefined' && typeof data === 'undefined') {
           document.getElementById('account-icon').style.display = 'none';
+          accountMenu.style.backgroundColor = "white"
+          accountMenu.innerHTML = `<button class="btn" onclick='location.href="/login"'>Login / Signup</button>`
        
         }
         
         document.getElementById("reg-confirm-container").style.position = "absolute"
+        const accountBtn = document.getElementById("account-button")
+        
         if (session["isStaff"]){
+       
+          accountBtn.innerHTML = ""
           document.getElementById("reg-confirm-container").style.position = "relative"
           document.getElementById("reg-confirm-container").innerHTML = `
             <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>

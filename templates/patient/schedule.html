@@ -54,23 +54,29 @@
                    <nav id="navmenu" class="navmenu">
                     <ul>
                      <li><a href="/" class="">Home</a></li>
-                     <li><a href="/schedule" class="active" id="schedule-title">View Appointments</a></li>
-                     <li><a href="/profile" class="">Account</a></li>
-                     <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                     <li><a href="/schedule" class="active" id="schedule-title" style="margin-right: -16px;">View Appointments</a></li>
+                     <li id="appointment-btn" style="display: none; margin-left: -16px;"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                      
                    </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
                </nav>
 
                <a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>
-               <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
-                <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
-              
+               <div style="border-width: 1px; border-color: white; border-radius: 16px;; border-style: solid;margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none; border: none; color: white;">
+                <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" id="account-icon" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
                 <div style="flex-direction:column; margin-right: 10px;">
-                    <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left;" ></span><br>
-                    <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
-                  </div>
-              </div>  
+                  <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span><br id="user-name-br">
+                  <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
+                </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                  <li><a class="dropdown-item" href="/profile">Account</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" onclick="logout()" href="/" style="color:red" >Logout</a></li>
+              </ul>
+              
+              </div>   
 
                 
              </div>
@@ -169,6 +175,34 @@
 <script type="module">
     import "/static/components/sidebar/script.js";
     Sidebar(document.getElementById('home-sidebar-insert-area'))
+    window.logout = async () => {
+        try {
+            const response = await fetch('/api/patient?for=logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            if (result.hasOwnProperty('customError')) {
+                 window.location.href = '/login';
+                alert(result.customError);
+
+                return;
+            }
+    
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Error:', error);
+            window.location.href = '/login';
+        }
+    }
 </script>
 
 
