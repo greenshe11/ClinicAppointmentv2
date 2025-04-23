@@ -904,7 +904,7 @@
             // Render data to HTML elements
             document.getElementById('sum-datetime').innerHTML = `${monthName} ${day}, ${year} @ ${sessionData.appointment_timeName}`
             document.getElementById('sum-name').innerHTML = `${userData.PatientLastName}, ${userData.PatientName}`
-            document.getElementById('sum-email').innerHTML = `${userData.PatientEmail}`
+            document.getElementById('sum-email').innerHTML = `${userData.PatientUsername}`
             document.getElementById('sum-contact').innerHTML = `${userData.PatientContactNo}`
             document.getElementById('sum-symptoms').innerHTML = `${symptomsString}`
             document.getElementById('sum-response').innerHTML = `${response}`
@@ -959,7 +959,7 @@
                     </p>
                     <p><b>Name: </b><span id="sum-name"></span>
                     </p>
-                    <p><b>Email: </b><span id="sum-email"></span>
+                    <p><b>Username: </b><span id="sum-email"></span>
                     </p>
                     <p><b>Contact No: </b><span id="sum-contact"></span>
                     </p>

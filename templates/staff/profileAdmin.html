@@ -57,7 +57,7 @@
                                        <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                                    </div>
                                </li>
-                         <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
+                         <li class="text-white"  id="manage-staff-link" style="display: none"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
                           <li><a href="/profile" class="active">Account</a>
                          </li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
@@ -67,18 +67,13 @@
                          <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
                     </nav>
 
-                    <div class="dropdown d-none d-sm-block" style="margin-left: 20px; align-items: center; display:flex; justify-content:center; position: relative;">
-                         <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none; border: none; color: white;">
-                             <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
-                             <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
-                         </button>
-                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                             <li><a class="dropdown-item" href="/profile">Profile</a></li>
-                             <li><a class="dropdown-item" href="/settings">Settings</a></li>
-                             <li><hr class="dropdown-divider"></li>
-                             <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                         </ul>
-                     </div>
+                    <!--<a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>-->
+                    <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                         <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                       
+                         <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
+                       
+                       </div>  
 
                   
                </div>

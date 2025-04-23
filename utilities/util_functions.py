@@ -293,6 +293,8 @@ def sort_dates(patients):
 def user_is_staff():
     return get_session('isStaff')
 
+def user_is_admin():
+    return get_session('isAdmin')
 import requests
 from twilio.rest import Client
 from dotenv import load_dotenv

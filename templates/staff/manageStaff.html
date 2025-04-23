@@ -125,13 +125,13 @@
                             </div>
                         </li>
                         <li>
-                            <a href="/regconfirm" id="reg-confirm-title" class="active">View Registrants</a>
+                            <a href="/regconfirm" id="reg-confirm-title">View Registrants</a>
                             <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                                 <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                             </div>
                         </li>
                         <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
-                        <li class="text-white"  id="manage-staff-link" style="display: none"><a href="/managestaff">Manage Staff</a></li>
+                        <li class="text-white"><a href="/managestaff" class="active">Manage Staff</a></li>
                        
                        <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                       
@@ -171,7 +171,7 @@
       
     <div id="home-container" style="margin-top: 50px;">
         <div id="home" class="container-fluid" >
-            <h1 class="title-opening" style="font-size: 30px;">All Registrants</h1>
+            <h1 class="title-opening" style="font-size: 30px;">Manage Staff</h1>
         </div>
          
     </div>
@@ -185,7 +185,7 @@
                 <!--<p class="text-primary m-0 fw-bold">Manage Patients</p>-->
                 <div style="width: 100%; justify-content: space-between; display: flex;">
                     <div style="display:flex; flex-direction:row; align-items:center;">
-                        <span style="width: 100px;">Sort By</span>
+                        <span style="width: 150px;">Sort By</span>
                         <select class="form-control" id="reg-confirm-sortby" required>
                             <option value="?">Last Created</option>
                             <option value="PatientIsConfirmed">Verification</option>
@@ -193,18 +193,9 @@
                             <option value="PatientLastName">Last Name</option>
                             <option value="PatientCategory">Patient Type</option>
                         </select>
-                        <!--button class="btn btn-primary" style="margin-left: 10px; width: 200px" data-bs-toggle="modal" data-bs-target="#customModal">Add a User</button>-->
+                        <button class="btn btn-primary" style="margin-left: 10px; width: 300px" data-bs-toggle="modal" data-bs-target="#customModal">Add Staff Account</button>
                     </div>
-                    <div id="autoconfirm-div" style="align-items:center; flex-direction:column; display:none;">
-                        <div style="width:100%; justify-content: flex-end; display:flex;">
-                            <span >Auto-Confirm</span>
-                            <label style="margin-left: 8px;" class="switch">
-                                <input type="checkbox" id="toggleSwitch">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <p style="font-size: small; color: gray; height: 16px; text-align:right;"><i>Auto-confirms incoming registrants<br>and no registration SMS will be sent to the users.</i></p>
-                    </div>
+                    
                 </div>
                 
             </div>
@@ -213,205 +204,77 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="customModalLabel">Add a User</h5>
+          <h5 class="modal-title" id="customModalLabel">Add Staff Account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="col-lg-12 mb-5 mb-lg-0">
-                <div class="card">
-                     <div class="card-body py-5 px-md-5">
-                          <form>
-                               <!-- 2 column grid layout with text inputs for the first and last names -->
-                               <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                         <div data-mdb-input-init class="form-outline">
-                                              <input type="text" id="firstname"
-                                                   class="form-control" required>
-                                              <label class="form-label" for="form3Example1"><span class="required">*</span>First
-                                                   name</label>
-                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                         <div data-mdb-input-init class="form-outline">
-                                              <input type="text" id="lastname"
-                                                   class="form-control" required>
-                                              <label class="form-label" for="form3Example2"><span class="required">*</span>Last
-                                                   name</label>
-                                         </div>
-                                    </div>
-                               </div>
-                               <div class="col-md-12 mb-4">
-                                <div data-mdb-input-init class="form-outline">
-                                     <input type="text" id="address"
-                                          class="form-control" required>
-                                     <label class="form-label" for="form3Example1"><span class="required">*</span>Address</label>
-                                </div>
-                           </div>   
-                               <!-- Contact input -->
-                               <div data-mdb-input-init class="form-outline mb-4">
-                                    <div style="display: flex; flex-direction: row; align-items:center;">
-                                         <span style="color: gray; margin-right: 10px;">+63</span>
-                                         <input type="text" id="contact" class="form-control" maxlength="10" oninput="validatePhoneNumber()" required/>
-                                    </div>
-                                    <label class="form-label" for="form3Example3"><span class="required">*</span>Contact</label>
-                                    <p id="contact-warn" style="color: red; font-size: 12px;"></p>
-                               </div>
-
-                               <!-- Email input -->
-                               <div data-mdb-input-init class="form-outline mb-4">
-                                   
-                                    <input id="email" class="form-control" required/>
-                                    
-                                    <label class="form-label" for="form3Example3"><span class="required">*</span>Username</label>
-                               </div>
-
-                               <!-- Password input -->
-                               <div class="form-outline mb-4 position-relative">
-                                    <input type="password" id="password1" class="form-control" required/>
-                                    <label class="form-label" for="password1"><span class="required">*</span>Password</label>
-                                    <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
-                               </div>
-                               
-                               <!-- Confirm Password input -->
-                               <div class="form-outline mb-4 position-relative">
-                                    <input type="password" id="password2" class="form-control" required/>
-                                    <label class="form-label" for="password2"><span class="required">*</span>Confirm Password</label>
-                                    <span onclick="togglePassword('password2', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
-                               </div>
-                               <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label">Patient Type</label>
-                                    <select class="form-select" id="member-type" aria-label="Default select example" onchange="validateApply()">
-                                         <option value="student">student</option>
-                                         <option value="community">community</option>
-                                         <option value="faculty">faculty</option>
-                                         <option value="office staff">office staff</option>
-                                         <!---<option value="staff">staff</option>-->
-                                  </select>
-                               </div>
-                               <!-- Submit button -->
-                               <button id="buttons" type="submit" data-mdb-button-init data-mdb-ripple-init
-                                    class="btn btn-block mb-4 btn-primary"  onclick="register(event)">
-                                    Add User
-                               </button>
-
-                               <!-- Register buttons -->
-                              
-                          </form>
-                     </div>
+            <form id="add-staff-form">
+              
+              <div class="mb-3">
+                  <label for="create-username" class="form-label">Username</label>
+                  <input type="text" class="form-control" id="create-username">
+              </div>
+              <div class="mb-3">
+                <label for="create-firstname" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="create-firstname" required>
+              </div>
+              <div class="mb-3">
+                  <label for="create-lastname" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="create-lastname" required>
                 </div>
-           </div>
-        </div>
+                <div class="mb-3">
+                  <label for="create-password" class="form-label">Password</label>
+                  <input type="password" id="create-password" class="form-control" required/>
+                  <span onclick="togglePassword('create-password', this)" class="toggle-password" style="position: absolute; right: 25px; transform: translateY(-30px); cursor: pointer;">Show</span>
+          
+                </div>
+                <hr>
+             
+              <div style="display:flex; flex-direction:row; justify-content:space-between">
+                  <!--<button type="button" class="btn btn-danger" id="form-submit-button" onclick="deleteUser(event)">Delete User</button>-->
+                  
+                  <button type="button" class="btn btn-primary" id="form-submit-button" onclick="createStaff(event)">Create Account</button>
+                 
+              </div>
+             
+            </form>
+          </div>
       </div>
     </div>
   </div>
             <!-- Modal for Adding Symptoms -->
-<div class="modal fade" id="regConfirmModal" tabindex="-1" aria-labelledby="regConfirmModalLabel" aria-hidden="true">
+<div class="modal fade" id="staffUpdateModal" tabindex="-1" aria-labelledby="staffUpdateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="regConfirmModalLabel">Edit Patient Info</h5>
+          <h5 class="modal-title" id="staffUpdateModalLabel">Update Staff Account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="regConfirmForm">
             
             <div class="mb-3">
-                <label for="regConfirm_Email" class="form-label">Email</label>
-                <input type="text" class="form-control" id="regConfirm_Email" disabled>
+                <label for="update-username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="update-username">
             </div>
             <div class="mb-3">
-              <label for="regConfirm_FirstName" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="regConfirm_FirstName" required>
+              <label for="update-firstname" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="update-firstname" required>
             </div>
             <div class="mb-3">
-                <label for="regConfirm_LastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="regConfirm_LastName" required>
+                <label for="update-lastname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="update-lastname" required>
+              </div>
+              <div class="mb-3">
+                <label for="update-password" class="form-label">Password</label>
+                <input type="password" id="update-password" class="form-control" required/>
+                <span onclick="togglePassword('update-password', this)" class="toggle-password" style="position: absolute; right: 25px; transform: translateY(-30px); cursor: pointer;">Show</span>
+        
               </div>
               <hr>
-            <h6>Birth Date</h6>
-            <div class="mb-3">
-                <div class="col-md-12">
-                    <label class="form-label">Month *</label>
-                    <select class="form-select" id="month-select" aria-label="Select month"  onchange="validateApply()">
-                        <option value="january" selected>January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
-                        </select>
-                </div>
-            </div>
-         
-            <div class="col-md-12">
-                <label class="form-label">Day *</label>
-                <select class="form-select" id="day-select" aria-label="Select day"  onchange="validateApply()">
-                    <option value="1" selected>1</option>
-                    <!-- Days 1 to 31 -->
-                    <script>
-                        for (let i = 2; i <= 31; i++) {
-                        document.write(`<option value="${i}">${i}</option>`);
-                        }
-                    </script>
-                    </select>
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">Year *</label>
-                <input required  type="text" id="year-select"
-                class="form-control" placeholder="YYYY" oninput="this.value = this.value.replace(/\D/g, ''); validateApply()"   />
-                    
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">Age</label>
-                <input required  type="text" id="age"
-                class="form-control" disabled  />
-                    
-            </div>
-            <hr>
-            <!-- Phone number -->
-            <div class="col-md-3">
-                <label class="form-label">Sex</label>
-                <select class="form-select" id="sex" aria-label="Select month"  onchange="validateApply()">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Civl Status</label>
-                <select class="form-select" id="civil-status" aria-label="Select civil status"  onchange="validateApply()">
-                    <option value="single" selected>Single</option>
-                    <option value="married">Married</option>
-                    <option value="separated">Separated</option>
-                    <option value="divorced">Divorced</option>
-                    <option value="widowed">Widowed</option>
-                    <option value="annulled">Annulled</option>
-                    </select>
-            </div>
-              <div class="mb-3">
-                <label for="regConfirm_Address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="regConfirm_Address" required>
-              </div>
-              <div class="mb-3">
-                <label for="regConfirm_PatientType" class="form-label">Patient Type</label>
-                <select class="form-control" id="regConfirm_PatientType" required>
-                  <option value="student">student</option>
-                  <option value="community">community</option>
-                  <option value="faculty">faculty</option>
-                  <option value="office staff">office staff</option>
-                </select>
-              </div>
-            <div class="mb-3">
-              <label for="regConfirm_ContactNo" class="form-label">Contact No.</label>
-              <input type="text" class="form-control" id="regConfirm_ContactNo" value="63"  oninput="contactOnChange(event)" required>
-            </div>
+           
             <div style="display:flex; flex-direction:row; justify-content:space-between">
-                <button type="button" class="btn btn-danger" id="form-submit-button" onclick="deleteUser(event)">Delete User</button>
+                <!--<button type="button" class="btn btn-danger" id="form-submit-button" onclick="deleteUser(event)">Delete User</button>-->
                 
                 <button type="button" class="btn btn-primary" id="form-submit-button" onclick="saveChanges(event)">Save Changes</button>
                
@@ -443,12 +306,8 @@
                             <tr>
                                <!--<th>ID</th>-->
                                <th>Name</th>
-                               <th>Patient Type</th>
-                               <!---<th>Last Name</th><th>First Name</th>-->
-                               <th>Contact No.</th>
-                               <th>Edit</th>
-                               <th>Verification</th>
-                                
+                               <th>Update</th>
+                               <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody id="sched-table-body">
@@ -666,7 +525,6 @@
         if (session["isStaff"]){
              // remove appointment button if staff
              document.getElementById("user-category-display").innerHTML = session["isAdmin"]?"ADMIN":"NURSE"
-             document.getElementById("autoconfirm-div").style.display = session["isAdmin"]?"flex":"none"
              if (session["isAdmin"]){
                 document.getElementById("manage-staff-link").style.display = "block"
               }
@@ -739,33 +597,102 @@
           return 0;
         });
     }
-    window.saveChanges = async (event) => {
+    window.createStaff = async (event) => {
         event.preventDefault()
-        console.log(selectedUserId, "id")
-        const userData = (await (await fetch(`/api/patient?Patient_ID=${selectedUserId}`)).json())[0]
-        console.log(userData, 'userdata')
-        const month = document.getElementById("month-select").value
-        const day = document.getElementById("day-select").value
-        const year = document.getElementById("year-select").value
-        const birthdate = `${month} ${day} ${year}`
-        const sex = document.getElementById("sex").value
-        const civilStatus = document.getElementById("civil-status").value
-      
+        const userData = (await (await fetch(`/api/patient`)).json())
+        const staffData = (await (await fetch(`/api/staff`)).json())
+        console.log("Creating staff")
+        const username = document.getElementById("create-username").value
+        const firstname = document.getElementById("create-firstname").value
+        const lastname = document.getElementById("create-lastname").value
+        const password = document.getElementById("create-password").value
+        
+        for (let index in userData){
+            const targetUser = userData[index]
+            if (targetUser.PatientUsername == username){
+                alert("Username is already taken!")
+                return
+            }
+            
+            
+        }
+
+        for (let index in staffData){
+            const targetStaff = staffData[index]
+            console.log(targetStaff, username)
+            if (targetStaff.staffUsername == username){
+                alert("Username is already taken!")
+                return
+            }
+        }
+
         const data = {
-            PatientBirthdate: birthdate,
-             PatientSex: sex,
-             PatientCivilStatus: civilStatus,
-             
-            Patient_ID: userData?.Patient_ID,
-            PatientName:document.getElementById("regConfirm_FirstName").value,
-            PatientLastName: document.getElementById("regConfirm_LastName").value,
-            PatientAddress: document.getElementById("regConfirm_Address").value,
-            PatientContactNo: document.getElementById("regConfirm_ContactNo").value,
-            PatientCategory: document.getElementById("regConfirm_PatientType").value,
+            staffFirstName: firstname,
+            staffUsername: username,
+            staffLastName: lastname,
+            staffPassword: password,
+           
         }
         console.log('sent data', data)
         try{
-            const response = await fetch('/api/patient', {
+            const response = await fetch('/api/staff', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            console.log(await response.json())
+            alert("New staff succesfully created!")
+            $('#customModal').modal('hide')
+            getProfiles()
+        }catch(error){
+            console.error('Error:', error);
+            alert(error);
+        }
+
+    }
+
+    window.saveChanges = async (event) => {
+        event.preventDefault()
+        console.log(selectedUserId, "id")
+        const userData = (await (await fetch(`/api/patient`)).json())
+        const staffData = (await (await fetch(`/api/staff`)).json())
+
+        const username = document.getElementById("update-username").value
+        const firstname = document.getElementById("update-firstname").value
+        const lastname = document.getElementById("update-lastname").value
+        const password = document.getElementById("update-password").value
+        
+        for (let index in userData){
+            const targetUser = userData[index]
+            if (targetUser.PatientUsername == username){
+                
+                alert("Username is already taken!")
+                return
+            }
+        }
+
+        for (let index in staffData){
+            const targetStaff = staffData[index]
+            if (targetStaff.staffUsername == username){
+                if (selectedUserId != targetStaff.staff_ID){
+                    alert("Username is already taken!")
+                    return
+                }
+                
+            }
+        }
+        const data = {
+            staff_ID: selectedUserId,
+            staffFirstName: firstname,
+            staffUsername: username,
+            staffLastName: lastname,
+            staffPassword: password,
+        }
+        console.log('sent data', data)
+        try{
+            const response = await fetch('/api/staff', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -774,11 +701,11 @@
             });
             console.log(await response.json())
             alert("Changes Saved!")
-            $('#regConfirmModal').modal('hide')
+            $('#staffUpdateModal').modal('hide')
             getProfiles()
         }catch(error){
             console.error('Error:', error);
-            alert("An error occurred while editing patient information.");
+            alert(error);
         }
 
     }
@@ -796,37 +723,42 @@
       
         return age;
       }
+    window.deleteStaff = async (id) => {
+        const deleteConfirmation = confirm("This action cannot be undone. Delete this staff?")
+        if (!deleteConfirmation){
+            return
+        }
+        const url = `/api/staff?staff_ID=${id}`
+        try{
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"staff_ID": id}),
+            });
+            await response.json()
+            alert("successfully deleted a staff.")
+            getProfiles()
+        }catch(error){
+            console.error('Error:', error);
+            alert("An error occurred while deleting staff");
+        }
+    }
     window.showUserModal = async (id) => {
         // autofills
-        
-        const userData = (await (await fetch(`/api/patient?Patient_ID=${id}`)).json())[0]
-        selectedUserId = userData?.Patient_ID
-        const month = document.getElementById("month-select")
-        const day = document.getElementById("day-select")
-        const year = document.getElementById("year-select")
-        const sex = document.getElementById("sex")
-        const civilStatus = document.getElementById("civil-status")
-        const firstName = document.getElementById("regConfirm_FirstName")
-        const lastName = document.getElementById("regConfirm_LastName")
-        const address = document.getElementById("regConfirm_Address")
-        const contactNo = document.getElementById("regConfirm_ContactNo")
-        const patientType = document.getElementById("regConfirm_PatientType")
-        const email = document.getElementById("regConfirm_Email")
-        // console.log(firstName, lastName, email, contactNo, patientType)
-        const birthdate = userData.PatientBirthdate?userData.PatientBirthdate.split(" "):["","",""]
-        month.value = birthdate[0]
-        day.value = birthdate[1]
-        year.value = birthdate[2]
-        sex.value = userData?.PatientSex
-        civilStatus.value = userData?.PatientCivilStatus
-        email.value = userData?.PatientUsername
-        address.value = userData?.PatientAddress
-        firstName.value = userData?.PatientName
-        lastName.value = userData?.PatientLastName
-        contactNo.value = userData?.PatientContactNo
-        patientType.value = userData?.PatientCategory
-        document.getElementById("age").value = getAge(birthdate)
-        setTimeout(()=>{$('#regConfirmModal').modal('show')}, 50) // add brief delay to set ui changes first
+        selectedUserId = id
+        const userData = (await (await fetch(`/api/staff?staff_ID=${id}`)).json())[0]
+        const elements = {}
+        const names = {"update-username": "staffUsername", "update-firstname": "staffFirstName", "update-lastname": "staffLastName", "update-password": "staffPassword"}
+        for (let keys in names){
+            console.log(keys)
+            elements[keys] = document.getElementById(keys)
+            elements[keys].value = userData?.[names[keys]]
+        }
+        console.log(elements,"elements")
+
+        setTimeout(()=>{$('#staffUpdateModal').modal('show')}, 50) // add brief delay to set ui changes first
     }
     window.updateSymptomRef = async (data) => {
         try{
@@ -893,7 +825,7 @@
             });
             console.log(await response.json())
             alert("A user has been successfully removed.")
-            $('#regConfirmModal').modal('hide')
+            $('#staffUpdateModal').modal('hide')
             getProfiles()
         }catch(error){
             console.error('Error:', error);
@@ -928,7 +860,10 @@
     }
     async function getProfiles(sortBy) {
             try {
-                const response = await fetch(`/api/patient`);
+                const session = await getSession()
+                console.log(session, "Session")
+                
+                const response = await fetch(`/api/staff`);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
@@ -939,14 +874,6 @@
                 const totalPages = Math.ceil(data.length / pageSize);
                 //let currentPage = 1; // removed. transfered to global scope for accessability
 
-                // sort data
-                const sortByRefValue = document.getElementById("reg-confirm-sortby").value
-                if (sortByRefValue != "?"){
-                    data = sortSymptomData(data, sortByRefValue)
-                    
-                }else{
-                    data = data.reverse()
-                }
 
                 // Function to display the current page
                 function displayPage(page) {
@@ -957,22 +884,18 @@
 
                     // Populate table rows for the current page
                     for (let i = startIndex; i < endIndex; i++) {
+                        
                         const item = data[i];
+                        if (session.userId ==  item.staff_ID){
+                            continue
+                        }
                         const row = document.createElement("tr");
                         let verification = ""
                         
-                        if (item?.PatientIsConfirmed == 1){
-                            verification = `<td><span style="color: green">Confirmed</span></td>`
-                        }else{
-                            verification = `<td><button class="btn btn-success" data-userId=${item.Patient_ID} onclick="ConfirmRegistration(event)">Confirm</button></td>`
-                        }
-                        
                         row.innerHTML = `
-                            <td>${item.PatientLastName}, ${item.PatientName}</td>
-                             <td>${item.PatientCategory}</td>
-                             <td>${item.PatientContactNo}</td>
-                            <td><button class="btn btn-primary"  onclick="showUserModal(${item.Patient_ID})">Edit</button></td>
-                            ${verification}
+                            <td>${item.staffFirstName}, ${item.staffLastName}</td>
+                            <td><button class="btn btn-primary"  onclick="showUserModal(${item.staff_ID})">Update</button></td>
+                             <td><button class="btn btn-danger"  onclick="deleteStaff(${item.staff_ID})">Delete</button></td>
                             
                         `;
                         tbody.appendChild(row);
@@ -996,6 +919,7 @@
 
                     // Add page number buttons
                     for (let i = 1; i <= totalPages; i++) {
+                       
                         const pageButton = document.createElement("li");
                         pageButton.classList.add("page-item");
                         
@@ -1078,37 +1002,7 @@
        }
     }
 
-    async function getAutoConfirmState(){
-        const staffData = (await (await fetch("/api/staff")).json())[0]
-        console.log(staffData, "STAFF DATA")
-        document.getElementById('toggleSwitch').checked = staffData.staffAutoConfirm?true:false;
-    }
-   
-
-    document.getElementById('toggleSwitch').addEventListener('change', async () => {
-        const state = document.getElementById('toggleSwitch').checked
-        const session = await getSession()
-        const staffId = session?.userId
-        const data = {
-            staff_ID: staffId,
-            staffAutoConfirm: state?"1":"0"
-        }
-        console.log("DATAS",data)
-        try{
-            const response = await fetch('/api/staff', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            console.log(await response.json())
-            getProfiles()
-        }catch(error){
-            console.error('Error:', error);
-            alert("An error occurred while toggling");
-        }
-    });
+  
 
     getProfiles();
     window.getProfiles = getProfiles

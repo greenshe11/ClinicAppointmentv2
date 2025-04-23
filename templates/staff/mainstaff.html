@@ -111,6 +111,7 @@ input:checked + .slider:before {
                                 </div>
                             </li>
                             <li class="text-white"><a href="/staffsymptoms">Manage Symptoms</a></li>
+                            <li class="text-white"  id="manage-staff-link" style="display: none"><a href="/managestaff">Manage Staff</a></li>
                         </li>
                        <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                       
@@ -253,7 +254,7 @@ input:checked + .slider:before {
                                 <th>Full Name</th>
                                 <th>Info</th>
                                 <th>Status</th>
-                                
+                                <th>Attended</th>
                             </tr>
                         </thead>
                         <tbody id="sched-table-body">
@@ -304,7 +305,10 @@ input:checked + .slider:before {
         const session = await getSession()
         if (session["isStaff"]){
              // remove appointment button if staff
-             document.getElementById("user-category-display").innerHTML = "NURSE"
+             document.getElementById("user-category-display").innerHTML = session["isAdmin"]?"ADMIN":"NURSE"
+             if (session["isAdmin"]){
+                document.getElementById("manage-staff-link").style.display = "block"
+              }
         }else{
              document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
         }
@@ -454,6 +458,12 @@ input:checked + .slider:before {
     * @param {number} statusCode - The new status code for the appointment.
     */
     window.setAppointmentStatus = async (event, statusCode) => {
+        const session = await getSession()
+        const staffId = session.userId
+        const staffDetails = (await (await fetch(`/api/staff?staff_ID=${staffId}`)).json())[0]
+
+        const staffFullname = `${staffDetails.staffLastName}, ${staffDetails.staffFirstName}`
+        console.log("STAFF FULL NAME", staffFullname)
         // Function to return HTML for displaying status
         const getStatusDisplay = (statusCode) => { 
             const color = ['black', 'green', 'red']; // Colors for status display
@@ -464,6 +474,8 @@ input:checked + .slider:before {
         // Get attributes from the clicked element
         const appointmentId = event.srcElement.getAttribute('data-appId'); // Get appointment ID
         const monthName = event.srcElement.getAttribute('data-monthName'); // Get month name
+        const confirmingStaff = staffFullname
+        console.log(confirmingStaff, "ConfirmingStaff")
         const day = event.srcElement.getAttribute('data-day'); // Get day
         const year = event.srcElement.getAttribute('data-year'); // Get year
         const timeName = event.srcElement.getAttribute('data-timeName'); // Get time name
@@ -472,7 +484,8 @@ input:checked + .slider:before {
         const url = '/api/appointments'; // API endpoint for updating appointments
         const data = {
             Appointment_ID: appointmentId,
-            Appointment_Confirmed: statusCode // Prepare data for the update
+            Appointment_Confirmed: statusCode ,// Prepare data for the update
+            Appointment_ConfirmingStaff: confirmingStaff
         };
 
         try {
@@ -493,6 +506,53 @@ input:checked + .slider:before {
             sendMessage(`${monthName} ${day}, ${year}`, timeName, contact, statusCode, fullname);
             getPendingCount()
             location.reload()
+        } catch (error) {
+            console.error('Error:', error); // Log any errors encountered
+        }
+    };
+
+    window.setAttended = async (event, statusCode) => {
+        const session = await getSession()
+        const staffId = session.userId
+        const checked = event.target.checked
+        const staffDetails = (await (await fetch(`/api/staff?staff_ID=${staffId}`)).json())[0]
+        const staffFullname = `${staffDetails.staffLastName}, ${staffDetails.staffFirstName}`
+        console.log("STAFF FULL NAME", staffFullname)
+        // Function to return HTML for displaying status
+        const getStatusDisplay = (statusCode) => { 
+            const color = ['black', 'green', 'red']; // Colors for status display
+            const name = ['Pending', 'Confirmed', 'Rejected']; // Status names
+            return `<p style="color: ${color[statusCode]}">${name[statusCode]}</p>`; // Return formatted HTML
+        };
+
+        // Get attributes from the clicked element
+        const appointmentId = event.srcElement.getAttribute('data-appId'); // Get appointment ID
+        const monthName = event.srcElement.getAttribute('data-monthName'); // Get month name
+        const confirmingStaff = staffFullname
+        console.log(confirmingStaff, "ConfirmingStaff")
+        const day = event.srcElement.getAttribute('data-day'); // Get day
+        const year = event.srcElement.getAttribute('data-year'); // Get year
+        const timeName = event.srcElement.getAttribute('data-timeName'); // Get time name
+        const contact = event.srcElement.getAttribute('data-contact'); // Get contact information
+        const fullname = event.srcElement.getAttribute('data-fullname'); // Get contact information
+        const url = '/api/appointments'; // API endpoint for updating appointments
+        const data = {
+            Appointment_ID: appointmentId,
+            Appointment_Attended: checked?"1":"0"
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'PUT', // Specify PUT method for updates
+                headers: { 'Content-Type': 'application/json' }, // Set content type to JSON
+                body: JSON.stringify(data) // Convert data object to JSON string
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); // Check for errors
+
+            const result = await response.json(); // Parse the JSON response
+           
+           
         } catch (error) {
             console.error('Error:', error); // Log any errors encountered
         }
@@ -597,12 +657,15 @@ input:checked + .slider:before {
             const minutes = appointmentSpec.Appointment_Minutes;
             const appId = appointmentSpec.Appointment_ID; // Extract appointment ID
             const patientId = appointmentSpec.Patient_ID; // Extract patient ID
+            
+            const checked = appointmentSpec.Appointment_Attended?"checked":""
             const monthName = monthNamesAll[appointmentSpec.Appointment_Month - 1]; // Get month name from array
             const combinedDate = `${monthName} ${day}, ${year}`; // Format date for display
             const timeName = getTimeName([time, minutes]); // Get formatted time name
             // Fetch patient info and ensure only single result is used
             let patientInfo = await getPatientInfo(patientId);
             patientInfo = patientInfo[0]; // Look only for single result
+            
             const contact = patientInfo ? patientInfo.PatientContactNo : undefined; // Get contact info
             const firstName = patientInfo ? patientInfo.PatientName : undefined; // Get first name
             const lastName = patientInfo ? patientInfo.PatientLastName : undefined; // Get last name
@@ -673,11 +736,20 @@ input:checked + .slider:before {
            }else{
             code = code + `<td><i><button class="btn btn-success viewer" data-appointmentId="${appId}" style="background-color:gray" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" disabled onclick="showModal(event)">Confirm</button></td></i></td>`
            }
-            code = code + `
-                
-               
-                
-            `;
+            code = code + ``;
+
+            code += `<td>
+                    <input 
+                        type="checkbox" 
+                        ${checked}
+                        class="form-check-input viewer"
+                         style="transform: scale(1.5); margin: 5px;"
+                        data-appId="${appId}" data-contact="${contact}" data-appointmentId="${appId}" data-timeName="${timeName}" data-monthName="${monthName}" data-userId="${patientId}" data-month="${month}" data-day="${day}" data-year="${year}" data-time="${time}" data-status="${status}" data-fullname="${fullname}" style="background-color: green" 
+                        onclick="setAttended(event, 1)"
+                        style="transform: scale(1.5); margin: 5px;"
+                    />
+                   
+                    </td>`
            // const reschedSnippet = getDaysUntilAppointment(month, year, day) > 0 ? `<td><button data-month="${month}" data-year="${year}" data-appointmentId="${appId}" onclick="onClickShowCalendar(event, ${contact})" class="btn btn-primary resched" style="background-color: blue">Reschedule</button></td>` : `<td><i>date lapsed</i></td>`
             //code = code + reschedSnippet
             code = code + '</tr>'

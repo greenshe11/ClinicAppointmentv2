@@ -27,16 +27,14 @@ def staff_routes(self, table_name):
         data = request.json
         print("DATA",data)
         return update_db(self, data, table_name, filter_names=['staff_ID'])
-"""
-    @self.app.route('/api/symptomsref', methods=['POST'])
-    def symptomsref_push():
+    
+    @self.app.route('/api/staff', methods=['POST'])
+    def staff_create():
         data = request.json
-        return push_to_db(self, data, table_name="tblsymptomsref")
+        return push_to_db(self, data, table_name)
   
-    @self.app.route('/api/symptomsref', methods=['DELETE'])
-    def symptomsref_delete():
+    @self.app.route('/api/staff', methods=['DELETE'])
+    def staff_delete():
         data = request.json
         print(data)
-        return delete_from_db(self, data, "tblsymptomsref", filter_names=['SymptomsRef_ID'])
-    
-"""
+        return delete_from_db(self, data, table_name, filter_names=['staff_ID'])

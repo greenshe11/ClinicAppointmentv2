@@ -139,7 +139,7 @@
                                                        <div data-mdb-input-init class="form-outline">
                                                             <input type="text" id="firstname"
                                                                  class="form-control" required>
-                                                            <label class="form-label" for="form3Example1"><span class="required">*</span>First
+                                                            <label class="form-label" for="form3Example1"><span class="required" required>*</span>First
                                                                  name</label>
                                                        </div>
                                                   </div>
@@ -147,11 +147,84 @@
                                                        <div data-mdb-input-init class="form-outline">
                                                             <input type="text" id="lastname"
                                                                  class="form-control" required>
-                                                            <label class="form-label" for="form3Example2"><span class="required">*</span>Last
+                                                            <label class="form-label" for="form3Example2"><span class="required" required>*</span>Last
                                                                  name</label>
                                                        </div>
                                                   </div>
                                              </div>
+                                             <h6>Birth Date</h6>
+                                             <div class="row">
+                                                  <div class="col-md-4 mb-4">
+                                                       <div data-mdb-input-init class="form-outline">
+                                                            <select class="form-select" id="month-select" aria-label="Select month">
+                                                                 <option value="january" selected>January</option>
+                                                                 <option value="february">February</option>
+                                                                 <option value="march">March</option>
+                                                                 <option value="april">April</option>
+                                                                 <option value="may">May</option>
+                                                                 <option value="june">June</option>
+                                                                 <option value="july">July</option>
+                                                                 <option value="august">August</option>
+                                                                 <option value="september">September</option>
+                                                                 <option value="october">October</option>
+                                                                 <option value="november">November</option>
+                                                                 <option value="december">December</option>
+                                                               </select>
+                                                            <label class="form-label" for="form3Example1"><span class="required">*</span>Month</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-md-4 mb-4">
+                                                       <div data-mdb-input-init class="form-outline">
+                                                            <select class="form-select" id="day-select" aria-label="Select day">
+                                                                 <option value="1" selected>1</option>
+                                                                 <!-- Days 1 to 31 -->
+                                                                 <script>
+                                                                   for (let i = 2; i <= 31; i++) {
+                                                                     document.write(`<option value="${i}">${i}</option>`);
+                                                                   }
+                                                                 </script>
+                                                               </select>
+                                                            <label class="form-label" for="form3Example2"><span class="required">*</span>Day</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-md-4 mb-4">
+                                                       <div data-mdb-input-init class="form-outline">
+                                                            <input required  type="text" id="year-select"
+                                                            class="form-control" placeholder="YYYY" oninput="this.value = this.value.replace(/\D/g, '')" />
+                                                            <label class="form-label" for="form3Example2"><span class="required">*</span>Year</label>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <div class="row">
+                                                  <div class="col-md-6 mb-4">
+                                                       <div data-mdb-input-init class="form-outline">
+                                                            <select class="form-select" id="sex" aria-label="Select month">
+                                                                 <option value="male" selected>Male</option>
+                                                                 <option value="female">Female</option>
+                                                               </select>
+                                                            <label class="form-label" for="form3Example1"><span class="required">*</span>Sex</label>
+                                                       </div>
+                                                     
+                                                  
+                                                  </div>
+                                                  <div class="col-md-6 mb-4">
+                                                       <div data-mdb-input-init class="form-outline">
+                                                            <div data-mdb-input-init class="form-outline">
+                                                                 <select class="form-select" id="civil-status" aria-label="Select civil status">
+                                                                      <option value="single" selected>Single</option>
+                                                                      <option value="married">Married</option>
+                                                                      <option value="separated">Separated</option>
+                                                                      <option value="divorced">Divorced</option>
+                                                                      <option value="widowed">Widowed</option>
+                                                                      <option value="annulled">Annulled</option>
+                                                                    </select>
+                                                                 <label class="form-label" for="form3Example1"><span class="required">*</span>Civil Status</label>
+                                                            </div>
+                                                       </div>
+                                                     
+                                                  
+                                                  </div>
+                                             
                                              <div class="col-md-12 mb-4">
                                                   <div data-mdb-input-init class="form-outline">
                                                        <input type="text" id="address"
@@ -159,36 +232,37 @@
                                                        <label class="form-label" for="form3Example1"><span class="required">*</span>Address</label>
                                                   </div>
                                              </div>
+                                             
                                              <!-- Contact input -->
                                              <div data-mdb-input-init class="form-outline mb-4">
                                                   <div style="display: flex; flex-direction: row; align-items:center;">
                                                        <span style="color: gray; margin-right: 10px;">+63</span>
                                                        <input type="text" id="contact" class="form-control" maxlength="10" oninput="validatePhoneNumber()" required/>
                                                   </div>
-                                                  <label class="form-label" for="form3Example3"><span class="required">*</span>Contact</label>
+                                                  <label class="form-label" for="form3Example3"><span class="required">*</span>Contact (unique)</label>
                                                   <p id="contact-warn" style="color: red; font-size: 12px;"></p>
                                              </div>
 
                                              <!-- Email input -->
                                              <div data-mdb-input-init class="form-outline mb-4">
                                                  
-                                                  <input type="email" id="email" class="form-control" required/>
+                                                  <input id="email" class="form-control" required/>
                                                   
-                                                  <label class="form-label" for="form3Example3"><span class="required">*</span>Email address</label>
+                                                  <label class="form-label" for="form3Example3"><span class="required" required>*</span>Username (unique)</label>
                                              </div>
 
                                              <!-- Password input -->
                                              <div class="form-outline mb-4 position-relative">
                                                   <input type="password" id="password1" class="form-control" required/>
                                                   <label class="form-label" for="password1"><span class="required">*</span>Password</label>
-                                                  <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                                                  <span onclick="togglePassword('password1', this)" class="toggle-password" style="position: absolute; right: 20px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
                                              </div>
                                             
                                              <!-- Confirm Password input -->
                                              <div class="form-outline mb-4 position-relative">
                                                   <input type="password" id="password2" class="form-control" required/>
                                                   <label class="form-label" for="password2"><span class="required">*</span>Confirm Password</label>
-                                                  <span onclick="togglePassword('password2', this)" class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
+                                                  <span onclick="togglePassword('password2', this)" class="toggle-password" style="position: absolute; right: 20px; top: 50%; transform: translateY(-25px); cursor: pointer;">Show</span>
                                              </div>
                                              <div data-mdb-input-init class="form-outline mb-4">
                                                   <label class="form-label">Patient Type</label>
@@ -315,15 +389,19 @@
                const PatientLastName = document.getElementById("lastname").value
                const PatientAddress = document.getElementById("address").value
                const PatientContactNo = '63' + document.getElementById("contact").value
-          
-               const PatientEmail = document.getElementById("email").value
-               
+               const month = document.getElementById("month-select").value
+               const day = document.getElementById("day-select").value
+               const year = document.getElementById("year-select").value
+               const PatientBirthdate = `${month} ${day} ${year}`
+               const PatientUsername = document.getElementById("email").value
+               const PatientSex = document.getElementById("sex").value
+               const PatientCivilStatus = document.getElementById("civil-status").value
                const contactInput = document.getElementById('contact');
                const PatientPassword = document.getElementById("password1").value
                const PatientPasswordConfirm = document.getElementById("password2").value
                const memberType = document.getElementById("member-type").value
 
-               data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo, PatientCategory: memberType, PatientAddress}
+               data = {PatientName, PatientLastName, PatientUsername, PatientPassword, PatientContactNo, PatientCategory: memberType, PatientAddress, PatientBirthdate, PatientSex, PatientCivilStatus}
 
                const contact = document.getElementById("contact-warn");
                
@@ -353,8 +431,8 @@
 
 
                /*
-               if (!validateEmail(PatientEmail)){
-                    alert(`Email: ${PatientEmail} is not a valid email.` )
+               if (!validateEmail(PatientUsername)){
+                    alert(`Email: ${PatientUsername} is not a valid email.` )
                     return null
                }
                */  

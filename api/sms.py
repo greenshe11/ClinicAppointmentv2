@@ -25,7 +25,7 @@ def sms_routes(self, table_name):
     def sms_send_registration():
         # url parameters will are used for filtering
         data = request.json
-        staffData = pull_from_db(self, {}, 'tblstaff',jsonify_return=False)[0]
+        staffData = pull_from_db(self, {"staffIsAdmin":1}, 'tblstaff',jsonify_return=False)[0]
         print("STAFF DATA", staffData)
         if (staffData["staffAutoConfirm"]==0):
             sms_after_registration(contact=data['contact'], fullname=data['fullname'])

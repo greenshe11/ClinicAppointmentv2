@@ -147,7 +147,7 @@
                        <div data-mdb-input-init class="form-outline mb-4">
                          <input type="email" id="email" class="form-control form-control-lg"
                            placeholder="Enter a valid email address" />
-                         <label class="form-label" for="email">Email address</label>
+                         <label class="form-label" for="email">Username</label>
                        </div>
              
                     <!-- Password input -->
@@ -204,10 +204,10 @@
                }
 
                async function login0(){
-                    const PatientEmail = document.getElementById("email").value
+                    const PatientUsername = document.getElementById("email").value
                     const PatientPassword = document.getElementById("password").value
                     const passwordInput = document.getElementById('password');
-                    const data = {PatientEmail, PatientPassword}
+                    const data = {PatientUsername, PatientPassword}
                     try {
                          const response = await fetch('/api/patient?for=login', {
                          method: 'POST',

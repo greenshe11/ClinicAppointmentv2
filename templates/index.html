@@ -62,6 +62,7 @@
                           <div id="manage-symptoms-container" >
                            
                           </div>
+                          <li class="text-white" id="manage-staff-link" style="display: none"><a href="/managestaff">Manage Staff</a></li>
                           <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
                           
                         </ul>
@@ -646,7 +647,10 @@
         const accountBtn = document.getElementById("account-button")
         
         if (session["isStaff"]){
-       
+          
+          if (session["isAdmin"]){
+            document.getElementById("manage-staff-link").style.display = "block"
+          }
           accountBtn.innerHTML = ""
           document.getElementById("reg-confirm-container").style.position = "relative"
           document.getElementById("reg-confirm-container").innerHTML = `
@@ -661,11 +665,11 @@
           // Change Background Image source if the Staff is logged in
           document.getElementById("background").src = "static/assets/img/req/registration.jpg";
           document.getElementById("staff-description").style.color = "#2C4964";
-
+            
           // remove appointment button if staff
           document.getElementById("appointment-btn").remove()
           document.getElementById("appointment-btn-2").remove()
-          document.getElementById("user-category-display").innerHTML = "NURSE"
+          document.getElementById("user-category-display").innerHTML = session["isAdmin"]?"ADMIN":"NURSE"
           document.getElementById("user-name").remove()
           document.getElementById("user-name-br").remove()
           document.getElementById("schedule-title").innerHTML = "View Requests"

@@ -205,6 +205,18 @@ class App:
                 return render_template('staff/staffsymptoms.html')
             except Exception as e:
                 return f"Error: {e}", 500
+            
+        @self.app.route('/managestaff')
+        def staffmanage():
+            if util.no_user_logged_in() or not util.user_is_staff(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                if util.user_is_admin():
+                    return render_template('staff/manageStaff.html')
+                else:
+                    return redirect('/home')
+            except Exception as e:  
+                return f"Error: {e}", 500
         
             
             

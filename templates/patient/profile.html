@@ -99,7 +99,7 @@
                                                   <h4 class="mb-4 mt-0">Information</h4>
                                                   <!-- First Name -->
                                                   <div class="col-md-6">
-                                                       <label class="form-label">Email *</label>
+                                                       <label class="form-label">Username *</label>
                                                        <input type="text" id="email" class="form-control" placeholder="" aria-label="First name" value="">
                                                   </div>
                                                   <div class="col-md-6">
@@ -115,15 +115,78 @@
                                                        <label class="form-label">Address *</label>
                                                        <input type="text" id="address" class="form-control" placeholder="" oninput="validateApply()"  aria-label="address"   value="">
                                                   </div>
+                                                  <hr>
+                                                  <h6>Birth Date</h6>
+                                                  
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Month *</label>
+                                                       <select class="form-select" id="month-select" aria-label="Select month"  onchange="validateApply()">
+                                                            <option value="january" selected>January</option>
+                                                            <option value="february">February</option>
+                                                            <option value="march">March</option>
+                                                            <option value="april">April</option>
+                                                            <option value="may">May</option>
+                                                            <option value="june">June</option>
+                                                            <option value="july">July</option>
+                                                            <option value="august">August</option>
+                                                            <option value="september">September</option>
+                                                            <option value="october">October</option>
+                                                            <option value="november">November</option>
+                                                            <option value="december">December</option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Day *</label>
+                                                       <select class="form-select" id="day-select" aria-label="Select day"  onchange="validateApply()">
+                                                            <option value="1" selected>1</option>
+                                                            <!-- Days 1 to 31 -->
+                                                            <script>
+                                                              for (let i = 2; i <= 31; i++) {
+                                                                document.write(`<option value="${i}">${i}</option>`);
+                                                              }
+                                                            </script>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Year *</label>
+                                                       <input required  type="text" id="year-select"
+                                                       class="form-control" placeholder="YYYY" oninput="this.value = this.value.replace(/\D/g, ''); validateApply()"   />
+                                                         
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Age</label>
+                                                       <input required  type="text" id="age"
+                                                       class="form-control" disabled  />
+                                                         
+                                                  </div>
+                                                  <hr>
                                                   <!-- Phone number -->
-                                                  <div class="col-md-6">
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Sex</label>
+                                                       <select class="form-select" id="sex" aria-label="Select month"  onchange="validateApply()">
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                       <label class="form-label">Civl Status</label>
+                                                       <select class="form-select" id="civil-status" aria-label="Select civil status"  onchange="validateApply()">
+                                                            <option value="single" selected>Single</option>
+                                                            <option value="married">Married</option>
+                                                            <option value="separated">Separated</option>
+                                                            <option value="divorced">Divorced</option>
+                                                            <option value="widowed">Widowed</option>
+                                                            <option value="annulled">Annulled</option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-md-3">
                                                        <label class="form-label">Phone number *</label>
                                                        <input type="text" id="contact" class="form-control" placeholder="" oninput="contactOnChange(event)" aria-label="Phone number" value="63">
                                                   </div>
                                                   <!-- Label number -->
-                                                  <div class="col-md-6">
+                                                  <div class="col-md-3">
                                                        <label class="form-label">Patient type</label>
-                                                       <select class="form-select" id="member-type" aria-label="Default select example" onchange="validateApply()">
+                                                       <select class="form-select" id="member-type" disabled aria-label="Default select example" onchange="validateApply()">
                                                             <option value="student">student</option>
                                                             <option value="community">community</option>
                                                             <option value="faculty">faculty</option>
@@ -194,12 +257,32 @@
           <!-- Main JS File -->
           <script src="{{ url_for('static',filename='assets/js/main.js')}}"></script>
           <script type="module">
+               function getAge(dateString) {
+                    const birthDate = new Date(dateString);
+                    const today = new Date();
+                  
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                  
+                    // Adjust if birthday hasn't occurred yet this year
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                      age--;
+                    }
+                  
+                    return age;
+                  }
                import {getUserData} from '/static/pageScripts/session.js'
                let data = await getUserData()
                data = data[0]
                window.validateApply = () => {
                     console.log('validated')
                     let result = false
+                    const month = document.getElementById("month-select").value
+                    const day = document.getElementById("day-select").value
+                    const year = document.getElementById("year-select").value
+                    const birthdate = `${month} ${day} ${year}`
+                    const sex = document.getElementById("sex").value
+                    const civilStatus = document.getElementById("civil-status").value
                     const email = document.getElementById('email')
                     const firstName = document.getElementById('first-name')
                     const lastName = document.getElementById('last-name')
@@ -210,8 +293,19 @@
                     
                     const memberType = document.getElementById('member-type')
                    
-
-                    if (email.value != data.PatientEmail){
+                    if (birthdate.value != data.PatientBirthdate){
+                         result = true
+                         console.log('birthdate changed')
+                    }
+                    if (sex.value != data.PatientSex){
+                         result = true
+                         console.log('sex changed')
+                    }
+                    if (civilStatus.value != data.PatientCivilStatus){
+                         result = true
+                         console.log('civilStatus changed')
+                    }
+                    if (email.value != data.PatientUsername){
                          result = true
                          console.log('email changed')
                     }
@@ -248,7 +342,7 @@
                          cancelBtn.style.display = "none"
                     }
                     result = false
-
+                    document.getElementById("age").value = getAge(birthdate)
 
 
                }
@@ -284,17 +378,28 @@
                     const lastName = document.getElementById('last-name')
                     const contact = document.getElementById('contact')
                     const address = document.getElementById("address")
-                    
+                    const month = document.getElementById("month-select")
+                    const day = document.getElementById("day-select")
+                    const year = document.getElementById("year-select")
+                    const sex = document.getElementById("sex")
+                    const civilStatus = document.getElementById("civil-status")
                     const disableEmail = () => {email.setAttribute('disabled', "true")} 
                     const enableEmail = () => {email.removeAttribute('disabled')}
                     enableEmail()
-                    email.value = data.PatientEmail
+                    email.value = data.PatientUsername
                     disableEmail()
                     console.log(data)
                     address.value = data.PatientAddress
                     firstName.value = data.PatientName 
                     lastName.value = data.PatientLastName 
                     contact.value = data.PatientContactNo 
+                    const birthdate = data.PatientBirthdate.split(" ")
+                    document.getElementById("age").value = getAge(birthdate)
+                    month.value = birthdate[0]
+                    day.value = birthdate[1]
+                    year.value = birthdate[2]
+                    sex.value = data.PatientSex
+                    civilStatus.value = data.PatientCivilStatus
                     setDefaultType(data.PatientCategory)
                     validateApply()
                     console.log(getTypeSelected())
@@ -370,7 +475,17 @@
           
                 applyProfile()
                async function updateInfo() {
+                    const month = document.getElementById("month-select").value
+                    const day = document.getElementById("day-select").value
+                    const year = document.getElementById("year-select").value
+                    const birthdate = `${month} ${day} ${year}`
+                    const sex = document.getElementById("sex").value
+                    const civilStatus = document.getElementById("civil-status").value
                     const newData = {
+                         PatientBirthdate: birthdate,
+                         PatientSex: sex,
+                         PatientCivilStatus: civilStatus,
+                         
                          Patient_ID: data.Patient_ID,
                          PatientName: document.getElementById('first-name').value,
                          PatientLastName: document.getElementById('last-name').value,

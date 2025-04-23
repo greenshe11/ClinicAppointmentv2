@@ -76,7 +76,7 @@
                             </div>
                         </li>
                             <li class="text-white"><a href="/staffsymptoms" class="active">Manage Symptoms</a></li>
-                        
+                            <li class="text-white"  id="manage-staff-link" style="display: none"><a href="/managestaff">Manage Staff</a></li>
                       
                        
                        <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
@@ -272,7 +272,10 @@
         const session = await getSession()
         if (session["isStaff"]){
              // remove appointment button if staff
-             document.getElementById("user-category-display").innerHTML = "NURSE"
+             document.getElementById("user-category-display").innerHTML = session["isAdmin"]?"ADMIN":"NURSE"
+             if (session["isAdmin"]){
+                document.getElementById("manage-staff-link").style.display = "block"
+              }
         }else{
              document.getElementById("user-category-display").innerHTML = data["PatientCategory"]
         }

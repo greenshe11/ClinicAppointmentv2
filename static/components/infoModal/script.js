@@ -135,6 +135,20 @@ export async function showModal(event){
     saveChangesButton.onclick = () =>{
         updateCustomSymptom(appointmentId)
     }
+    function getAge(dateString) {
+        const birthDate = new Date(dateString);
+        const today = new Date();
+      
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+      
+        // Adjust if birthday hasn't occurred yet this year
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+      
+        return age;
+      }
     const getStatusDisplay = (statusCode) =>{ 
         const color = ['black','green','red']
         const name = ['Pending','Confirmed','Rejected']
@@ -142,21 +156,28 @@ export async function showModal(event){
     }
     //global setting
     firstName =  userInfo[0].PatientName
-    lastName = userInfo[0].PatientLastName
+    lastName = userInfo[0].PatientLastName  
     //
-    document.getElementById('im-first-name').innerHTML = userInfo[0].PatientName
-    document.getElementById('im-last-name').innerHTML = userInfo[0].PatientLastName
-    document.getElementById("im-address").innerHTML = userInfo[0].PatientAddress
-    document.getElementById('im-email').innerHTML = userInfo[0].PatientEmail
-    document.getElementById('im-contact-no').innerHTML = userInfo[0].PatientContactNo
-    document.getElementById('im-sched-date').innerHTML = `${months[month-1]} ${day}, ${year}`
-    document.getElementById('im-time').innerHTML = getTimeName([time, minutes])
-    document.getElementById('im-status').innerHTML = getStatusDisplay(status)
-    document.getElementById('im-sched-response').innerHTML = symptomResponse
-    document.getElementById('im-category').innerHTML = userInfo[0].PatientCategory
+    document.getElementById('im-first-name').innerHTML = userInfo[0].PatientName||"<span style='color: gray'>?</span>"
+    document.getElementById('im-last-name').innerHTML = userInfo[0].PatientLastName||"<span style='color: gray'>?</span>"
+    document.getElementById("im-address").innerHTML = userInfo[0].PatientAddress||"<span style='color: gray'>?</span>"
+    document.getElementById('im-email').innerHTML = userInfo[0].PatientUsername||"<span style='color: gray'>?</span>"
+    document.getElementById('im-contact-no').innerHTML = userInfo[0].PatientContactNo||"<span style='color: gray'>?</span>"
+    document.getElementById('im-sched-date').innerHTML = `${months[month-1]} ${day}, ${year}`||"<span style='color: gray'>?</span>"
+    document.getElementById('im-time').innerHTML = getTimeName([time, minutes])||"<span style='color: gray'>?</span>"
+    document.getElementById('im-status').innerHTML = getStatusDisplay(status)||"<span style='color: gray'>?</span>"
+    document.getElementById('im-sched-response').innerHTML = symptomResponse||"<span style='color: gray'>?</span>"
+    document.getElementById('im-category').innerHTML = userInfo[0].PatientCategory||"<span style='color: gray'>?</span>"
     document.getElementById('im-sched-complaints').innerHTML = appointmentData.Appointment_Complaints||"N/A"
-   
-
+    document.getElementById("im-confirming-staff").innerHTML = appointmentData.Appointment_ConfirmingStaff||"<span style='color: gray'>?</span>"
+    const sex = userInfo[0].PatientSex||"<span style='color: gray'>?</span>"
+    const civilStatus = userInfo[0].PatientCivilStatus||"<span style='color: gray'>?</span>"
+    document.getElementById('im-birthdate').innerHTML = userInfo[0].PatientBirthdate||"<span style='color: gray'>?</span>"
+    document.getElementById('im-age').innerHTML =getAge(userInfo[0].PatientBirthdate)||"<span style='color: gray'>?</span>"
+    document.getElementById('im-sex').innerHTML = sex||"<span style='color: gray'>?</span>"
+    document.getElementById('im-civil-status').innerHTML = civilStatus||"<span style='color: gray'>?</span>"
+    
+    
     
 
     
@@ -252,7 +273,6 @@ window.printInfo = (event) =>{
         printContents.style.backgroundColor = "blue"
         document.body.innerHTML = printContents.innerHTML;;
         window.print();
-        
         document.body.innerHTML = originalContents; // Restore the original page
       }
     printDiv("im-scrollview")
