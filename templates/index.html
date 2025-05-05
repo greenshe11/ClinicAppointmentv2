@@ -51,7 +51,7 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="active">Home</a></li>
-                          <li><a href="/schedule" class="" id="schedule-title" style="margin-right: -15px;">View Appointments</a>
+                          <li id="schedule-container"><a href="/schedule" class="" id="schedule-title" style="margin-right: -15px;">View Appointments</a>
                             <div id="pending-count-container" style="display: none;right: -10px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
                               <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
                           </div></li>
@@ -645,13 +645,15 @@
         
         document.getElementById("reg-confirm-container").style.position = "absolute"
         const accountBtn = document.getElementById("account-button")
-        
+        console.log("SESSION", session)
         if (session["isStaff"]){
           
           if (session["isAdmin"]){
             document.getElementById("manage-staff-link").style.display = "block"
+            accountBtn.innerHTML = ""
+            
           }
-          accountBtn.innerHTML = ""
+          
           document.getElementById("reg-confirm-container").style.position = "relative"
           document.getElementById("reg-confirm-container").innerHTML = `
             <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>
@@ -673,6 +675,9 @@
           document.getElementById("user-name").remove()
           document.getElementById("user-name-br").remove()
           document.getElementById("schedule-title").innerHTML = "View Requests"
+          if (session?.isAdmin){
+            document.getElementById("schedule-container").remove()
+          }
           const appointments = await getAppointmentsFilter({}); // Fetch all appointments (no filter)
           
 

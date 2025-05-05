@@ -46,34 +46,42 @@
                     <nav id="navmenu" class="navmenu">
                          <ul>
                           <li><a href="/" class="">Home</a></li>
-                          <li><a href="/schedule" class="">View Requests</a>
-                              
-                              <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
-                                  <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
-                              </div></li>
-                              <li>
-                                   <a href="/regconfirm" id="reg-confirm-title" class="">View Registrants</a>
-                                   <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
-                                       <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
-                                   </div>
-                               </li>
-                         <li class="text-white"  id="manage-staff-link" style="display: none"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
-                          <li><a href="/profile" class="active">Account</a>
-                         </li>
-                          <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
-
+                          <li id="schedule-container">
+                               <a href="/schedule" id="schedule-title">View Requests</a>
+                               <div id="pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                                   <h6 id="pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                               </div>
+                           </li>
+                           <li>
+                               <a href="/regconfirm" id="reg-confirm-title">View Registrants</a>
+                               <div id="reg-confirm-pending-count-container" style="display:none;right: 0px; top: 5px;border-radius: 50px; height: 20px; width: 20px; align-items:center; justify-content:center; position: absolute; background-color: red; color:white">
+                                   <h6 id="reg-confirm-pending-count" style="border-radius: 50px;text-align: center;align-items:center; justify-content:center; background-color:red; color:white">1</h6>
+                               </div>
+                           </li>
+                           <li class="text-white"><a href="/staffsymptoms" class="">Manage Symptoms</a></li>
                           
+                          <li id="appointment-btn" style="display: none"><a class="" href="/chatbotpage" ><b>Make an Appointment</b></a></li>
+                         
                         </ul>
                          <i class="mobile-nav-toggle d-xl-none bi bi-list" id="menu-btn"></i>
                     </nav>
 
                     <!--<a class="cta-btn d-none d-sm-block" href="/chatbotpage" id="appointment-btn-2">Make an Appointment</a>-->
-                    <div style="margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
-                         <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                    <div style="border-width: 1px; border-color: white; border-radius: 16px;; border-style: solid;margin-left: 20px; align-items: center; display:flex; justify-content:center" clas="d-none d-sm-block">
+                         <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none; border: none; color: white;">
+                         <img style="height: 30px; width: 30px; object-fit: contain; border-width: 1px; background-color:white; border-style: solid; border-radius: 50px; border-color: white;" id="account-icon" src="{{ url_for('static', filename='assets/account-icon.png')}}"/>
+                         <div style="flex-direction:column; margin-right: 10px;">
+                           <span id="user-name"  style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; text-align: left" ></span>
+                           <span id="user-category-display" style=" margin-left: 10px; color:white; padding: 5px; border-radius: 10px; font-size: 15px; text-align: left"></span>
+                         </div>
+                         </button>
+                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                             <li><a class="dropdown-item" href="/profile" id="account-button">Account</a></li>
+                           <li><hr class="dropdown-divider"></li>
+                           <li><a class="dropdown-item" onclick="logout()" href="/" style="color:red" >Logout</a></li>
+                       </ul>
                        
-                         <span id="user-category-display" style=" margin-left: 10px; margin-right: 10px; color:white; padding: 5px; border-radius: 10px;"></span>
-                       
-                       </div>  
+                       </div>    
 
                   
                </div>
@@ -90,7 +98,6 @@
                <div class="row">
                     <div class="col-12">
                          <!-- Page title -->
-                         <button class="btn btn-danger" onclick="logout()">Log Out</button>
                          <div class="my-5">
                              
                          </div>
@@ -98,22 +105,40 @@
                          <form class="file-upload">
                               <div class="row mb-5 gx-5">
                                    <!-- Contact detail -->
-                                   <div class="col-xxl-8 mb-5 mb-xxl-0">
+                                   <div class="col-xxl-12 mb-5 mb-xxl-0">
                                         <div class="bg-secondary-soft px-4 py-5 rounded">
-                                             <div class="row g-3">
+                                             <div class="row g-3" style="display:flex; align-items:center; justify-content:center; margin-bottom: 8px;" >
                                                   <h3>My Profile</h3>
                                                   <hr>
-                                                  <h4 class="mb-4 mt-0">Admin Account</h4>
-                                                  
-                                                 
-                                             </div> <!-- Row END -->
+                                                  <h4 class="mb-4 mt-0">Information</h4>
+                                                  <!-- First Name -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Username *</label>
+                                                       <input type="text" id="email" disabled class="form-control" placeholder="" aria-label="First name" value="">
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">First Name *</label>
+                                                       <input type="text" id="first-name" class="form-control" placeholder="" oninput="validateApply()" aria-label="First name" value="">
+                                                  </div>
+                                                  <!-- Last name -->
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Last Name *</label>
+                                                       <input type="text" id="last-name" class="form-control" placeholder=""  oninput="validateApply()" aria-label="Last name"  value="">
+                                                  </div>
+                                                
                                         </div>
-                                        <div style="display: flex; width: 100%; justify-content: right;">
+                                        <div style="display: flex; width: 100%; justify-content:space-between; border-width:0px; padding-top: 10px; border-color: gray; border-top-width: 1px; border-style: solid;">
+                                             <button class="btn btn-danger" style="margin-left: 30px;"  onclick="logout()">Log Out</button>
+                        
+                                             <div style="display: flex;">
+                                                  <button class="btn btn-primary"  id="applyBtn" onclick="updateInfo()">Apply</button>
+                                                  <button class="btn " id="cancel" style="margin-left: 20px;" onclick="renderData(event)">Cancel</button>
+                                             </div>
+                                             
                                              
                                         </div>
                                    </div>
                                   
-                                   <hr>
                                    <!-- Upload profile -->
                                     <!--
                                    <div class="col-xxl-4">
@@ -217,38 +242,26 @@
                   
                }
                getPendingCount()
-               window.validateApply = () => {
+               window.validateApply = async () => {
                     let result = false
                     const email = document.getElementById('email')
                     const firstName = document.getElementById('first-name')
                     const lastName = document.getElementById('last-name')
-                    const contact = document.getElementById('contact')
-                    const applyBtn = document.getElementById('apply')
-                    const memberType = document.getElementById('member-type')
-                   
+                    const sessionData = await getSession()
+                    console.log(sessionData)
+                    const staffData = (await ( await (fetch(`/api/staff?staff_ID=${sessionData.userId}`))).json())[0]
+                    console.log(staffData)
 
-                    if (email.value != data.PatientEmail){
-                         result = true
-                         console.log('email changed')
-                    }
-                    if (firstName.value != data.PatientName){
+                    if (firstName.value != staffData.staffFirstName){
                          result = true
                          console.log('name changed')
                     }
-                    if (lastName.value != data.PatientLastName){
+                    if (lastName.value != staffData.staffLastName){
                          result = true
                          console.log('last name changed')
                     }
-                    if (contact.value != data.PatientContactNo){
-                         result = true
-                         console.log('contact changed')
-                    }
-                    console.log(getTypeSelected(), data.PatientCategory)
-                    if (data.PatientCategory != getTypeSelected()){
-                         result = true
-                         console.log('category changed')
-                    }
                     console.log(result)
+                    const applyBtn = document.getElementById("applyBtn")
                     if (result){
                          applyBtn.removeAttribute('disabled')
                     }else{
@@ -259,29 +272,13 @@
 
 
                }
-               const getTypeSelected = () => {
-                    const memberType = document.getElementById('member-type')
-                   
-                    return memberType.value
-               }
-
-               const setDefaultType = (name) => {
-                    const memberType = document.getElementById('member-type')
-                    memberType.childNodes.forEach((element)=>{
-                         if (element.nodeName == '#text'){return}
-                         if (name==element.value){
-                              element.setAttribute('selected', 'true')
-                         }else{
-                              console.log(element)
-                              element.removeAttribute('selected')
-                         }
-                    })
-                   
-               }
-
                const renderData = async (event) => {
                     event?event.preventDefault():null
-                    
+                    const sessionData = await getSession()
+                    console.log(sessionData)
+                    const staffData = (await ( await (fetch(`/api/staff?staff_ID=${sessionData.userId}`))).json())[0]
+                    console.log(staffData)
+
                     const email = document.getElementById('email')
                     const firstName = document.getElementById('first-name')
                     const lastName = document.getElementById('last-name')
@@ -290,21 +287,16 @@
                     
                     const disableEmail = () => {email.setAttribute('disabled', "true")} 
                     const enableEmail = () => {email.removeAttribute('disabled')}
-                    enableEmail()
-                    email.value = data.PatientEmail
-                    disableEmail()
-                    console.log(data)
-                    firstName.value = data.PatientName 
-                    lastName.value = data.PatientLastName 
-                    contact.value = data.PatientContactNo 
-                    setDefaultType(data.PatientCategory)
+                    email.value = staffData.staffUsername
+                    firstName.value = staffData.staffFirstName
+                    lastName.value = staffData.staffLastName
                     validateApply()
-                    console.log(getTypeSelected())
 
 
                     
 
                }
+               renderData()
                async function getRegistrationPendingCount(){
                     const patients = (await (await fetch("/api/patient")).json())
                     let count = 0;
