@@ -42,12 +42,11 @@ def otp_routes(self, table_name):
             sms_otp(contact=otp_contact, otp=new_otp)
         else:
             new_otp =  ''.join(random.choices(string.digits, k=5))
-           
             push_to_db(self, {"Otp_Code": new_otp, "Otp_Contact": otp_contact}, table_name)
             sms_otp(contact=otp_contact, otp=new_otp)
-        return jsonify({'success': True,"email": target_user["PatientEmail"]})
-    
-    """Define Flask routes."""
+        return jsonify({'success': True,"email": target_user["PatientUsername"]})
+
+    """Define Flask routes."""    
     @self.app.route('/api/otp_reset', methods=['POST'])
     @cross_origin(supports_credentials=True)
     def otp_reset_password():
@@ -69,6 +68,6 @@ def otp_routes(self, table_name):
             print("target user", target_user, otp_new_password)
             target_user["PatientPassword"] = hashPassword(otp_new_password)
             update_db(self, target_user, "tblpatient", filter_names=["Patient_ID"])
-            return jsonify({"success": True, "email": target_user["PatientEmail"]})
+            return jsonify({"success": True, "email": target_user["PatientUsername"]})
         return jsonify({'success': False})
         

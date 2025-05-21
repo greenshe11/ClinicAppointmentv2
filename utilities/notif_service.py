@@ -29,6 +29,7 @@ def roll_service(self, patient_table_name, appointment_table_name, seconds):
     threading.Timer(seconds, lambda: roll_service(self, patient_table_name, appointment_table_name, seconds)).start()
 
 def start_notif_service(self, patient_table_name, appointment_table_name, seconds):
+    return
     print("Notification service started")
     # Start the recurring process
     roll_service(self, patient_table_name, appointment_table_name, seconds)
